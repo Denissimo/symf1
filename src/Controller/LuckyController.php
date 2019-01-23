@@ -10,7 +10,7 @@ class LuckyController extends AbstractController
 {
 
     /**
-     * @Route("/", name="home")
+     * @Route("/zzzz", name="zzzz")
      * @return Response
      */
     public function home()
@@ -27,7 +27,7 @@ class LuckyController extends AbstractController
     public function asdf()
     {
         return new Response(
-            '<html><body>Lucky number: asdf</body></html>'
+            '<html><body>Lucky number: '.getenv('user').'</body></html>'
         );
     }
 

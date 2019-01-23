@@ -1,0 +1,105 @@
+{% extends '../base.html.twig' %}
+{% block body %}
+    {% if access.userlist %}
+
+        <div class="container-fluid">
+            <div class="row mart10">
+                <div class="col-12 text-center">
+                    <button type="button" class="btn btn-success" data-toggle="modal"
+                            data-target="#modal">
+                        Добавление Пользователя
+                    </button>
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Добавление
+                                        Пользователя</h5>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post" action="/adduser">
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="name">Имя</label>
+                                            <input type="text" class="form-control" name="name" id="name"
+                                                   placeholder="Ф.И.О.">
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-6">
+                                                <label for="email">Емайл</label>
+                                                <input type="text" class="form-control" name="email" id="email"
+                                                       placeholder="Email">
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="password">Пароль</label>
+                                                <input type="text" class="form-control" name="password" id="password"
+                                                       placeholder="Пароль">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="btn-group-toggle col-6" data-toggle="buttons">
+                                                {#<br />#}
+                                                <label class="btn btn-secondary">
+                                                    <input id="enabled" name="enabled" type="checkbox"
+                                                           autocomplete="off">
+                                                    Активен
+                                                </label>
+                                            </div>
+                                            <div class="col-6">
+                                                {#<label for="priority">Приоритет</label>#}
+                                                <input type="text" class="form-control" name="priority" id="priority"
+                                                       placeholder="Приоритет">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">OK</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mart10">
+                <div class="loginform col-12 shadow-lg padt01 bg-white1">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>id</th>
+                            <th>Имя</th>
+                            <th>Емайл</th>
+                            {#<th>Роль</th>#}
+                            <th>Акивен</th>
+                            <th>Приоритет</th>
+                        </tr>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td><a href="/user?user_id={{ user.id }}">{{ user.name }}</a></td>
+                                <td><a href="mailto:{{ user.email }}"> {{ user.email }}</a></td>
+                                {#<td>{{ user.role.0.id }}</td>#}
+                                {#<td>{{ user.enabled }}</td>#}
+                                {#<td>{% if user.enabled %} <span class="badge badge-success">&#128522;</span> {% else %} <span class="badge badge-secondary">&#128532;</span> {% endif %}</td>#}
+                                <td>{% if user.enabled %} <img class="color_label"
+                                                               src="/images/color_labels/color_green.png"/> {% else %}
+                                        <img class="color_label" src="/images/color_labels/color_gray.png"/> {% endif %}
+                                </td>
+                                <td>{{ user.priority }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

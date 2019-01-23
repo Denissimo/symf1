@@ -1,0 +1,173 @@
+{#<input id="address" name="address" type="text" size="100"/>#}
+<link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@18.8.0/dist/css/suggestions.min.css" type="text/css"
+      rel="stylesheet"/>
+{#<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>#}
+<!--[if lt IE 10]>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.1/jquery.xdomainrequest.min.js"></script>
+<![endif]-->
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/suggestions-jquery@18.8.0/dist/js/jquery.suggestions.min.js"></script>
+<script type="text/javascript">
+
+    var app_id = {{ app_id }};
+
+    $('#field_birthDate').datepicker();
+    $('#field_passportDate').datepicker();
+    $('#field_birthDate').mask("99.99.9999");
+    $('#field_passportDate').mask("99.99.9999");
+    $("#field_mobileNumber").mask("+7 (999) 999-99-99");
+    $("#field_work_phone").mask("+7 (999) 999-99-99");
+    $("#field_homePhone").mask("+7 (999) 999-99-99");
+
+    $("#address_reg").suggestions({
+        token: "53d8a06683944866455eb1eb05c5fe5df33d788b",
+//        token: "7bb5d27b33e60de38bfbbcd47207132ef007fb4f",
+        type: "ADDRESS",
+        count: 5,
+        /* Вызывается, когда пользователь выбирает одну из подсказок */
+        onSelect: function (suggestion) {
+            var data = suggestion.data;
+            fill(data, '');
+        }
+    });
+
+    $("#field_passportCity").suggestions({
+        token: "53d8a06683944866455eb1eb05c5fe5df33d788b",
+//        token: "7bb5d27b33e60de38bfbbcd47207132ef007fb4f",
+        type: "ADDRESS",
+        count: 5,
+        /* Вызывается, когда пользователь выбирает одну из подсказок */
+        onSelect: function (suggestion) {
+            var data = suggestion.data;
+            $(this).val(data.city);
+        }
+    });
+
+    $("#address_live").suggestions({
+        token: "53d8a06683944866455eb1eb05c5fe5df33d788b",
+//        token: "7bb5d27b33e60de38bfbbcd47207132ef007fb4f",
+        type: "ADDRESS",
+        count: 5,
+        /* Вызывается, когда пользователь выбирает одну из подсказок */
+        onSelect: function (suggestion) {
+            var data = suggestion.data;
+            fill(data, 1);
+        }
+    });
+
+    $("#address_job").suggestions({
+        token: "53d8a06683944866455eb1eb05c5fe5df33d788b",
+//        token: "7bb5d27b33e60de38bfbbcd47207132ef007fb4f",
+        type: "ADDRESS",
+        count: 5,
+        /* Вызывается, когда пользователь выбирает одну из подсказок */
+        onSelect: function (suggestion) {
+            var data = suggestion.data;
+            fill_job(data);
+        }
+    });
+
+    $("#adressidentical").click(function (e) {
+        e.preventDefault();
+        $("#field_index1").val($("#field_index").val());
+        $("#field_region1").val($("#field_region").val());
+        $("#field_city1").val($("#field_city").val());
+        $("#field_street1").val($("#field_street").val());
+        $("#field_house1").val($("#field_house").val());
+        $("#field_building1").val($("#field_building").val());
+        $("#field_structure1").val($("#field_structure").val());
+        $("#field_apartment1").val($("#field_apartment").val());
+        $("#field_fias1").val($("#field_fias").val());
+        return false;
+    });
+
+    $("#maildefault").click(function (e) {
+        e.preventDefault();
+        $("#field_email").val('null@mail.ru');
+        return false;
+    });
+
+    $('#field_passportCode').blur(function () {
+//        console.log($(this).val());
+
+        $.ajax({
+            method: 'POST',
+            url: '/ajaxcode',
+            data: {pcode: $(this).val()}
+        })
+            .done(function (msg) {
+                console.log(msg);
+//                if (msg != null && msg != '') {
+                    $('#field_passportWho').val(msg);
+//                }
+//                    $('#passportWho').attr("setvalue", msg);
+            });
+
+    });
+
+    function fill(data, prefix) {
+//        console.log('#field_index');
+        $('#field_index' + prefix).val(data.postal_code);
+        $('#field_region' + prefix).val(data.region);
+        $('#field_city' + prefix).val(data.city);
+        $('#field_street' + prefix).val(data.street_with_type);
+        $('#field_house' + prefix).val(data.house);
+        if (data.block_type == 'к') {
+            $('#field_building' + prefix).val(data.block);
+            $('#field_structure' + prefix).val('')
+        }
+        if (data.block_type == 'стр') {
+            $('#field_structure' + prefix).val(data.block);
+            $('#field_building' + prefix).val('');
+        }
+        if (data.block_type == null) {
+            $('#field_structure' + prefix).val('');
+            $('#field_building' + prefix).val('');
+        }
+
+        $('#field_apartment' + prefix).val(data.flat);
+        $('#field_fias' + prefix).val(data.region_fias_id);
+//        console.log(data.region_fias_id);
+    }
+
+    function fill_job(data) {
+        $('#field_work_region').val(data.region);
+        $('#field_work_city').val(data.city);
+        $('#field_work_street').val(data.street_with_type);
+        $('#field_work_house_num').val(data.house);
+    }
+
+
+    $('#btn_ready').click(function () {
+//        console.log('ZZZZZZZZZ');
+        if ($('#ready').is(':checked'))
+            $("#return").attr("disabled", "disabled");
+        else
+            $("#return").removeAttr("disabled");
+    });
+
+    $('#send2partner').click(function () {
+//        console.log(app_id);
+
+        $.ajax({
+            method: 'POST',
+            url: '/api4s?id=' + app_id,
+            dataType: "json",
+            success: function( data ) {
+                console.log( data.response );
+                $('body').append(
+                    '<div class="alert alert-info alert-dismissible fade show alert-center" role="alert">'
+                    + data.response + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">\
+                    <span aria-hidden="true">&times;</span>\
+                </button>\
+                </div>'
+                );
+            },
+            error: function() {
+                console.log( [] );
+            }
+        });
+    });
+
+</script>

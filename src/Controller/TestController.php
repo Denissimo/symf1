@@ -1,0 +1,202 @@
+<?php
+
+namespace App\Controller;
+
+use App\Kernel;
+use App\Security\AuthListener;
+use Doctrine\ORM\Mapping\EntityResult;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\Routing\Annotation\Route;
+use App\Proxy;
+use App\Controller\Forms\FormBuilder;
+use Users;
+use Goods;
+use App\Twig\Render;
+use App\Controller\Query;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\User;
+use App\Cfg\Config;
+
+class TestController extends BaseController
+{
+
+
+    /**
+     * @Route("/admin")
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function admin()
+    {
+        try {
+            return (new Render())->render([
+                'data' => ' try'
+            ]);
+        } catch (\Exception $e) {
+            return (new Render())->render([
+                'data' => $e->getMessage()
+            ]);
+        }
+
+//        return (new Render())->render([
+//            'data' => ' admin'
+//        ]);
+    }
+
+    /**
+     * @Route("/secur")
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function secur()
+    {
+        Proxy::init()->getLogger()->addWarning(
+            \GuzzleHttp\json_encode(self::getRequest())
+        );
+        return (new Render())->render([
+            'data' => \GuzzleHttp\json_encode((self::getRequest())->query->all())
+        ]);
+    }
+
+    /**
+     * @Route("/sql")
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function sql()
+    {
+        $qb = Proxy::init()->getEntityManager()->createQueryBuilder();
+        $res = $qb
+            ->select('g.id', 'g.article', 'g.orderId')
+            ->from('Goods', 'g')
+//            ->where('a.userId=9')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->execute();
+        $data['data'] = \GuzzleHttp\json_encode($res);
+        return (new Render())->render($data, 'test.html.twig');
+    }
+
+
+    /**
+     * @Route("/sql1")
+     * @return Response
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function sql1()
+    {
+        $query = "SELECT * FROM goods WHERE goods_status = 4 AND price > 20.0 LIMIT 5";
+        $sth = Proxy::init()->getConnecton()->query($query);
+        $sth->bindValue(':status', 4);
+        $sth->bindValue(':price', 20.0);
+        $sth->execute();
+        $res = $sth->fetchAll();
+
+        $data['data'] = \GuzzleHttp\json_encode($res);
+        return (new Render())->render($data, 'test.html.twig');
+    }
+
+    /**
+     * @Route("/sql2")
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function sql2()
+    {
+        $qb = Proxy::init()->getEntityManager()->createQueryBuilder();
+        $res = $qb->select('u')
+            ->from(\Users::class, 'u')
+            ->getQuery()
+            ->execute();
+
+        var_dump($res); die();
+        $data['data'] = \GuzzleHttp\json_encode($res);
+        return (new Render())->render($data, 'test.html.twig');
+    }
+
+    /**
+     * @Route("/sql3")
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function sql3()
+    {
+        $res = Proxy::init()->getEntityManager()->getRepository(\Goods::class)->findAll();
+        var_dump($res); die();
+        $data['data'] = \GuzzleHttp\json_encode($res);
+        return (new Render())->render($data, 'test.html.twig');
+    }
+
+    /**
+     * @Route("/test")
+     * @return Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function test()
+    {
+
+        Proxy::init()->initDoctrine();
+
+
+        /** @var \Users[] $user */
+        $user = Proxy::init()->getEntityManager()
+            ->getRepository(\Users::class)
+            ->findBy(['name' => 'Den Drake']);
+
+//        var_dump($user); die;
+//        $user[0]->setName('ZZdddzz');
+//        Proxy::init()->getEntityManager()->flush();
+
+        /*
+        $newUser = (new Users())
+            ->setName('sdfgag')
+            ->setEmail('ss@xhx.xx')
+            ->setPassword('kjhgfkjfkfku')
+            ->setEnabled(true)
+        ;
+        */
+
+//        Proxy::init()->getEntityManager()->persist($newUser);
+//        Proxy::init()->getEntityManager()->flush();
+
+
+//        Proxy::init()->getLogger()->addWarning(
+//            \GuzzleHttp\json_encode(
+//                $app->getUser()->getName()
+//            )
+//        );
+//
+
+        /*
+                $query = 'INSERT INTO comments SET app_id = :app_id, comment = :comment, uid = :user_id, ts = now(), reminder = :reminder, ctype = :ctype;';
+                $sth = Proxy::init()->getConnecton()->prepare($query);
+                $sth->bindValue(':app_id', (int)self::getRequest()->get('app_id'), \PDO::PARAM_INT);
+                $sth->bindValue(':user_id', (int)self::getRequest()->get('user_id'), \PDO::PARAM_INT);
+                $sth->bindValue(':ctype', $ctype, \PDO::PARAM_INT);
+                $sth->bindValue(':comment', self::getRequest()->get('comment'), \PDO::PARAM_STR);
+                $sth->bindValue(':reminder', $reminderStr);
+                $sth->execute();
+        */
+        $data['data'] = 'zdf';
+        $data['form'] = (new FormBuilder())->buildForm()->createView();
+        return (new Render())->render($data, 'test.html.twig');
+    }
+}

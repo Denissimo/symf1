@@ -1,0 +1,64 @@
+<!-- Modal -->
+<div class="modal fade" id="modal{{ app.id }}" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Добавление
+                    комментария</h5>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" action="{{ addcomment }}">
+                <input type="hidden" name="app_id" value="{{ app.id }}">
+                <input type="hidden" name="user_id" value="{{ uid }}">
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-4">
+                            <label for="ctype{{ app.id }}">Тип</label>
+                            <select id="ctype{{ app.id }}" class="form-control ctype"
+                                    name="ctype">
+                                {% for ct in ctype %}
+                                    {% if ct.id != 9 or access.command_proc %}
+                                        <option value="{{ ct.id }}">{{ ct.value }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-4 recall">
+                            <label for="reminder{{ app.id }}">Дата</label>
+                            {#<input type="datetime-local" class="form-control"#}
+                                   {#name="reminder"#}
+                                   {#id="reminder{{ app.id }}" placeholder="Дата/Время">#}
+                            <input type="text" class="form-control reminder" name="reminder"
+                                   autocomplete="off" id="reminder{{ app.id }}" placeholder="Дата">
+                        </div>
+                        <div class="col-4 recall">
+                            <label for="timepick{{ app.id }}">Время</label>
+                            <select id="timepick{{ app.id }}" class="form-control"
+                                    name="reminder_time">
+                                {% for tp in time_picker %}
+                                    <option value="{{ tp.text }}">{{ tp.text }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group notice">
+                        <label for="comment{{ app.id }}">Заметка</label>
+                        <input type="text" class="form-control" name="comment"
+                               id="comment{{ app.id }}" placeholder="Заметка">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal">Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">OK</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+{% extends '../empty.html.twig' %}
+{% block body %}
+    <table>
+        <tr>
+            <th>id</th>
+            <th>userId</th>
+            <th>userName</th>
+            <th>CreatedAt</th>
+            <th>UpdatedAt</th>
+            <th>status</th>
+            <th>LastName</th>
+            <th>FirstName</th>
+            <th>MiddleName</th>
+            <th>City</th>
+            <th>TimeZone</th>
+        </tr>
+    {% for row in data %}
+
+        <tr>
+            <td>{{ row.id }}</td>
+            <td>{{ row.userId }}</td>
+            <td>{{ row.user.name }}</td>
+            <td>{{ row.createdAtString }}</td>
+            <td>{{ row.updatedAtString }}</td>
+            <td>{{ row.status }}</td>
+            <td>{{ row.lastName }}</td>
+            <td>{{ row.firstName }}</td>
+            <td>{{ row.middleName }}</td>
+            <td>{{ row.City }}</td>
+            <td>{{ row.timeZone }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

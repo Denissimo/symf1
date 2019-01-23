@@ -1,0 +1,228 @@
+{% extends '../base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row mart10">
+            <div class="col-12 shadow-lg padt01 bg-white1">
+                <div class="row">
+                    <a href="/apps?update_from={{ "2 days ago"|date("d.m.Y") }}" class="col-12 text-center">
+                        <button class="btn btn-warning">Список заявок</button>
+                    </a>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 offset-3">
+                        <h4>Данные заявки</h4>
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Параметр</th>
+                                <th>Значение</th>
+                            </tr>
+                            <tr>
+                                <td>ID</td>
+                                {#>{{ ValueLists[0].id }}#}
+                                <td>{{ app.id }}</td>
+                            </tr>
+                            <tr>
+                                <td>Создан</td>
+                                <td>{{ app.createdAtString }}</td>
+                            </tr>
+                            <tr>
+                                <td>Изменён</td>
+                                <td>{{ app.updatedAtString }}</td>
+                            </tr>
+                            {#<tr>#}
+                            {#<td>Пользователь</td>#}
+                            {#<td>{{ app.user.name }}</td>#}
+                            {#</tr>#}
+                            {#<tr>#}
+                            {#<td>Емайл</td>#}
+                            {#<td><a href="mailto:{{ app.user.email }}">{{ app.user.email }}</a></td>#}
+                            {#</tr>#}
+                            <tr>
+                                <td>Комментарии</td>
+                                <td>
+                                    {% for com in app.comments %}
+                                        {% autoescape false %}
+                                            <a href="/user/?user_id={{ com.user.id }}">{{ com.user.nameShort|raw|replace({' ' : '&nbsp;'}) }}</a>
+                                        {% endautoescape %}
+                                        {{ com.id }}
+                                        {{ com.tsString }}
+                                        {{ com.comment }}  <br/>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 offset-3">
+                        <h4>Данные заёмщика</h4>
+                        <form class="form" method="post" action="/updclientdata">
+                            <input type="hidden" name="app_id" value="{{ app_id }}"/>
+                            {#<input id="address" name="address" type="text" size="100"/>#}
+                            {#<div class="form-group row">#}
+                            {#<label for="address"#}
+                            {#class="control-label col-4 text-left">Адрес</label>#}
+                            {#<input type="text" class="form-control col-8"#}
+                            {#placeholder="адрес"#}
+                            {#id="address"#}
+                            {#autocomplete="off"#}
+                            {#name="address"/>#}
+                            {#</div>#}
+                            {% for groupName, fgroup in FieldGroups %}
+                                <h4>{{ groupName }}</h4>
+                                {% for fv in fgroup %}
+                                    {% if fv.field.id == 17 %}
+                                        <div class="form-group row">
+                                            <label for="address_reg"
+                                                   class="control-label col-4 text-left"><b>Адрес прописки</b></label>
+                                            <input type="text" class="form-control col-8"
+                                                   placeholder="Указать полный адрес регистрации"
+                                                   id="address_reg"
+                                                   autocomplete="off"/>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if fv.field.id == 38 %}
+                                        <div class="form-group row">
+                                            <label for="address_live"
+                                                   class="control-label col-4 text-left"><b>Адрес места
+                                                    жительства</b></label>
+                                            <input type="text" class="form-control col-8"
+                                                   placeholder="Указать полный адрес проживания"
+                                                   id="address_live"
+                                                   autocomplete="off"/>
+
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-8 offset-4">
+                                                <button id="adressidentical" class="btn btn-link">Совпадает с адресом
+                                                    регистрации
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if fv.field.id == 50 %}
+                                        <div class="form-group row">
+                                            <label for="address_job"
+                                                   class="control-label col-4 text-left"><b>Адрес работы</b></label>
+                                            <input type="text" class="form-control col-8"
+                                                   placeholder="Указать полный адрес работы"
+                                                   id="address_job"
+                                                   autocomplete="off"/>
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="form-group row">
+                                        <label for="field_{{ fv.field.name }}"
+                                               class="control-label col-4 text-left">{{ fv.field.Description }}
+                                            {#{% for key, vl in fv.field.valueList %} {{ vl.id }} {{ vl.value }} {% endfor %}#}
+                                            {#{{ fv.field.id }} {{ fv.field.group.id }} {{ fv.field.group.name }}#}
+                                        </label>
+                                        {% if fv.field.valueList | first %}
+                                            {#ZZ {{ fv.field.valueList.0.id }}#}
+                                            <select name="field_{{ fv.field.id }}" class="form-control  col-8">
+                                                <option value="0"></option>
+                                                {% for key, vl in fv.field.valueList %}
+                                                    <option value="{{ vl.id }}"
+                                                            {% if vl.id == fv.valueText %}selected="selected"{% endif %}>{{ vl.value }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            {#<input type="text" class="form-control col-8"#}
+                                            {#placeholder="{{ fv.field.Description }}"#}
+                                            {#id="field_{{ fv.field.name }}"#}
+                                            {#name="field_{{ fv.field.id }}" value="{{ fv.valueText }}"/>#}
+                                        {% else %}
+                                            <input type="text" class="form-control col-8"
+                                                   placeholder="{{ fv.field.Description }}"
+                                                   id="field_{{ fv.field.name }}"
+                                                   name="field_{{ fv.field.id }}" value="{{ fv.valueText }}"/>
+                                        {% endif %}
+
+                                    </div>
+
+                                    {% if fv.field.id == 9 %}
+                                        <div class="form-group row">
+                                            <div class="col-8 offset-4">
+                                                Узнать ИНН по паспорту на сайте
+                                                <a href="https://service.nalog.ru/inn.do" target="_blank"> ИФНС </a>
+                                                или <a href="https://www.tinkoff.ru/inn/" target="_blank"> Тинькофф </a>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if fv.field.id == 3 %}
+                                        <div class="form-group row">
+                                            <div class="col-8 offset-4">
+                                                <a href="#" id="maildefault">У клиента нет емайл </a>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                {% endfor %}
+                            {% endfor %}
+                            <input type="hidden" id="field_fias" name="field_fias" value=""/>
+                            <input type="hidden" id="field_fias1" name="field_fias1" value=""/>
+                            <div class="form-group row">
+                                <div class="btn-group-toggle col-2 offset-3" data-toggle="buttons">
+                                    {#<br />#}
+                                    <label id="btn_ready"
+                                           class="btn btn-secondary {% if  app.status == 6 %} btn-success active {% endif %}">
+                                        <input id="ready" name="ready"
+                                               type="checkbox" {% if app.status == 6 %} checked {% endif %}
+                                               autocomplete="off">
+                                        Готово
+                                    </label>
+                                </div>
+                                <div class="col-2">
+                                    <button type="submit" class="btn btn-success save">Сохранить</button>
+                                </div>
+                                <div class="col-2">
+                                    <button type="submit" class="btn btn-success save" name="return" id="return"
+                                            value="true" disabled="disabled">Отправить
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 offset-3">
+
+                            <button class="btn btn-primary send col-4 offset-4" name="send2partner" id="send2partner"
+                                    value="true">отправить в 4slovo
+                            </button>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 offset-3">
+                        &nbsp;
+                    </div>
+                </div>
+
+                {#
+                <table class="table table-striped">
+                    <tr>
+                        <th>Параметр</th>
+                        <th>Значение</th>
+                    </tr>
+                    {% for fv in FieldValues %}
+                    <tr>
+                        <td>{{ fv.field.Description }}</td>
+                        <td>{{ fv.valueText }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                #}
+
+            </div>
+        </div>
+    </div>
+    {{ include('sub_address_js.html.twig', { 'article': article }) }}
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends '../base.html.twig' %}
+{% block body %}
+    {% if access.userlist %}
+        <div class="container-fluid">
+            <div class="row mart10">
+                <div class="col-12 shadow-lg bg-white1">
+                    <div class="row">
+                        <div class="col-12 text-center mart10 padt01">
+                            <a href="/users">
+                                <button class="btn btn-success">Список пользователей</button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 text-center mart10 marb20 padt01">
+                            <div class="card border-secondary mb-3 shadow-lg">
+                                <div class="card-header">Распределение</div>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                    <form method="post" action="/changeopts">
+                                        <label for="distribution">Способ</label>
+                                        <select class="form-control" name="distribution" id="distribution">
+                                            <option value="propor" {% if distribution == 'propor' %} selected{% endif %}>По весу</option>
+                                            <option value="circle" {% if distribution == 'circle' %} selected{% endif %}>По кругу</option>
+                                        </select>
+                                        <label for="rows_for_iteration">Записей за раз</label>
+                                        <input type="text" class="form-control" name="rows_for_iteration" id="rows_for_iteration" value="{{ rows_for_iteration }}" />
+                                        <label for="apps_limit_for_user">Лимит заявок на пользователя</label>
+                                        <input type="text" class="form-control" name="apps_limit_for_user" id="apps_limit_for_user" value="{{ apps_limit_for_user }}" />
+                                        <input type="hidden" name="user_id" value="" />
+                                        <button type="submit" class="mart10 col-3  btn btn-success">OK</button>
+                                    </form>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

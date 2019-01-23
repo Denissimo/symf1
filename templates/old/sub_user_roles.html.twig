@@ -1,0 +1,24 @@
+<div class="card border-secondary mb-3 shadow-lg">
+    <div class="card-header">Роли</div>
+    <div class="card-body">
+        {#<h5 class="card-title">Пользователь</h5>#}
+        <p class="card-text">
+            {#<ul class="list-group">#}
+            {% for lr in list_roles %}
+            {#<li class="list-group-item">#}
+        <form method="post" action="/changerole">
+            <input type="hidden" name="user_id" value="{{ user.id }}">
+            <input type="hidden" name="role_id" value="{{ lr.id }}">
+            <input type="hidden" name="action"
+                   value="{% if lr.access %}del{% else %}add{% endif %}">
+            <button type="submit"
+                    class="mart10 col-6  {% if lr.access %}btn btn-success {% else %}btn btn-secondary{% endif %}">{{ lr.name }}
+            </button>
+            {#{{ lr.id }} >> {{ lr.name }} >> {{ lr.access }}#}
+        </form>
+        {#</li>#}
+        {% endfor %}
+        {#</ul>#}
+        </p>
+    </div>
+</div>

@@ -1,0 +1,131 @@
+{% extends '../base.html.twig' %}
+{% block body %}
+    {{ include('sub_form_params.html.twig', { 'article': article }) }}
+    {{ include('sub_form_find.html.twig', { 'article': article }) }}
+
+{#
+    {% if access.all_apps %}
+        <div class="container-fluid">
+            <div class="row mart10">
+                <div class="col-12 padt01 shadow-lg bg-white1">
+                    <form class="form-inline" method="post" action="changeuser">
+                        <input type="hidden">
+                        <div class="form-group mx-sm-2">
+                            <select class="custom-select" name="userId">
+                                {% for user in Users %}
+                                    <option {% if request.userId == user.id %} selected="selected" {% endif %}
+                                            value="{{ user.id }}">{{ user.nameShort }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group mx-sm-2">
+
+                            <button type="submit" class="btn btn-sm btn-primary">Передать</button>
+                        </div>
+                    </form>
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+    {% endif %}
+#}
+    <div class="container-fluid">
+        <div class="row mart10">
+            <div class="loginform col-12 shadow-lg padt01 bg-white1">
+                {#<p>&#x1F6AE</p>#}
+                <table class="table table-striped appstable">
+                    <tr>
+                        <th>id</th>
+                        {#<th></th>#}
+                        <th>Клиент</th>
+                        <th>Тел, Город</th>
+                        <th>Оператор</th>
+                        <th>Статус</th>
+                        <th>Создано</th>
+                        <th>Обработать</th>
+
+                        <th>Комментарии</th>
+                        <th></th>
+                        <th>Добавить</th>
+                    </tr>
+                    {% for app in apps %}
+                        <tr>
+                            <td>
+                                {% if command_proc and request.userTo %}
+                                    {{ include('sub_btn_transfer.html.twig', { 'article': article }) }}
+                                {% endif %}
+
+                                <a href="/app?app_id={{ app.id }}">{{ app.id }}</a>
+                                {#</td>#}
+                                {#<td>#}
+                                {% if command_proc and request.filter != 'trash' and app.trash==0 %}
+                                    {{ include('sub_btn_trash.html.twig', { 'article': article }) }}
+                                {% endif %}
+                            </td>
+                            <td><a href="/app?app_id={{ app.id }}">{{ app.lastName }}&nbsp;{{ app.firstName }}
+                                    &nbsp;{{ app.middleName }}</a></td>
+                            <td>{{ app.phone }}<br/>{{ app.city }}
+                                {% if app.timeZone > 0 %}
+                                <p class="emoji emoji1f559"></p> {{ app.timeZone - 3 }}
+                                {% endif %}
+                            </td>
+                            <td>{{ app.userName }}</td>
+                            {#<td><img src="/images/color_labels/{{ app.appStatus.picture }}" class="color_label" /> </td>#}
+                            <td>
+                                {#{{ app.status }}#}
+                                {#{{ app.id }} >> {{ app.userId }} >> {{ app.createdAtString }} >> {{ app.updatedAtString }} >> {{ app.status }} #}
+
+                                <img src="/images/color_labels/{{ appstatus[app.status].picture }}"
+                                     class="color_label"/>
+                                {% if app.trash %}
+                                <p class="emoji emoji1f4a9 is_trash"></p>
+                                {% endif %}
+                            </td>
+                            {#<td>{{ appstatus[app.status].picture}}</td>#}
+                            <td>{{ app.createdAtString }}</td>
+                            <td>{{ app.updatedAtString }}</td>
+                            {#<td>{{ app.lastComment.id }}</td>#}
+
+                            <td>
+                                {#{{ app.comments.0.id }}#}
+                                <table class="table table-borderless table-sm table-small">
+                                    {% for key, com in app.comments %}
+
+                                        <tr class="row{% if key>0 %} collapse_row collapse_{{ app.id }}{% endif %}">
+                                            {#<td>{{ com.id }}</td>#}
+                                            <td class="col-3">{{ com.tsString }}</td>
+                                            <td class="col-3">
+                                                {% autoescape false %}
+                                                    <a href="/user/?user_id={{ com.user.id }}">{{ com.user.nameShort|raw|replace({' ' : '&nbsp;'}) }}</a>
+                                                {% endautoescape %}
+                                            </td>
+                                            <td class="col-3">{{ com.ctype.value }}</td>
+                                            <td class="col-3">{{ com.reminderString }}{{ com.comment }}</td>
+                                            {#<td class="col-4">{{ com.comment }}</td>#}
+
+                                        </tr>
+                                        {#{% if key==0 %}<div class="collapse" id="#collapse{{ app.id }}">{% endif %}#}
+                                    {% endfor %}
+                                    {#{% if app.comments | length %} </div> {% endif %}#}
+                                </table>
+                            </td>
+                            <td>
+                                {% if app.comments | length > 1 %}
+                                    {{ include('sub_modal_btn_down.html.twig', { 'article': article }) }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ include('sub_modal_btn.html.twig', { 'article': article }) }}
+
+                                {{ include('sub_modal.html.twig', { 'article': article }) }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

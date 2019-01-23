@@ -1,0 +1,50 @@
+{% extends '../base.html.twig' %}
+{% block body %}
+
+        <div class="container-fluid">
+            <div class="row mart10">
+                <div class="col-12 shadow-lg bg-white1">
+                    <div class="row">
+                        <div class="col-6 offset-3 text-center mart10 marb20 padt01">
+
+                            <div class="card">
+                                <div class="card-header">
+                                    {{ user.name }}
+                                </div>
+                                <div class="card-body">
+                                    <blockquote class="blockquote mb-0 text-center">
+                                        <img src="{{ user.userPick }}" class="userpic u150"/>
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th>Период</th>
+                                                <th>Количество</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="/images/color_labels/color_green.png" class="color_label">
+                                                    Сегодня
+                                                </td>
+                                                <td>{{ stat.today }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <img src="/images/color_labels/color_green.png" class="color_label">
+                                                    За месяц
+                                                </td>
+                                                <td>{{ stat.month }}</td>
+                                            </tr>
+                                        </table>
+                                        {#<p>Lorem ipsum</p>#}
+                                        {#<footer class="blockquote-footer">#}
+                                            {#Someone famous in <cite title="Source Title">Source Title</cite></footer>#}
+                                    </blockquote>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

@@ -41,13 +41,30 @@
         "sort-packages": true
     },
     "autoload": {
+        "classmap": [
+            "models/"
+        ],
+        "psr-0": {
+            "": [
+                "models/"
+            ]
+        },
         "psr-4": {
             "App\\": "src/"
         }
     },
     "autoload-dev": {
+        "classmap": [
+            "models/"
+        ],
+        "psr-0": {
+            "": [
+                "models/"
+            ]
+        },
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "App\\Tests\\": "tests/",
+            "App\\": "src/"
         }
     },
     "replace": {

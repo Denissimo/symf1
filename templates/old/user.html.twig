@@ -1,0 +1,31 @@
+{% extends '../base.html.twig' %}
+{% block body %}
+    {% if access.userlist %}
+        <div class="container-fluid">
+            <div class="row mart10">
+                <div class="col-12 shadow-lg bg-white1">
+                    <div class="row">
+                        <div class="col-12 text-center mart10 padt01">
+                            <a href="/users">
+                                <button class="btn btn-success">Список пользователей</button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-center mart10 marb20 padt01">
+                            {{ include('sub_user_data.html.twig', { 'article': article }) }}
+                        </div>
+                        <div class="col-6 text-center mart10 marb20 padt01">
+                            {{ include('sub_user_roles.html.twig', { 'article': article }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center mart10 marb20 padt01">
+                            {{ include('sub_user_schedule.html.twig', { 'article': article }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
