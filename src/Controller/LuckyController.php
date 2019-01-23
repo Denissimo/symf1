@@ -21,7 +21,7 @@ class LuckyController extends AbstractController
     }
 
     /**
-     * @Route("/asdf", name="asdf")
+     * @Route("asdf", name="asdf")
      * @return Response
      */
     public function asdf()
