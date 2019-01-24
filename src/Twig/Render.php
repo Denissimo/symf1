@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Render
 {
+
+    const CONTENT = 'content';
+
     /**
      * @param array $data
      * @param string|null $template

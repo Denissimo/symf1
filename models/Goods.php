@@ -101,5 +101,220 @@ class Goods
      */
     private $goodsStatus;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return Goods
+     */
+    public function setId(int $id): Goods
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getArticle(): ?string
+    {
+        return $this->article;
+    }
+
+    /**
+     * @param string|null $article
+     * @return Goods
+     */
+    public function setArticle(?string $article): Goods
+    {
+        $this->article = $article;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOrderId(): ?string
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @param string|null $orderId
+     * @return Goods
+     */
+    public function setOrderId(?string $orderId): Goods
+    {
+        $this->orderId = $orderId;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     * @return Goods
+     */
+    public function setDescription(?string $description): Goods
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getWeight(): ?float
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param float|null $weight
+     * @return Goods
+     */
+    public function setWeight(?float $weight): Goods
+    {
+        $this->weight = $weight;
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getCountWeight(): ?float
+    {
+        return $this->countWeight;
+    }
+
+    /**
+     * @param float|null $countWeight
+     * @return Goods
+     */
+    public function setCountWeight(?float $countWeight): Goods
+    {
+        $this->countWeight = $countWeight;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCount(): ?int
+    {
+        return $this->count;
+    }
+
+    /**
+     * @param int|null $count
+     * @return Goods
+     */
+    public function setCount(?int $count): Goods
+    {
+        $this->count = $count;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPrice(): ?string
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param string|null $price
+     * @return Goods
+     */
+    public function setPrice(?string $price): Goods
+    {
+        $this->price = $price;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getisCancle(): ?int
+    {
+        return $this->isCancle;
+    }
+
+    /**
+     * @param int|null $isCancle
+     * @return Goods
+     */
+    public function setIsCancle(?int $isCancle): Goods
+    {
+        $this->isCancle = $isCancle;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getVAktId(): ?int
+    {
+        return $this->vAktId;
+    }
+
+    /**
+     * @param int|null $vAktId
+     * @return Goods
+     */
+    public function setVAktId(?int $vAktId): Goods
+    {
+        $this->vAktId = $vAktId;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getGoodsNdsType(): ?int
+    {
+        return $this->goodsNdsType;
+    }
+
+    /**
+     * @param int|null $goodsNdsType
+     * @return Goods
+     */
+    public function setGoodsNdsType(?int $goodsNdsType): Goods
+    {
+        $this->goodsNdsType = $goodsNdsType;
+        return $this;
+    }
+
+    /**
+     * @return GoodsStatusModel
+     */
+    public function getGoodsStatus(): GoodsStatusModel
+    {
+        return $this->goodsStatus;
+    }
+
+    /**
+     * @param GoodsStatusModel $goodsStatus
+     * @return Goods
+     */
+    public function setGoodsStatus(GoodsStatusModel $goodsStatus): Goods
+    {
+        $this->goodsStatus = $goodsStatus;
+        return $this;
+    }
 
 }

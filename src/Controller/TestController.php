@@ -34,16 +34,16 @@ class TestController extends BaseController
     {
         try {
             return (new Render())->render([
-                'data' => ' try'
+                Render::CONTENT => ' try'
             ]);
         } catch (\Exception $e) {
             return (new Render())->render([
-                'data' => $e->getMessage()
+                Render::CONTENT => $e->getMessage()
             ]);
         }
 
 //        return (new Render())->render([
-//            'data' => ' admin'
+//            Render::CONTENT => ' admin'
 //        ]);
     }
 
@@ -60,7 +60,7 @@ class TestController extends BaseController
             \GuzzleHttp\json_encode(self::getRequest())
         );
         return (new Render())->render([
-            'data' => \GuzzleHttp\json_encode((self::getRequest())->query->all())
+            Render::CONTENT => \GuzzleHttp\json_encode((self::getRequest())->query->all())
         ]);
     }
 
@@ -81,7 +81,7 @@ class TestController extends BaseController
             ->setMaxResults(5)
             ->getQuery()
             ->execute();
-        $data['data'] = \GuzzleHttp\json_encode($res);
+        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res);
         return (new Render())->render($data, 'test.html.twig');
     }
 
@@ -103,7 +103,7 @@ class TestController extends BaseController
         $sth->execute();
         $res = $sth->fetchAll();
 
-        $data['data'] = \GuzzleHttp\json_encode($res);
+        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res);
         return (new Render())->render($data, 'test.html.twig');
     }
 
@@ -123,7 +123,7 @@ class TestController extends BaseController
             ->execute();
 
         var_dump($res); die();
-        $data['data'] = \GuzzleHttp\json_encode($res);
+        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res);
         return (new Render())->render($data, 'test.html.twig');
     }
 
@@ -136,10 +136,12 @@ class TestController extends BaseController
      */
     public function sql3()
     {
+        /** @var Goods[] $res */
         $res = Proxy::init()->getEntityManager()->getRepository(\Goods::class)->findAll();
-        var_dump($res); die();
-        $data['data'] = \GuzzleHttp\json_encode($res);
-        return (new Render())->render($data, 'test.html.twig');
+//        var_dump($res[0]->getDescription()); die();
+//        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res);
+        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res[0]->getDescription());
+        return (new Render())->render($data);
     }
 
     /**
@@ -195,7 +197,7 @@ class TestController extends BaseController
                 $sth->bindValue(':reminder', $reminderStr);
                 $sth->execute();
         */
-        $data['data'] = 'zdf';
+        $data[Render::CONTENT] = 'zdf';
         $data['form'] = (new FormBuilder())->buildForm()->createView();
         return (new Render())->render($data, 'test.html.twig');
     }
