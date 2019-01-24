@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\User;
 use App\Cfg\Config;
 
+
 class TestController extends BaseController
 {
 
@@ -117,13 +118,13 @@ class TestController extends BaseController
     public function sql2()
     {
         $qb = Proxy::init()->getEntityManager()->createQueryBuilder();
+        /** @var Users[] $res */
         $res = $qb->select('u')
             ->from(\Users::class, 'u')
             ->getQuery()
             ->execute();
 
-        var_dump($res); die();
-        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res);
+        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res[0]->getEmail());
         return (new Render())->render($data, 'test.html.twig');
     }
 
@@ -138,9 +139,24 @@ class TestController extends BaseController
     {
         /** @var Goods[] $res */
         $res = Proxy::init()->getEntityManager()->getRepository(\Goods::class)->findAll();
-//        var_dump($res[0]->getDescription()); die();
-//        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res);
+        
         $data[Render::CONTENT] = \GuzzleHttp\json_encode($res[0]->getDescription());
+        return (new Render())->render($data);
+    }
+
+    /**
+     * @Route("/zorders")
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function zorders()
+    {
+        /** @var \Zorders[] $res */
+        $res = Proxy::init()->getEntityManager()->getRepository(\Zorders::class)->findAll();
+//        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res[0]->getSklad()->getAddr());
+        $data[Render::CONTENT] = $res[0]->getSklad()->getAddr();
         return (new Render())->render($data);
     }
 
@@ -200,5 +216,18 @@ class TestController extends BaseController
         $data[Render::CONTENT] = 'zdf';
         $data['form'] = (new FormBuilder())->buildForm()->createView();
         return (new Render())->render($data, 'test.html.twig');
+    }
+
+    /**
+     * @Route("/swag1")
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function swag()
+    {
+        $data[Render::CONTENT] = 'sss';
+        return (new Render())->render($data);
     }
 }

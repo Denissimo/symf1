@@ -8,10 +8,10 @@ return ConsoleRunner::createHelperSet(
     EntityManager::create(
         [
             'driver' => 'pdo_mysql',
-            'host' => 'localhost',
-            'user' => 'root',
-            'password' => '',
-            'dbname' => 'kabudasay',
+            'host' => 'kabudasay.beget.tech',
+            'user' => 'kabudasay_core',
+            'password' => 'arg0navt12$',
+            'dbname' => 'kabudasay_core',
             'charset' => 'utf8',
         ],
         Setup::createAnnotationMetadataConfiguration(
