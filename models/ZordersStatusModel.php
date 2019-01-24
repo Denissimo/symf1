@@ -5,12 +5,12 @@
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * OrderStatusModel
+ * ZordersStatusModel
  *
- * @ORM\Table(name="order_status_model", uniqueConstraints={@ORM\UniqueConstraint(name="UK_order_status_model_id", columns={"id"})})
+ * @ORM\Table(name="zorders_status_model")
  * @ORM\Entity
  */
-class OrderStatusModel
+class ZordersStatusModel
 {
     /**
      * @var int
@@ -24,7 +24,7 @@ class OrderStatusModel
     /**
      * @var string|null
      *
-     * @ORM\Column(name="status", type="string", length=100, nullable=true, options={"comment"="Description статуса"})
+     * @ORM\Column(name="status", type="string", length=255, nullable=true)
      */
     private $status;
 

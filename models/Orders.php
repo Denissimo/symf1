@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Orders
  *
- * @ORM\Table(name="orders", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="FK_orders_status", columns={"status"}), @ORM\Index(name="oid", columns={"old_id"}), @ORM\Index(name="order_id", columns={"order_id"})})
+ * @ORM\Table(name="orders", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="order_id", columns={"order_id"}), @ORM\Index(name="oid", columns={"old_id"}), @ORM\Index(name="FK_orders_status", columns={"status"})})
  * @ORM\Entity
  */
 class Orders
@@ -36,9 +36,9 @@ class Orders
     private $orderId;
 
     /**
-     * @var \OrderStatusModel
+     * @var \OrdersStatusModel
      *
-     * @ORM\ManyToOne(targetEntity="OrderStatusModel")
+     * @ORM\ManyToOne(targetEntity="OrdersStatusModel")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="status", referencedColumnName="id")
      * })
