@@ -18,6 +18,8 @@ use App\Controller\Query;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\User;
 use App\Cfg\Config;
+use Doctrine\Common\Collections\Criteria;
+
 
 
 class TestController extends BaseController
@@ -139,7 +141,6 @@ class TestController extends BaseController
     {
         /** @var Goods[] $res */
         $res = Proxy::init()->getEntityManager()->getRepository(\Goods::class)->findAll();
-        
         $data[Render::CONTENT] = \GuzzleHttp\json_encode($res[0]->getDescription());
         return (new Render())->render($data);
     }
@@ -154,7 +155,15 @@ class TestController extends BaseController
     public function zorders()
     {
         /** @var \Zorders[] $res */
-        $res = Proxy::init()->getEntityManager()->getRepository(\Zorders::class)->findAll();
+        $res = Proxy::init()->getEntityManager()
+            ->getRepository(\Zorders::class)
+            ->matching(
+                Criteria::create()
+                    ->orderBy(['id' => 'ASC'])
+                    ->setMaxResults(1)
+
+            )->toArray();
+//        var_dump($res); die;
 //        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res[0]->getSklad()->getAddr());
         $data[Render::CONTENT] = $res[0]->getSklad()->getAddr();
         return (new Render())->render($data);
