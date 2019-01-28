@@ -5,6 +5,7 @@ namespace App\Twig;
 use App\Proxy;
 use App\Cfg\Config;
 use App\Controller\Actions\Autorize;
+use http\Header;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -16,12 +17,14 @@ class Render
     /**
      * @param array $data
      * @param string|null $template
+     * @param int $status
+     * @param array $headers
      * @return Response
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function render(array $data, string $template = null)
+    public function render(array $data, string $template = null, $status = Response::HTTP_OK, $headers = [])
     {
         $data[Autorize::FIELD_LOGGED] = (new Autorize())->isLogged();
         $data[Autorize::FIELD_USER_NAME] = (new Autorize())->getUserName();
@@ -42,7 +45,9 @@ class Render
             Proxy::init()->getTwigEnvironment()->render(
                 $tpl,
                 $data
-            )
+            ),
+            $status,
+            $headers
         );
     }
 

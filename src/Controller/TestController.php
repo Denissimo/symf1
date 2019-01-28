@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Kernel;
 use App\Security\AuthListener;
 use Doctrine\ORM\Mapping\EntityResult;
+use http\Header;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -85,6 +86,48 @@ class TestController extends BaseController
             ->execute();
         $data[Render::CONTENT] = \GuzzleHttp\json_encode($res);
         return (new Render())->render($data, 'test.html.twig');
+    }
+
+    /**
+     * @Route("/jpeg")
+     * @return Response
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function jpeg()
+    {
+        $attachment3 = file_get_contents('C:\OSpanel\OSPanel\domains\symf1\public\images\suda.jpeg');
+        $attachment_encoded3 = base64_encode($attachment3);
+//        \header("Content-type: text/plain");
+//        \header("Content-type: image/jpeg");
+//        echo $this->oord($attachment3);
+//        die;
+//        $data[Render::CONTENT] = $this->oord($attachment3);
+//        $data[Render::CONTENT] = $attachment_encoded3;
+        $data[Render::CONTENT] = $attachment3;
+        return (new Render())->render(
+            $data,
+            'jpeg.html.twig',
+            Response::HTTP_OK,
+//            ["Content-type" => "text/plain"]
+            ["Content-type" => "image/jpeg"]
+        );
+    }
+
+    /**
+     * @param string $str
+     * @return array
+     */
+    private function oord(string $str)
+    {
+        $len = mb_strlen($str);
+        for($i = 0; $i< $len; $i++){
+            $res[] = ord($str[$i]);
+        }
+//        return \GuzzleHttp\json_encode($res);
+        return implode("\r\n", $res);
     }
 
 
