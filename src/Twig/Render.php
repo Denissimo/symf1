@@ -5,7 +5,6 @@ namespace App\Twig;
 use App\Proxy;
 use App\Cfg\Config;
 use App\Controller\Actions\Autorize;
-use http\Header;
 use Symfony\Component\HttpFoundation\Response;
 
 
