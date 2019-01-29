@@ -100,19 +100,20 @@ class TestController extends BaseController
     {
         $attachment3 = file_get_contents('C:\OSpanel\OSPanel\domains\symf1\public\images\suda.jpeg');
         $attachment_encoded3 = base64_encode($attachment3);
-//        \header("Content-type: text/plain");
+        \header("Content-type: text/plain");
 //        \header("Content-type: image/jpeg");
-//        echo $this->oord($attachment3);
-//        die;
-//        $data[Render::CONTENT] = $this->oord($attachment3);
+        echo $this->oord($attachment3);
+//        echo $attachment3;
+        die;
+        $data[Render::CONTENT] = $this->oord($attachment3);
 //        $data[Render::CONTENT] = $attachment_encoded3;
-        $data[Render::CONTENT] = $attachment3;
+//        $data[Render::CONTENT] = $attachment3;
         return (new Render())->render(
             $data,
             'jpeg.html.twig',
             Response::HTTP_OK,
-//            ["Content-type" => "text/plain"]
-            ["Content-type" => "image/jpeg"]
+            ["Content-type" => "text/plain"]
+//            ["Content-type" => "image/jpeg"]
         );
     }
 
@@ -187,6 +188,23 @@ class TestController extends BaseController
         $data[Render::CONTENT] = \GuzzleHttp\json_encode($res[0]->getDescription());
         return (new Render())->render($data);
     }
+
+    /**
+     * @Route("/testpost")
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function testpost()
+    {
+        /** @var Goods[] $res */
+        $res = Proxy::init()->getEntityManager()->getRepository(\Goods::class)->findAll();
+
+        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res[0]->getDescription());
+        return (new Render())->render($data);
+    }
+
 
     /**
      * @Route("/zorders")
