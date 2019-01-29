@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\User;
 use App\Cfg\Config;
 use Doctrine\Common\Collections\Criteria;
+use GuzzleHttp\Client;
 
 
 
@@ -203,6 +204,22 @@ class TestController extends BaseController
 
         $data[Render::CONTENT] = \GuzzleHttp\json_encode($res[0]->getDescription());
         return (new Render())->render($data);
+    }
+
+
+    /**
+     * @Route("/testpost")
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function testpost()
+    {
+        $request = self::getRequest()->request->all();
+//        var_dump($request); die;
+        $data[Render::CONTENT] = \GuzzleHttp\json_encode($request);
+        return (new Render())->render($data, 'test.html.twig');
     }
 
 
