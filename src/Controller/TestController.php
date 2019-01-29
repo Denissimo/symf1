@@ -199,24 +199,6 @@ class TestController extends BaseController
      */
     public function testpost()
     {
-        /** @var Goods[] $res */
-        $res = Proxy::init()->getEntityManager()->getRepository(\Goods::class)->findAll();
-
-        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res[0]->getDescription());
-        return (new Render())->render($data);
-    }
-
-    //zzzzzzzzzzzzzzzzzzzzz
-
-    /**
-     * @Route("/testpost")
-     * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public function testpost()
-    {
         $request = self::getRequest()->request->all();
         $data[Render::CONTENT] = \GuzzleHttp\json_encode($request);
         return (new Render())->render($data, 'test.html.twig');
