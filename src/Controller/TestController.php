@@ -200,7 +200,6 @@ class TestController extends BaseController
     public function testpost()
     {
         $request = self::getRequest()->request->all();
-//        var_dump($request); die;
         $data[Render::CONTENT] = \GuzzleHttp\json_encode($request);
         return (new Render())->render($data, 'test.html.twig');
     }
