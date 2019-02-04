@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Orders
  *
- * @ORM\Table(name="orders", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="order_id", columns={"order_id"}), @ORM\Index(name="order_type", columns={"type"}), @ORM\Index(name="pimpay_status", columns={"pimpay_status"}), @ORM\Index(name="oid", columns={"old_id"}), @ORM\Index(name="order_status", columns={"status"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="orders_address_id", columns={"address_id"})})
+ * @ORM\Table(name="orders", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="oid", columns={"old_id"}), @ORM\Index(name="order_status", columns={"status"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="orders_address_id", columns={"address_id"}), @ORM\Index(name="order_id", columns={"order_id"}), @ORM\Index(name="order_type", columns={"type"}), @ORM\Index(name="pimpay_status", columns={"pimpay_status"})})
  * @ORM\Entity
  */
 class Orders
@@ -404,7 +404,7 @@ class Orders
      *
      * @ORM\ManyToOne(targetEntity="ClientSettings")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="client_id", referencedColumnName="client_id")
+     *   @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      * })
      */
     private $client;

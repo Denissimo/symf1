@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * OrdersHistory
  *
- * @ORM\Table(name="orders_history", indexes={@ORM\Index(name="type", columns={"type"}), @ORM\Index(name="oid", columns={"oid"}), @ORM\Index(name="client_id", columns={"client_id"})})
+ * @ORM\Table(name="orders_history", indexes={@ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="oid", columns={"oid"}), @ORM\Index(name="type", columns={"type"})})
  * @ORM\Entity
  */
 class OrdersHistory
@@ -64,7 +64,7 @@ class OrdersHistory
      *
      * @ORM\ManyToOne(targetEntity="ClientSettings")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="client_id", referencedColumnName="client_id")
+     *   @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      * })
      */
     private $client;

@@ -42,5 +42,77 @@ class ClientSettings
      */
     private $active;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return ClientSettings
+     */
+    public function setId(int $id): ClientSettings
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getClientId(): ?int
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @param int|null $clientId
+     * @return ClientSettings
+     */
+    public function setClientId(?int $clientId): ClientSettings
+    {
+        $this->clientId = $clientId;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getApikey(): ?string
+    {
+        return $this->apikey;
+    }
+
+    /**
+     * @param string|null $apikey
+     * @return ClientSettings
+     */
+    public function setApikey(?string $apikey): ClientSettings
+    {
+        $this->apikey = $apikey;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getActive(): ?int
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param int|null $active
+     * @return ClientSettings
+     */
+    public function setActive(?int $active): ClientSettings
+    {
+        $this->active = $active;
+        return $this;
+    }
+
 
 }

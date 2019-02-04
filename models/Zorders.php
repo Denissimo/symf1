@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Zorders
  *
- * @ORM\Table(name="zorders", indexes={@ORM\Index(name="vakt_part_status", columns={"vakt_part_status"}), @ORM\Index(name="status", columns={"status"}), @ORM\Index(name="sklad_id", columns={"sklad_id"}), @ORM\Index(name="date", columns={"date"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="zpvz_id", columns={"zpvz_id"}), @ORM\Index(name="zone_id", columns={"zone_id"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="sklad_our", columns={"sklad_our"}), @ORM\Index(name="mo_kladr_id", columns={"mo_kladr_id"}), @ORM\Index(name="courier_id", columns={"courier_id"}), @ORM\Index(name="bill_id", columns={"bill_id"})})
+ * @ORM\Table(name="zorders", indexes={@ORM\Index(name="courier_id", columns={"courier_id"}), @ORM\Index(name="bill_id", columns={"bill_id"}), @ORM\Index(name="zone_id", columns={"zone_id"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="sklad_our", columns={"sklad_our"}), @ORM\Index(name="mo_kladr_id", columns={"mo_kladr_id"}), @ORM\Index(name="date", columns={"date"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="zpvz_id", columns={"zpvz_id"}), @ORM\Index(name="vakt_part_status", columns={"vakt_part_status"}), @ORM\Index(name="status", columns={"status"}), @ORM\Index(name="sklad_id", columns={"sklad_id"})})
  * @ORM\Entity
  */
 class Zorders
@@ -778,6 +778,5 @@ class Zorders
         $this->vaktPartStatus = $vaktPartStatus;
         return $this;
     }
-
 
 }

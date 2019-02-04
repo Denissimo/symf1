@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ZordersStocksModels
  *
- * @ORM\Table(name="zorders_stocks_models", indexes={@ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="mo_punkt_id", columns={"mo_punkt_id"})})
+ * @ORM\Table(name="zorders_stocks_models", indexes={@ORM\Index(name="mo_punkt_id", columns={"mo_punkt_id"}), @ORM\Index(name="client_id", columns={"client_id"})})
  * @ORM\Entity
  */
 class ZordersStocksModels
@@ -103,7 +103,7 @@ class ZordersStocksModels
      *
      * @ORM\ManyToOne(targetEntity="ClientSettings")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="client_id", referencedColumnName="client_id")
+     *   @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      * })
      */
     private $client;
@@ -341,6 +341,4 @@ class ZordersStocksModels
         $this->client = $client;
         return $this;
     }
-
-
 }
