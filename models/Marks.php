@@ -35,5 +35,59 @@ class Marks
      */
     private $markDescr;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return Marks
+     */
+    public function setId(int $id): Marks
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMarkType(): ?int
+    {
+        return $this->markType;
+    }
+
+    /**
+     * @param int|null $markType
+     * @return Marks
+     */
+    public function setMarkType(?int $markType): Marks
+    {
+        $this->markType = $markType;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMarkDescr(): ?string
+    {
+        return $this->markDescr;
+    }
+
+    /**
+     * @param string|null $markDescr
+     * @return Marks
+     */
+    public function setMarkDescr(?string $markDescr): Marks
+    {
+        $this->markDescr = $markDescr;
+        return $this;
+    }
+
 
 }

@@ -73,5 +73,148 @@ class Porders
      */
     private $podstatus;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return Porders
+     */
+    public function setId(int $id): Porders
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOrderId(): ?string
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @param string|null $orderId
+     * @return Porders
+     */
+    public function setOrderId(?string $orderId): Porders
+    {
+        $this->orderId = $orderId;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAtar(): ?string
+    {
+        return $this->atar;
+    }
+
+    /**
+     * @param string|null $atar
+     * @return Porders
+     */
+    public function setAtar(?string $atar): Porders
+    {
+        $this->atar = $atar;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAnp(): ?string
+    {
+        return $this->anp;
+    }
+
+    /**
+     * @param string|null $anp
+     * @return Porders
+     */
+    public function setAnp(?string $anp): Porders
+    {
+        $this->anp = $anp;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAus(): ?string
+    {
+        return $this->aus;
+    }
+
+    /**
+     * @param string|null $aus
+     * @return Porders
+     */
+    public function setAus(?string $aus): Porders
+    {
+        $this->aus = $aus;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBillId(): ?string
+    {
+        return $this->billId;
+    }
+
+    /**
+     * @param string|null $billId
+     * @return Porders
+     */
+    public function setBillId(?string $billId): Porders
+    {
+        $this->billId = $billId;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getEnddate(): ?DateTime
+    {
+        return $this->enddate;
+    }
+
+    /**
+     * @param DateTime|null $enddate
+     * @return Porders
+     */
+    public function setEnddate(?DateTime $enddate): Porders
+    {
+        $this->enddate = $enddate;
+        return $this;
+    }
+
+    /**
+     * @return PordersPodstatusModel
+     */
+    public function getPodstatus(): PordersPodstatusModel
+    {
+        return $this->podstatus;
+    }
+
+    /**
+     * @param PordersPodstatusModel $podstatus
+     * @return Porders
+     */
+    public function setPodstatus(PordersPodstatusModel $podstatus): Porders
+    {
+        $this->podstatus = $podstatus;
+        return $this;
+    }
 
 }

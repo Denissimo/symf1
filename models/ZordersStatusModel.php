@@ -63,6 +63,4 @@ class ZordersStatusModel
         $this->status = $status;
         return $this;
     }
-
-
 }

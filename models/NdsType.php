@@ -28,5 +28,41 @@ class NdsType
      */
     private $nds;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return NdsType
+     */
+    public function setId(int $id): NdsType
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNds(): string
+    {
+        return $this->nds;
+    }
+
+    /**
+     * @param string $nds
+     * @return NdsType
+     */
+    public function setNds(string $nds): NdsType
+    {
+        $this->nds = $nds;
+        return $this;
+    }
+
 
 }

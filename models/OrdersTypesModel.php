@@ -28,5 +28,40 @@ class OrdersTypesModel
      */
     private $type;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return OrdersTypesModel
+     */
+    public function setId(int $id): OrdersTypesModel
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string|null $type
+     * @return OrdersTypesModel
+     */
+    public function setType(?string $type): OrdersTypesModel
+    {
+        $this->type = $type;
+        return $this;
+    }
 
 }

@@ -28,5 +28,40 @@ class ZordersTypesModel
      */
     private $type;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return ZordersTypesModel
+     */
+    public function setId(int $id): ZordersTypesModel
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string|null $type
+     * @return ZordersTypesModel
+     */
+    public function setType(?string $type): ZordersTypesModel
+    {
+        $this->type = $type;
+        return $this;
+    }
 
 }

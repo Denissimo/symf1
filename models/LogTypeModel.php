@@ -28,5 +28,41 @@ class LogTypeModel
      */
     private $type;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return LogTypeModel
+     */
+    public function setId(int $id): LogTypeModel
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string|null $type
+     * @return LogTypeModel
+     */
+    public function setType(?string $type): LogTypeModel
+    {
+        $this->type = $type;
+        return $this;
+    }
+
 
 }

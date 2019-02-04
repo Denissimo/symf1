@@ -28,5 +28,40 @@ class ZordersStocksOurModel
      */
     private $sklad;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return ZordersStocksOurModel
+     */
+    public function setId(int $id): ZordersStocksOurModel
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSklad(): ?string
+    {
+        return $this->sklad;
+    }
+
+    /**
+     * @param string|null $sklad
+     * @return ZordersStocksOurModel
+     */
+    public function setSklad(?string $sklad): ZordersStocksOurModel
+    {
+        $this->sklad = $sklad;
+        return $this;
+    }
 
 }

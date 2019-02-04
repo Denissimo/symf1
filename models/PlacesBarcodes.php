@@ -73,5 +73,148 @@ class PlacesBarcodes
      */
     private $oid;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return PlacesBarcodes
+     */
+    public function setId(int $id): PlacesBarcodes
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPlace(): ?int
+    {
+        return $this->place;
+    }
+
+    /**
+     * @param int|null $place
+     * @return PlacesBarcodes
+     */
+    public function setPlace(?int $place): PlacesBarcodes
+    {
+        $this->place = $place;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBarcode(): ?string
+    {
+        return $this->barcode;
+    }
+
+    /**
+     * @param string|null $barcode
+     * @return PlacesBarcodes
+     */
+    public function setBarcode(?string $barcode): PlacesBarcodes
+    {
+        $this->barcode = $barcode;
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getWeight(): ?float
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param float|null $weight
+     * @return PlacesBarcodes
+     */
+    public function setWeight(?float $weight): PlacesBarcodes
+    {
+        $this->weight = $weight;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getReserved(): ?int
+    {
+        return $this->reserved;
+    }
+
+    /**
+     * @param int|null $reserved
+     * @return PlacesBarcodes
+     */
+    public function setReserved(?int $reserved): PlacesBarcodes
+    {
+        $this->reserved = $reserved;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getFirstSkladScan(): ?int
+    {
+        return $this->firstSkladScan;
+    }
+
+    /**
+     * @param int|null $firstSkladScan
+     * @return PlacesBarcodes
+     */
+    public function setFirstSkladScan(?int $firstSkladScan): PlacesBarcodes
+    {
+        $this->firstSkladScan = $firstSkladScan;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int|null $status
+     * @return PlacesBarcodes
+     */
+    public function setStatus(?int $status): PlacesBarcodes
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * @return Orders
+     */
+    public function getOid(): Orders
+    {
+        return $this->oid;
+    }
+
+    /**
+     * @param Orders $oid
+     * @return PlacesBarcodes
+     */
+    public function setOid(Orders $oid): PlacesBarcodes
+    {
+        $this->oid = $oid;
+        return $this;
+    }
 
 }

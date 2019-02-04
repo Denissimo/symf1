@@ -229,7 +229,7 @@ class TestController extends BaseController
             )->toArray();
 //        var_dump($res); die;
 //        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res[0]->getSklad()->getAddr());
-        $data[Render::CONTENT] = (string)$res[0]->getSklad()->getComments();
+        $data[Render::CONTENT] = (string)$res[0]->getStock()->getComments();
 //        $data[Render::CONTENT] = $res[0]->getId();
 //        $data[Render::CONTENT] = '++';
         return (new Render())->render($data);

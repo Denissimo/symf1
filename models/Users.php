@@ -79,4 +79,130 @@ class Users
         $this->role = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return Users
+     */
+    public function setId(int $id): Users
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return Users
+     */
+    public function setName(string $name): Users
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     * @return Users
+     */
+    public function setEmail(string $email): Users
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     * @return Users
+     */
+    public function setPassword(string $password): Users
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param bool $enabled
+     * @return Users
+     */
+    public function setEnabled(bool $enabled): Users
+    {
+        $this->enabled = $enabled;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserPic(): string
+    {
+        return $this->userPic;
+    }
+
+    /**
+     * @param string $userPic
+     * @return Users
+     */
+    public function setUserPic(string $userPic): Users
+    {
+        $this->userPic = $userPic;
+        return $this;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRole(): \Doctrine\Common\Collections\Collection
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\Collection $role
+     * @return Users
+     */
+    public function setRole(\Doctrine\Common\Collections\Collection $role): Users
+    {
+        $this->role = $role;
+        return $this;
+    }
+
 }

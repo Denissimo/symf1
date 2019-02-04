@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Zorders
  *
- * @ORM\Table(name="zorders", indexes={@ORM\Index(name="courier_id", columns={"courier_id"}), @ORM\Index(name="bill_id", columns={"bill_id"}), @ORM\Index(name="zone_id", columns={"zone_id"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="sklad_our", columns={"sklad_our"}), @ORM\Index(name="mo_kladr_id", columns={"mo_kladr_id"}), @ORM\Index(name="date", columns={"date"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="zpvz_id", columns={"zpvz_id"}), @ORM\Index(name="vakt_part_status", columns={"vakt_part_status"}), @ORM\Index(name="status", columns={"status"}), @ORM\Index(name="sklad_id", columns={"sklad_id"})})
+ * @ORM\Table(name="zorders", indexes={@ORM\Index(name="mo_kladr_id", columns={"mo_kladr_id"}), @ORM\Index(name="courier_id", columns={"courier_id"}), @ORM\Index(name="bill_id", columns={"bill_id"}), @ORM\Index(name="stock_our", columns={"stock_our"}), @ORM\Index(name="zone_id", columns={"zone_id"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="status", columns={"status"}), @ORM\Index(name="date", columns={"date"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="stocks", columns={"stock_id"}), @ORM\Index(name="zpvz_id", columns={"zpvz_id"}), @ORM\Index(name="vakt_part_status", columns={"vakt_part_status"})})
  * @ORM\Entity
  */
 class Zorders
@@ -173,7 +173,7 @@ class Zorders
      *
      * @ORM\Column(name="vozvratmark", type="integer", nullable=true)
      */
-    private $vozvratmark = '0';
+    private $vozvratmark;
 
     /**
      * @var int|null
@@ -190,26 +190,6 @@ class Zorders
     private $vaktPart;
 
     /**
-     * @var \ZordersStocksOurModel
-     *
-     * @ORM\ManyToOne(targetEntity="ZordersStocksOurModel")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="sklad_our", referencedColumnName="id")
-     * })
-     */
-    private $skladOur;
-
-    /**
-     * @var \ZordersStocksModels
-     *
-     * @ORM\ManyToOne(targetEntity="ZordersStocksModels")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="sklad_id", referencedColumnName="id")
-     * })
-     */
-    private $sklad;
-
-    /**
      * @var \ZordersStatusModel
      *
      * @ORM\ManyToOne(targetEntity="ZordersStatusModel")
@@ -218,6 +198,26 @@ class Zorders
      * })
      */
     private $status;
+
+    /**
+     * @var \ZordersStocksOurModel
+     *
+     * @ORM\ManyToOne(targetEntity="ZordersStocksOurModel")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="stock_our", referencedColumnName="id")
+     * })
+     */
+    private $stockOur;
+
+    /**
+     * @var \ZordersStocksModels
+     *
+     * @ORM\ManyToOne(targetEntity="ZordersStocksModels")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="stock_id", referencedColumnName="id")
+     * })
+     */
+    private $stock;
 
     /**
      * @var \ZordersTypesModel
@@ -690,42 +690,6 @@ class Zorders
     }
 
     /**
-     * @return ZordersStocksOurModel
-     */
-    public function getSkladOur(): ZordersStocksOurModel
-    {
-        return $this->skladOur;
-    }
-
-    /**
-     * @param ZordersStocksOurModel $skladOur
-     * @return Zorders
-     */
-    public function setSkladOur(ZordersStocksOurModel $skladOur): Zorders
-    {
-        $this->skladOur = $skladOur;
-        return $this;
-    }
-
-    /**
-     * @return ZordersStocksModels
-     */
-    public function getSklad(): ZordersStocksModels
-    {
-        return $this->sklad;
-    }
-
-    /**
-     * @param ZordersStocksModels $sklad
-     * @return Zorders
-     */
-    public function setSklad(ZordersStocksModels $sklad): Zorders
-    {
-        $this->sklad = $sklad;
-        return $this;
-    }
-
-    /**
      * @return ZordersStatusModel
      */
     public function getStatus(): ZordersStatusModel
@@ -740,6 +704,42 @@ class Zorders
     public function setStatus(ZordersStatusModel $status): Zorders
     {
         $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * @return ZordersStocksOurModel
+     */
+    public function getStockOur(): ZordersStocksOurModel
+    {
+        return $this->stockOur;
+    }
+
+    /**
+     * @param ZordersStocksOurModel $stockOur
+     * @return Zorders
+     */
+    public function setStockOur(ZordersStocksOurModel $stockOur): Zorders
+    {
+        $this->stockOur = $stockOur;
+        return $this;
+    }
+
+    /**
+     * @return ZordersStocksModels
+     */
+    public function getStock(): ZordersStocksModels
+    {
+        return $this->stock;
+    }
+
+    /**
+     * @param ZordersStocksModels $stock
+     * @return Zorders
+     */
+    public function setStock(ZordersStocksModels $stock): Zorders
+    {
+        $this->stock = $stock;
         return $this;
     }
 

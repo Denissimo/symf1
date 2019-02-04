@@ -28,5 +28,41 @@ class PordersPodstatusModel
      */
     private $podstatus;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return PordersPodstatusModel
+     */
+    public function setId(int $id): PordersPodstatusModel
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPodstatus(): ?string
+    {
+        return $this->podstatus;
+    }
+
+    /**
+     * @param string|null $podstatus
+     * @return PordersPodstatusModel
+     */
+    public function setPodstatus(?string $podstatus): PordersPodstatusModel
+    {
+        $this->podstatus = $podstatus;
+        return $this;
+    }
+
 
 }

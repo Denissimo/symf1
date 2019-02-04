@@ -84,5 +84,184 @@ class OrderHistory
      */
     private $time;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return OrderHistory
+     */
+    public function setId(int $id): OrderHistory
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOrderId(): ?string
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @param string|null $orderId
+     * @return OrderHistory
+     */
+    public function setOrderId(?string $orderId): OrderHistory
+    {
+        $this->orderId = $orderId;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getWhat(): ?int
+    {
+        return $this->what;
+    }
+
+    /**
+     * @param int|null $what
+     * @return OrderHistory
+     */
+    public function setWhat(?int $what): OrderHistory
+    {
+        $this->what = $what;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUserId(): ?string
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param string|null $userId
+     * @return OrderHistory
+     */
+    public function setUserId(?string $userId): OrderHistory
+    {
+        $this->userId = $userId;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     * @return OrderHistory
+     */
+    public function setDescription(?string $description): OrderHistory
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOldValue(): ?string
+    {
+        return $this->oldValue;
+    }
+
+    /**
+     * @param string|null $oldValue
+     * @return OrderHistory
+     */
+    public function setOldValue(?string $oldValue): OrderHistory
+    {
+        $this->oldValue = $oldValue;
+        return $this;
+    }
+
+    /**
+     * @return json|null
+     */
+    public function getJson(): ?json
+    {
+        return $this->json;
+    }
+
+    /**
+     * @param json|null $json
+     * @return OrderHistory
+     */
+    public function setJson(?json $json): OrderHistory
+    {
+        $this->json = $json;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStatusLogs(): ?string
+    {
+        return $this->statusLogs;
+    }
+
+    /**
+     * @param string|null $statusLogs
+     * @return OrderHistory
+     */
+    public function setStatusLogs(?string $statusLogs): OrderHistory
+    {
+        $this->statusLogs = $statusLogs;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getDate(): ?DateTime
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param DateTime|null $date
+     * @return OrderHistory
+     */
+    public function setDate(?DateTime $date): OrderHistory
+    {
+        $this->date = $date;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getTime(): ?DateTime
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param DateTime|null $time
+     * @return OrderHistory
+     */
+    public function setTime(?DateTime $time): OrderHistory
+    {
+        $this->time = $time;
+        return $this;
+    }
 
 }

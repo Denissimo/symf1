@@ -449,5 +449,1084 @@ class Orders
      */
     private $pimpayStatus;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return Orders
+     */
+    public function setId(int $id): Orders
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOldId(): ?int
+    {
+        return $this->oldId;
+    }
+
+    /**
+     * @param int|null $oldId
+     * @return Orders
+     */
+    public function setOldId(?int $oldId): Orders
+    {
+        $this->oldId = $oldId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderId(): string
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @param string $orderId
+     * @return Orders
+     */
+    public function setOrderId(string $orderId): Orders
+    {
+        $this->orderId = $orderId;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getDateAdd(): ?DateTime
+    {
+        return $this->dateAdd;
+    }
+
+    /**
+     * @param DateTime|null $dateAdd
+     * @return Orders
+     */
+    public function setDateAdd(?DateTime $dateAdd): Orders
+    {
+        $this->dateAdd = $dateAdd;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getChangeDate(): ?DateTime
+    {
+        return $this->changeDate;
+    }
+
+    /**
+     * @param DateTime|null $changeDate
+     * @return Orders
+     */
+    public function setChangeDate(?DateTime $changeDate): Orders
+    {
+        $this->changeDate = $changeDate;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getDeliveryDate(): ?DateTime
+    {
+        return $this->deliveryDate;
+    }
+
+    /**
+     * @param DateTime|null $deliveryDate
+     * @return Orders
+     */
+    public function setDeliveryDate(?DateTime $deliveryDate): Orders
+    {
+        $this->deliveryDate = $deliveryDate;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getDeliveryTime1(): ?DateTime
+    {
+        return $this->deliveryTime1;
+    }
+
+    /**
+     * @param DateTime|null $deliveryTime1
+     * @return Orders
+     */
+    public function setDeliveryTime1(?DateTime $deliveryTime1): Orders
+    {
+        $this->deliveryTime1 = $deliveryTime1;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getDeliveryTime2(): ?DateTime
+    {
+        return $this->deliveryTime2;
+    }
+
+    /**
+     * @param DateTime|null $deliveryTime2
+     * @return Orders
+     */
+    public function setDeliveryTime2(?DateTime $deliveryTime2): Orders
+    {
+        $this->deliveryTime2 = $deliveryTime2;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTargetName(): ?string
+    {
+        return $this->targetName;
+    }
+
+    /**
+     * @param string|null $targetName
+     * @return Orders
+     */
+    public function setTargetName(?string $targetName): Orders
+    {
+        $this->targetName = $targetName;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCourierId(): ?int
+    {
+        return $this->courierId;
+    }
+
+    /**
+     * @param int|null $courierId
+     * @return Orders
+     */
+    public function setCourierId(?int $courierId): Orders
+    {
+        $this->courierId = $courierId;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCourCid(): ?int
+    {
+        return $this->courCid;
+    }
+
+    /**
+     * @param int|null $courCid
+     * @return Orders
+     */
+    public function setCourCid(?int $courCid): Orders
+    {
+        $this->courCid = $courCid;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTargetContacts(): ?string
+    {
+        return $this->targetContacts;
+    }
+
+    /**
+     * @param string|null $targetContacts
+     * @return Orders
+     */
+    public function setTargetContacts(?string $targetContacts): Orders
+    {
+        $this->targetContacts = $targetContacts;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTargetNotes(): ?string
+    {
+        return $this->targetNotes;
+    }
+
+    /**
+     * @param string|null $targetNotes
+     * @return Orders
+     */
+    public function setTargetNotes(?string $targetNotes): Orders
+    {
+        $this->targetNotes = $targetNotes;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAdmNotes(): ?string
+    {
+        return $this->admNotes;
+    }
+
+    /**
+     * @param string|null $admNotes
+     * @return Orders
+     */
+    public function setAdmNotes(?string $admNotes): Orders
+    {
+        $this->admNotes = $admNotes;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getNdsPriceClient(): ?int
+    {
+        return $this->ndsPriceClient;
+    }
+
+    /**
+     * @param int|null $ndsPriceClient
+     * @return Orders
+     */
+    public function setNdsPriceClient(?int $ndsPriceClient): Orders
+    {
+        $this->ndsPriceClient = $ndsPriceClient;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getisPacked(): ?string
+    {
+        return $this->isPacked;
+    }
+
+    /**
+     * @param string|null $isPacked
+     * @return Orders
+     */
+    public function setIsPacked(?string $isPacked): Orders
+    {
+        $this->isPacked = $isPacked;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNp(): ?string
+    {
+        return $this->np;
+    }
+
+    /**
+     * @param string|null $np
+     * @return Orders
+     */
+    public function setNp(?string $np): Orders
+    {
+        $this->np = $np;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSms(): ?string
+    {
+        return $this->sms;
+    }
+
+    /**
+     * @param string|null $sms
+     * @return Orders
+     */
+    public function setSms(?string $sms): Orders
+    {
+        $this->sms = $sms;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getisComplect(): ?string
+    {
+        return $this->isComplect;
+    }
+
+    /**
+     * @param string|null $isComplect
+     * @return Orders
+     */
+    public function setIsComplect(?string $isComplect): Orders
+    {
+        $this->isComplect = $isComplect;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCard(): ?int
+    {
+        return $this->card;
+    }
+
+    /**
+     * @param int|null $card
+     * @return Orders
+     */
+    public function setCard(?int $card): Orders
+    {
+        $this->card = $card;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCardType(): ?int
+    {
+        return $this->cardType;
+    }
+
+    /**
+     * @param int|null $cardType
+     * @return Orders
+     */
+    public function setCardType(?int $cardType): Orders
+    {
+        $this->cardType = $cardType;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getAgentId(): ?int
+    {
+        return $this->agentId;
+    }
+
+    /**
+     * @param int|null $agentId
+     * @return Orders
+     */
+    public function setAgentId(?int $agentId): Orders
+    {
+        $this->agentId = $agentId;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAgentAct(): ?string
+    {
+        return $this->agentAct;
+    }
+
+    /**
+     * @param string|null $agentAct
+     * @return Orders
+     */
+    public function setAgentAct(?string $agentAct): Orders
+    {
+        $this->agentAct = $agentAct;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAgentVact(): ?string
+    {
+        return $this->agentVact;
+    }
+
+    /**
+     * @param string|null $agentVact
+     * @return Orders
+     */
+    public function setAgentVact(?string $agentVact): Orders
+    {
+        $this->agentVact = $agentVact;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getManagerId(): ?int
+    {
+        return $this->managerId;
+    }
+
+    /**
+     * @param int|null $managerId
+     * @return Orders
+     */
+    public function setManagerId(?int $managerId): Orders
+    {
+        $this->managerId = $managerId;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getIsoh(): ?int
+    {
+        return $this->isoh;
+    }
+
+    /**
+     * @param int|null $isoh
+     * @return Orders
+     */
+    public function setIsoh(?int $isoh): Orders
+    {
+        $this->isoh = $isoh;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOtkazmark(): ?int
+    {
+        return $this->otkazmark;
+    }
+
+    /**
+     * @param int|null $otkazmark
+     * @return Orders
+     */
+    public function setOtkazmark(?int $otkazmark): Orders
+    {
+        $this->otkazmark = $otkazmark;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPReason(): ?int
+    {
+        return $this->pReason;
+    }
+
+    /**
+     * @param int|null $pReason
+     * @return Orders
+     */
+    public function setPReason(?int $pReason): Orders
+    {
+        $this->pReason = $pReason;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getReason7(): ?int
+    {
+        return $this->reason7;
+    }
+
+    /**
+     * @param int|null $reason7
+     * @return Orders
+     */
+    public function setReason7(?int $reason7): Orders
+    {
+        $this->reason7 = $reason7;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getReason8(): ?int
+    {
+        return $this->reason8;
+    }
+
+    /**
+     * @param int|null $reason8
+     * @return Orders
+     */
+    public function setReason8(?int $reason8): Orders
+    {
+        $this->reason8 = $reason8;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOrdercall(): ?int
+    {
+        return $this->ordercall;
+    }
+
+    /**
+     * @param int|null $ordercall
+     * @return Orders
+     */
+    public function setOrdercall(?int $ordercall): Orders
+    {
+        $this->ordercall = $ordercall;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getInnerN(): ?string
+    {
+        return $this->innerN;
+    }
+
+    /**
+     * @param string|null $innerN
+     * @return Orders
+     */
+    public function setInnerN(?string $innerN): Orders
+    {
+        $this->innerN = $innerN;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBrand(): ?string
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @param string|null $brand
+     * @return Orders
+     */
+    public function setBrand(?string $brand): Orders
+    {
+        $this->brand = $brand;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getShk(): ?string
+    {
+        return $this->shk;
+    }
+
+    /**
+     * @param string|null $shk
+     * @return Orders
+     */
+    public function setShk(?string $shk): Orders
+    {
+        $this->shk = $shk;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOrderWeight(): ?string
+    {
+        return $this->orderWeight;
+    }
+
+    /**
+     * @param string|null $orderWeight
+     * @return Orders
+     */
+    public function setOrderWeight(?string $orderWeight): Orders
+    {
+        $this->orderWeight = $orderWeight;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getChweightflag(): ?int
+    {
+        return $this->chweightflag;
+    }
+
+    /**
+     * @param int|null $chweightflag
+     * @return Orders
+     */
+    public function setChweightflag(?int $chweightflag): Orders
+    {
+        $this->chweightflag = $chweightflag;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getUpdateDateFlag(): ?int
+    {
+        return $this->updateDateFlag;
+    }
+
+    /**
+     * @param int|null $updateDateFlag
+     * @return Orders
+     */
+    public function setUpdateDateFlag(?int $updateDateFlag): Orders
+    {
+        $this->updateDateFlag = $updateDateFlag;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBillId(): ?string
+    {
+        return $this->billId;
+    }
+
+    /**
+     * @param string|null $billId
+     * @return Orders
+     */
+    public function setBillId(?string $billId): Orders
+    {
+        $this->billId = $billId;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAktId(): ?string
+    {
+        return $this->aktId;
+    }
+
+    /**
+     * @param string|null $aktId
+     * @return Orders
+     */
+    public function setAktId(?string $aktId): Orders
+    {
+        $this->aktId = $aktId;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRegBillId(): ?string
+    {
+        return $this->regBillId;
+    }
+
+    /**
+     * @param string|null $regBillId
+     * @return Orders
+     */
+    public function setRegBillId(?string $regBillId): Orders
+    {
+        $this->regBillId = $regBillId;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPartnerAct(): ?string
+    {
+        return $this->partnerAct;
+    }
+
+    /**
+     * @param string|null $partnerAct
+     * @return Orders
+     */
+    public function setPartnerAct(?string $partnerAct): Orders
+    {
+        $this->partnerAct = $partnerAct;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOpenOption(): ?int
+    {
+        return $this->openOption;
+    }
+
+    /**
+     * @param int|null $openOption
+     * @return Orders
+     */
+    public function setOpenOption(?int $openOption): Orders
+    {
+        $this->openOption = $openOption;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCallOption(): ?int
+    {
+        return $this->callOption;
+    }
+
+    /**
+     * @param int|null $callOption
+     * @return Orders
+     */
+    public function setCallOption(?int $callOption): Orders
+    {
+        $this->callOption = $callOption;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLabelOption(): ?int
+    {
+        return $this->labelOption;
+    }
+
+    /**
+     * @param int|null $labelOption
+     * @return Orders
+     */
+    public function setLabelOption(?int $labelOption): Orders
+    {
+        $this->labelOption = $labelOption;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPlacesCount(): ?int
+    {
+        return $this->placesCount;
+    }
+
+    /**
+     * @param int|null $placesCount
+     * @return Orders
+     */
+    public function setPlacesCount(?int $placesCount): Orders
+    {
+        $this->placesCount = $placesCount;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDocsOption(): ?int
+    {
+        return $this->docsOption;
+    }
+
+    /**
+     * @param int|null $docsOption
+     * @return Orders
+     */
+    public function setDocsOption(?int $docsOption): Orders
+    {
+        $this->docsOption = $docsOption;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDocsReturnOption(): ?int
+    {
+        return $this->docsReturnOption;
+    }
+
+    /**
+     * @param int|null $docsReturnOption
+     * @return Orders
+     */
+    public function setDocsReturnOption(?int $docsReturnOption): Orders
+    {
+        $this->docsReturnOption = $docsReturnOption;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPartialOption(): ?int
+    {
+        return $this->partialOption;
+    }
+
+    /**
+     * @param int|null $partialOption
+     * @return Orders
+     */
+    public function setPartialOption(?int $partialOption): Orders
+    {
+        $this->partialOption = $partialOption;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDressFittingOption(): ?int
+    {
+        return $this->dressFittingOption;
+    }
+
+    /**
+     * @param int|null $dressFittingOption
+     * @return Orders
+     */
+    public function setDressFittingOption(?int $dressFittingOption): Orders
+    {
+        $this->dressFittingOption = $dressFittingOption;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLiftingOption(): ?int
+    {
+        return $this->liftingOption;
+    }
+
+    /**
+     * @param int|null $liftingOption
+     * @return Orders
+     */
+    public function setLiftingOption(?int $liftingOption): Orders
+    {
+        $this->liftingOption = $liftingOption;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCargoLift(): ?int
+    {
+        return $this->cargoLift;
+    }
+
+    /**
+     * @param int|null $cargoLift
+     * @return Orders
+     */
+    public function setCargoLift(?int $cargoLift): Orders
+    {
+        $this->cargoLift = $cargoLift;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getChangeOption(): ?int
+    {
+        return $this->changeOption;
+    }
+
+    /**
+     * @param int|null $changeOption
+     * @return Orders
+     */
+    public function setChangeOption(?int $changeOption): Orders
+    {
+        $this->changeOption = $changeOption;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getChangeText(): ?string
+    {
+        return $this->changeText;
+    }
+
+    /**
+     * @param string|null $changeText
+     * @return Orders
+     */
+    public function setChangeText(?string $changeText): Orders
+    {
+        $this->changeText = $changeText;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOrderplace(): ?int
+    {
+        return $this->orderplace;
+    }
+
+    /**
+     * @param int|null $orderplace
+     * @return Orders
+     */
+    public function setOrderplace(?int $orderplace): Orders
+    {
+        $this->orderplace = $orderplace;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPimpSend(): ?int
+    {
+        return $this->pimpSend;
+    }
+
+    /**
+     * @param int|null $pimpSend
+     * @return Orders
+     */
+    public function setPimpSend(?int $pimpSend): Orders
+    {
+        $this->pimpSend = $pimpSend;
+        return $this;
+    }
+
+    /**
+     * @return ClientSettings
+     */
+    public function getClient(): ClientSettings
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param ClientSettings $client
+     * @return Orders
+     */
+    public function setClient(ClientSettings $client): Orders
+    {
+        $this->client = $client;
+        return $this;
+    }
+
+    /**
+     * @return OrdersStatusModel
+     */
+    public function getStatus(): OrdersStatusModel
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param OrdersStatusModel $status
+     * @return Orders
+     */
+    public function setStatus(OrdersStatusModel $status): Orders
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * @return OrdersTypesModel
+     */
+    public function getType(): OrdersTypesModel
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param OrdersTypesModel $type
+     * @return Orders
+     */
+    public function setType(OrdersTypesModel $type): Orders
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getAddress(): Address
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param Address $address
+     * @return Orders
+     */
+    public function setAddress(Address $address): Orders
+    {
+        $this->address = $address;
+        return $this;
+    }
+
+    /**
+     * @return OrdersPimpayModel
+     */
+    public function getPimpayStatus(): OrdersPimpayModel
+    {
+        return $this->pimpayStatus;
+    }
+
+    /**
+     * @param OrdersPimpayModel $pimpayStatus
+     * @return Orders
+     */
+    public function setPimpayStatus(OrdersPimpayModel $pimpayStatus): Orders
+    {
+        $this->pimpayStatus = $pimpayStatus;
+        return $this;
+    }
 
 }

@@ -28,5 +28,41 @@ class OrdersPimpayModel
      */
     private $pimpay;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return OrdersPimpayModel
+     */
+    public function setId(int $id): OrdersPimpayModel
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPimpay(): ?string
+    {
+        return $this->pimpay;
+    }
+
+    /**
+     * @param string|null $pimpay
+     * @return OrdersPimpayModel
+     */
+    public function setPimpay(?string $pimpay): OrdersPimpayModel
+    {
+        $this->pimpay = $pimpay;
+        return $this;
+    }
+
 
 }

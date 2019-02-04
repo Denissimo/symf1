@@ -28,5 +28,40 @@ class OrdersStatusModel
      */
     private $status;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return OrdersStatusModel
+     */
+    public function setId(int $id): OrdersStatusModel
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string|null $status
+     * @return OrdersStatusModel
+     */
+    public function setStatus(?string $status): OrdersStatusModel
+    {
+        $this->status = $status;
+        return $this;
+    }
 
 }
