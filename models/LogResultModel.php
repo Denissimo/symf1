@@ -5,12 +5,12 @@
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * LogTypeModel
+ * LogResultModel
  *
- * @ORM\Table(name="log_type_model", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
+ * @ORM\Table(name="log_result_model", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
  * @ORM\Entity
  */
-class LogTypeModel
+class LogResultModel
 {
     /**
      * @var int
@@ -24,9 +24,9 @@ class LogTypeModel
     /**
      * @var string|null
      *
-     * @ORM\Column(name="type", type="string", length=100, nullable=true, options={"comment"="Description статуса"})
+     * @ORM\Column(name="result", type="string", length=100, nullable=true, options={"comment"="Description результата"})
      */
-    private $type;
+    private $result;
 
     /**
      * @return int
@@ -38,9 +38,9 @@ class LogTypeModel
 
     /**
      * @param int $id
-     * @return LogTypeModel
+     * @return LogResultModel
      */
-    public function setId(int $id): LogTypeModel
+    public function setId(int $id): LogResultModel
     {
         $this->id = $id;
         return $this;
@@ -49,18 +49,18 @@ class LogTypeModel
     /**
      * @return string|null
      */
-    public function getType(): ?string
+    public function getResult(): ?string
     {
-        return $this->type;
+        return $this->result;
     }
 
     /**
-     * @param string|null $type
-     * @return LogTypeModel
+     * @param string|null $result
+     * @return LogResultModel
      */
-    public function setType(?string $type): LogTypeModel
+    public function setResult(?string $result): LogResultModel
     {
-        $this->type = $type;
+        $this->result = $result;
         return $this;
     }
 

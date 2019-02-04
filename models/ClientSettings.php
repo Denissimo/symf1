@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ClientSettings
  *
- * @ORM\Table(name="client_settings", indexes={@ORM\Index(name="client_id", columns={"client_id"})})
+ * @ORM\Table(name="client_settings", uniqueConstraints={@ORM\UniqueConstraint(name="client_id", columns={"client_id"})})
  * @ORM\Entity
  */
 class ClientSettings
@@ -34,6 +34,13 @@ class ClientSettings
      * @ORM\Column(name="apikey", type="string", length=111, nullable=true, options={"comment"="API key"})
      */
     private $apikey;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="active", type="integer", nullable=true)
+     */
+    private $active;
 
 
 }

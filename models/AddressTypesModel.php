@@ -5,12 +5,12 @@
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * LogTypeModel
+ * AddressTypesModel
  *
- * @ORM\Table(name="log_type_model", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
+ * @ORM\Table(name="address_types_model", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
  * @ORM\Entity
  */
-class LogTypeModel
+class AddressTypesModel
 {
     /**
      * @var int
@@ -24,7 +24,7 @@ class LogTypeModel
     /**
      * @var string|null
      *
-     * @ORM\Column(name="type", type="string", length=100, nullable=true, options={"comment"="Description статуса"})
+     * @ORM\Column(name="type", type="string", length=100, nullable=true, options={"comment"="type description"})
      */
     private $type;
 
@@ -38,9 +38,9 @@ class LogTypeModel
 
     /**
      * @param int $id
-     * @return LogTypeModel
+     * @return AddressTypesModel
      */
-    public function setId(int $id): LogTypeModel
+    public function setId(int $id): AddressTypesModel
     {
         $this->id = $id;
         return $this;
@@ -56,9 +56,9 @@ class LogTypeModel
 
     /**
      * @param string|null $type
-     * @return LogTypeModel
+     * @return AddressTypesModel
      */
-    public function setType(?string $type): LogTypeModel
+    public function setType(?string $type): AddressTypesModel
     {
         $this->type = $type;
         return $this;

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Zorders
  *
- * @ORM\Table(name="zorders", indexes={@ORM\Index(name="status", columns={"status"}), @ORM\Index(name="sklad_id", columns={"sklad_id"}), @ORM\Index(name="date", columns={"date"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="zpvz_id", columns={"zpvz_id"}), @ORM\Index(name="vakt_part_status", columns={"vakt_part_status"}), @ORM\Index(name="sklad_our", columns={"sklad_our"}), @ORM\Index(name="mo_kladr_id", columns={"mo_kladr_id"}), @ORM\Index(name="courier_id", columns={"courier_id"}), @ORM\Index(name="bill_id", columns={"bill_id"}), @ORM\Index(name="zone_id", columns={"zone_id"}), @ORM\Index(name="type", columns={"type"})})
+ * @ORM\Table(name="zorders", indexes={@ORM\Index(name="vakt_part_status", columns={"vakt_part_status"}), @ORM\Index(name="status", columns={"status"}), @ORM\Index(name="sklad_id", columns={"sklad_id"}), @ORM\Index(name="date", columns={"date"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="zpvz_id", columns={"zpvz_id"}), @ORM\Index(name="zone_id", columns={"zone_id"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="sklad_our", columns={"sklad_our"}), @ORM\Index(name="mo_kladr_id", columns={"mo_kladr_id"}), @ORM\Index(name="courier_id", columns={"courier_id"}), @ORM\Index(name="bill_id", columns={"bill_id"})})
  * @ORM\Entity
  */
 class Zorders
@@ -190,9 +190,9 @@ class Zorders
     private $vaktPart;
 
     /**
-     * @var \ZordersSkladsOurModel
+     * @var \ZordersStocksOurModel
      *
-     * @ORM\ManyToOne(targetEntity="ZordersSkladsOurModel")
+     * @ORM\ManyToOne(targetEntity="ZordersStocksOurModel")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="sklad_our", referencedColumnName="id")
      * })
@@ -200,9 +200,9 @@ class Zorders
     private $skladOur;
 
     /**
-     * @var \ZordersSkladsModels
+     * @var \ZordersStocksModels
      *
-     * @ORM\ManyToOne(targetEntity="ZordersSkladsModels")
+     * @ORM\ManyToOne(targetEntity="ZordersStocksModels")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="sklad_id", referencedColumnName="id")
      * })
@@ -690,36 +690,36 @@ class Zorders
     }
 
     /**
-     * @return ZordersSkladsOurModel
+     * @return ZordersStocksOurModel
      */
-    public function getSkladOur(): ZordersSkladsOurModel
+    public function getSkladOur(): ZordersStocksOurModel
     {
         return $this->skladOur;
     }
 
     /**
-     * @param ZordersSkladsOurModel $skladOur
+     * @param ZordersStocksOurModel $skladOur
      * @return Zorders
      */
-    public function setSkladOur(ZordersSkladsOurModel $skladOur): Zorders
+    public function setSkladOur(ZordersStocksOurModel $skladOur): Zorders
     {
         $this->skladOur = $skladOur;
         return $this;
     }
 
     /**
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function getSklad(): ZordersSkladsModels
+    public function getSklad(): ZordersStocksModels
     {
         return $this->sklad;
     }
 
     /**
-     * @param ZordersSkladsModels $sklad
+     * @param ZordersStocksModels $sklad
      * @return Zorders
      */
-    public function setSklad(ZordersSkladsModels $sklad): Zorders
+    public function setSklad(ZordersStocksModels $sklad): Zorders
     {
         $this->sklad = $sklad;
         return $this;

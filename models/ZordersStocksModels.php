@@ -5,12 +5,12 @@
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ZordersSkladsModels
+ * ZordersStocksModels
  *
- * @ORM\Table(name="zorders_sklads_models", indexes={@ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="mo_punkt_id", columns={"mo_punkt_id"})})
+ * @ORM\Table(name="zorders_stocks_models", indexes={@ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="mo_punkt_id", columns={"mo_punkt_id"})})
  * @ORM\Entity
  */
-class ZordersSkladsModels
+class ZordersStocksModels
 {
     /**
      * @var int
@@ -57,13 +57,6 @@ class ZordersSkladsModels
     private $latitude;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="client_id", type="integer", nullable=true)
-     */
-    private $clientId;
-
-    /**
      * @var string|null
      *
      * @ORM\Column(name="comments", type="text", length=255, nullable=true)
@@ -106,6 +99,16 @@ class ZordersSkladsModels
     private $innerN;
 
     /**
+     * @var \ClientSettings
+     *
+     * @ORM\ManyToOne(targetEntity="ClientSettings")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="client_id", referencedColumnName="client_id")
+     * })
+     */
+    private $client;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -115,9 +118,9 @@ class ZordersSkladsModels
 
     /**
      * @param int $id
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function setId(int $id): ZordersSkladsModels
+    public function setId(int $id): ZordersStocksModels
     {
         $this->id = $id;
         return $this;
@@ -133,9 +136,9 @@ class ZordersSkladsModels
 
     /**
      * @param string|null $name
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function setName(?string $name): ZordersSkladsModels
+    public function setName(?string $name): ZordersStocksModels
     {
         $this->name = $name;
         return $this;
@@ -151,9 +154,9 @@ class ZordersSkladsModels
 
     /**
      * @param string|null $addr
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function setAddr(?string $addr): ZordersSkladsModels
+    public function setAddr(?string $addr): ZordersStocksModels
     {
         $this->addr = $addr;
         return $this;
@@ -169,9 +172,9 @@ class ZordersSkladsModels
 
     /**
      * @param string|null $city
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function setCity(?string $city): ZordersSkladsModels
+    public function setCity(?string $city): ZordersStocksModels
     {
         $this->city = $city;
         return $this;
@@ -187,9 +190,9 @@ class ZordersSkladsModels
 
     /**
      * @param string|null $longtitude
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function setLongtitude(?string $longtitude): ZordersSkladsModels
+    public function setLongtitude(?string $longtitude): ZordersStocksModels
     {
         $this->longtitude = $longtitude;
         return $this;
@@ -205,29 +208,11 @@ class ZordersSkladsModels
 
     /**
      * @param string|null $latitude
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function setLatitude(?string $latitude): ZordersSkladsModels
+    public function setLatitude(?string $latitude): ZordersStocksModels
     {
         $this->latitude = $latitude;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getClientId(): ?int
-    {
-        return $this->clientId;
-    }
-
-    /**
-     * @param int|null $clientId
-     * @return ZordersSkladsModels
-     */
-    public function setClientId(?int $clientId): ZordersSkladsModels
-    {
-        $this->clientId = $clientId;
         return $this;
     }
 
@@ -241,9 +226,9 @@ class ZordersSkladsModels
 
     /**
      * @param string|null $comments
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function setComments(?string $comments): ZordersSkladsModels
+    public function setComments(?string $comments): ZordersStocksModels
     {
         $this->comments = $comments;
         return $this;
@@ -259,9 +244,9 @@ class ZordersSkladsModels
 
     /**
      * @param string|null $contLico
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function setContLico(?string $contLico): ZordersSkladsModels
+    public function setContLico(?string $contLico): ZordersStocksModels
     {
         $this->contLico = $contLico;
         return $this;
@@ -277,9 +262,9 @@ class ZordersSkladsModels
 
     /**
      * @param string|null $contTel
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function setContTel(?string $contTel): ZordersSkladsModels
+    public function setContTel(?string $contTel): ZordersStocksModels
     {
         $this->contTel = $contTel;
         return $this;
@@ -295,9 +280,9 @@ class ZordersSkladsModels
 
     /**
      * @param string|null $time
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function setTime(?string $time): ZordersSkladsModels
+    public function setTime(?string $time): ZordersStocksModels
     {
         $this->time = $time;
         return $this;
@@ -313,9 +298,9 @@ class ZordersSkladsModels
 
     /**
      * @param string|null $moPunktId
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function setMoPunktId(?string $moPunktId): ZordersSkladsModels
+    public function setMoPunktId(?string $moPunktId): ZordersStocksModels
     {
         $this->moPunktId = $moPunktId;
         return $this;
@@ -331,11 +316,29 @@ class ZordersSkladsModels
 
     /**
      * @param string|null $innerN
-     * @return ZordersSkladsModels
+     * @return ZordersStocksModels
      */
-    public function setInnerN(?string $innerN): ZordersSkladsModels
+    public function setInnerN(?string $innerN): ZordersStocksModels
     {
         $this->innerN = $innerN;
+        return $this;
+    }
+
+    /**
+     * @return ClientSettings
+     */
+    public function getClient(): ClientSettings
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param ClientSettings $client
+     * @return ZordersStocksModels
+     */
+    public function setClient(ClientSettings $client): ZordersStocksModels
+    {
+        $this->client = $client;
         return $this;
     }
 

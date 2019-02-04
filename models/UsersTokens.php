@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * UsersTokens
  *
- * @ORM\Table(name="users_tokens", indexes={@ORM\Index(name="FK_users_tokets_uiser_id", columns={"uiser_id"})})
+ * @ORM\Table(name="users_tokens", indexes={@ORM\Index(name="uiser_id", columns={"uiser_id"})})
  * @ORM\Entity
  */
 class UsersTokens
