@@ -3,6 +3,7 @@
 
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * ClientSettings
@@ -41,6 +42,17 @@ class ClientSettings
      * @ORM\Column(name="active", type="integer", nullable=true)
      */
     private $active;
+
+    //     * @ORM\OrderBy({"id" = "DESC"})
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="\Orders", mappedBy="client")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id", referencedColumnName="client_id", nullable=true)
+     * })
+     */
+    private $orders;
 
     /**
      * @return int
@@ -114,5 +126,22 @@ class ClientSettings
         return $this;
     }
 
+    /**
+     * @return Collection
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param Collection $orders
+     * @return ClientSettings
+     */
+    public function setOrders(Collection $orders): ClientSettings
+    {
+        $this->orders = $orders;
+        return $this;
+    }
 
 }

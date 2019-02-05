@@ -400,9 +400,16 @@ class Orders
     private $pimpSend;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="client_id", type="integer", nullable=true, options={"comment"="id Клиента"})
+     */
+    private $clientId;
+
+    /**
      * @var \ClientSettings
      *
-     * @ORM\ManyToOne(targetEntity="ClientSettings")
+     * @ORM\ManyToOne(targetEntity="ClientSettings", inversedBy="orders")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      * })
@@ -1436,6 +1443,24 @@ class Orders
     public function setPimpSend(?int $pimpSend): Orders
     {
         $this->pimpSend = $pimpSend;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getClientId(): ?int
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @param int|null $clientId
+     * @return Orders
+     */
+    public function setClientId(?int $clientId): Orders
+    {
+        $this->clientId = $clientId;
         return $this;
     }
 

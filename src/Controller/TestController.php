@@ -133,6 +133,26 @@ class TestController extends BaseController
         return implode("\r\n", $res);
     }
 
+    /**
+     * @Route("/clset")
+     * @return Response
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function clset()
+    {
+        /** @var \ClientSettings $cs */
+        $cs = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)->find(3);
+
+        /** @var \Orders $ord */
+        $ord = Proxy::init()->getEntityManager()->getRepository(\Orders::class)->find(1);
+//        echo '<pre>'; var_dump($res); die();
+        $data[Render::CONTENT] = \GuzzleHttp\json_encode($cs->getOrders()) . ' >>> ' . \GuzzleHttp\json_encode($ord->getClient()->getId());
+        return (new Render())->render($data, 'test.html.twig');
+    }
+
 
     /**
      * @Route("/sql1")
