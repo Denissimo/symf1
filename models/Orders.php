@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Orders
  *
- * @ORM\Table(name="orders", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="oid", columns={"old_id"}), @ORM\Index(name="order_status", columns={"status"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="orders_address_id", columns={"address_id"}), @ORM\Index(name="order_id", columns={"order_id"}), @ORM\Index(name="order_type", columns={"type"}), @ORM\Index(name="pimpay_status", columns={"pimpay_status"})})
+ * @ORM\Table(name="orders", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="order_id", columns={"order_id"}), @ORM\Index(name="order_type", columns={"type"}), @ORM\Index(name="pimpay_status", columns={"pimpay_status"}), @ORM\Index(name="order_bill_id", columns={"order_bill_id"}), @ORM\Index(name="order_settings_id", columns={"order_settings_id"}), @ORM\Index(name="oid", columns={"old_id"}), @ORM\Index(name="order_status", columns={"status"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="orders_address_id", columns={"address_id"})})
  * @ORM\Entity
  */
 class Orders
@@ -152,7 +152,7 @@ class Orders
      *
      * @ORM\Column(name="card", type="integer", nullable=true, options={"comment"="оплата картой"})
      */
-    private $card = '0';
+    private $card;
 
     /**
      * @var int|null
@@ -264,14 +264,14 @@ class Orders
      *
      * @ORM\Column(name="chweightflag", type="integer", nullable=true, options={"comment"="опция Максипост"})
      */
-    private $chweightflag = '0';
+    private $chweightflag;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="update_date_flag", type="integer", nullable=true, options={"comment"="опция b2cpl - но уберем"})
      */
-    private $updateDateFlag = '0';
+    private $updateDateFlag;
 
     /**
      * @var string|null
@@ -313,14 +313,14 @@ class Orders
      *
      * @ORM\Column(name="call_option", type="integer", nullable=true, options={"comment"="Предварительный прозвон"})
      */
-    private $callOption = '0';
+    private $callOption;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="label_option", type="integer", nullable=true, options={"comment"="этикирование"})
      */
-    private $labelOption = '0';
+    private $labelOption;
 
     /**
      * @var int|null
@@ -334,14 +334,14 @@ class Orders
      *
      * @ORM\Column(name="docs_option", type="integer", nullable=true, options={"comment"="Вложение накладной"})
      */
-    private $docsOption = '0';
+    private $docsOption;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="docs_return_option", type="integer", nullable=true, options={"comment"="Возврат накладной"})
      */
-    private $docsReturnOption = '0';
+    private $docsReturnOption;
 
     /**
      * @var int|null
@@ -355,28 +355,28 @@ class Orders
      *
      * @ORM\Column(name="dress_fitting_option", type="integer", nullable=true, options={"comment"="примерка"})
      */
-    private $dressFittingOption = '0';
+    private $dressFittingOption;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="lifting_option", type="integer", nullable=true, options={"comment"="подъем"})
      */
-    private $liftingOption = '0';
+    private $liftingOption;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="cargo_lift", type="integer", nullable=true, options={"comment"="наличие лифта"})
      */
-    private $cargoLift = '0';
+    private $cargoLift;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="change_option", type="integer", nullable=true, options={"comment"="обмен"})
      */
-    private $changeOption = '0';
+    private $changeOption;
 
     /**
      * @var string|null
@@ -400,21 +400,34 @@ class Orders
     private $pimpSend;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="client_id", type="integer", nullable=true, options={"comment"="id Клиента"})
-     */
-    private $clientId;
-
-    /**
      * @var \ClientSettings
      *
-     * @ORM\ManyToOne(targetEntity="ClientSettings", inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity="ClientSettings")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      * })
      */
     private $client;
+
+    /**
+     * @var \OrdersBills
+     *
+     * @ORM\ManyToOne(targetEntity="OrdersBills")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="order_bill_id", referencedColumnName="id")
+     * })
+     */
+    private $orderBill;
+
+    /**
+     * @var \OrdersSettings
+     *
+     * @ORM\ManyToOne(targetEntity="OrdersSettings")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="order_settings_id", referencedColumnName="id")
+     * })
+     */
+    private $orderSettings;
 
     /**
      * @var \OrdersStatusModel
@@ -1447,24 +1460,6 @@ class Orders
     }
 
     /**
-     * @return int|null
-     */
-    public function getClientId(): ?int
-    {
-        return $this->clientId;
-    }
-
-    /**
-     * @param int|null $clientId
-     * @return Orders
-     */
-    public function setClientId(?int $clientId): Orders
-    {
-        $this->clientId = $clientId;
-        return $this;
-    }
-
-    /**
      * @return ClientSettings
      */
     public function getClient(): ClientSettings
@@ -1479,6 +1474,42 @@ class Orders
     public function setClient(ClientSettings $client): Orders
     {
         $this->client = $client;
+        return $this;
+    }
+
+    /**
+     * @return OrdersBills
+     */
+    public function getOrderBill(): OrdersBills
+    {
+        return $this->orderBill;
+    }
+
+    /**
+     * @param OrdersBills $orderBill
+     * @return Orders
+     */
+    public function setOrderBill(OrdersBills $orderBill): Orders
+    {
+        $this->orderBill = $orderBill;
+        return $this;
+    }
+
+    /**
+     * @return OrdersSettings
+     */
+    public function getOrderSettings(): OrdersSettings
+    {
+        return $this->orderSettings;
+    }
+
+    /**
+     * @param OrdersSettings $orderSettings
+     * @return Orders
+     */
+    public function setOrderSettings(OrdersSettings $orderSettings): Orders
+    {
+        $this->orderSettings = $orderSettings;
         return $this;
     }
 

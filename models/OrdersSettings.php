@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * OrdersSettings
  *
- * @ORM\Table(name="orders_settings", uniqueConstraints={@ORM\UniqueConstraint(name="order_id", columns={"order_id"})})
+ * @ORM\Table(name="orders_settings")
  * @ORM\Entity
  */
 class OrdersSettings
@@ -34,16 +34,6 @@ class OrdersSettings
      * @ORM\Column(name="doc_description", type="string", length=256, nullable=true, options={"comment"="Ооо или ип"})
      */
     private $docDescription;
-
-    /**
-     * @var \Orders
-     *
-     * @ORM\ManyToOne(targetEntity="Orders")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="order_id", referencedColumnName="id")
-     * })
-     */
-    private $order;
 
     /**
      * @return int
@@ -96,24 +86,6 @@ class OrdersSettings
     public function setDocDescription(?string $docDescription): OrdersSettings
     {
         $this->docDescription = $docDescription;
-        return $this;
-    }
-
-    /**
-     * @return Orders
-     */
-    public function getOrder(): Orders
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param Orders $order
-     * @return OrdersSettings
-     */
-    public function setOrder(Orders $order): OrdersSettings
-    {
-        $this->order = $order;
         return $this;
     }
 

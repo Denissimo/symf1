@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * OrdersBills
  *
- * @ORM\Table(name="orders_bills", uniqueConstraints={@ORM\UniqueConstraint(name="order_id", columns={"order_id"})})
+ * @ORM\Table(name="orders_bills")
  * @ORM\Entity
  */
 class OrdersBills
@@ -209,16 +209,6 @@ class OrdersBills
      * @ORM\Column(name="change_weight", type="decimal", precision=9, scale=3, nullable=true, options={"default"="1.000","comment"="вес обмена"})
      */
     private $changeWeight = '1.000';
-
-    /**
-     * @var \Orders
-     *
-     * @ORM\ManyToOne(targetEntity="Orders")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="order_id", referencedColumnName="id")
-     * })
-     */
-    private $order;
 
     /**
      * @return int
@@ -723,24 +713,4 @@ class OrdersBills
         $this->changeWeight = $changeWeight;
         return $this;
     }
-
-    /**
-     * @return Orders
-     */
-    public function getOrder(): Orders
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param Orders $order
-     * @return OrdersBills
-     */
-    public function setOrder(Orders $order): OrdersBills
-    {
-        $this->order = $order;
-        return $this;
-    }
-
-
 }
