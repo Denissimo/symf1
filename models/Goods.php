@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Goods
  *
- * @ORM\Table(name="goods", indexes={@ORM\Index(name="order_id", columns={"order_id"}), @ORM\Index(name="goods_nds_type", columns={"goods_nds_type"}), @ORM\Index(name="FK_goods_goods_status", columns={"goods_status"})})
+ * @ORM\Table(name="goods", indexes={@ORM\Index(name="goods_nds_type", columns={"goods_nds_type"}), @ORM\Index(name="FK_goods_goods_status", columns={"goods_status"}), @ORM\Index(name="order_id", columns={"order_id"})})
  * @ORM\Entity
  */
 class Goods
@@ -85,13 +85,6 @@ class Goods
     private $vAktId;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="goods_nds_type", type="integer", nullable=true, options={"comment"="НДС Товара берем из таблицы nds_type"})
-     */
-    private $goodsNdsType;
-
-    /**
      * @var \GoodsStatusModel
      *
      * @ORM\ManyToOne(targetEntity="GoodsStatusModel")
@@ -100,6 +93,16 @@ class Goods
      * })
      */
     private $goodsStatus;
+
+    /**
+     * @var \NdsType
+     *
+     * @ORM\ManyToOne(targetEntity="NdsType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="goods_nds_type", referencedColumnName="id")
+     * })
+     */
+    private $goodsNdsType;
 
     /**
      * @return int
@@ -282,24 +285,6 @@ class Goods
     }
 
     /**
-     * @return int|null
-     */
-    public function getGoodsNdsType(): ?int
-    {
-        return $this->goodsNdsType;
-    }
-
-    /**
-     * @param int|null $goodsNdsType
-     * @return Goods
-     */
-    public function setGoodsNdsType(?int $goodsNdsType): Goods
-    {
-        $this->goodsNdsType = $goodsNdsType;
-        return $this;
-    }
-
-    /**
      * @return GoodsStatusModel
      */
     public function getGoodsStatus(): GoodsStatusModel
@@ -317,5 +302,22 @@ class Goods
         return $this;
     }
 
+    /**
+     * @return NdsType
+     */
+    public function getGoodsNdsType(): NdsType
+    {
+        return $this->goodsNdsType;
+    }
+
+    /**
+     * @param NdsType $goodsNdsType
+     * @return Goods
+     */
+    public function setGoodsNdsType(NdsType $goodsNdsType): Goods
+    {
+        $this->goodsNdsType = $goodsNdsType;
+        return $this;
+    }
 
 }

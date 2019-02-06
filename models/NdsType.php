@@ -64,5 +64,4 @@ class NdsType
         return $this;
     }
 
-
 }
