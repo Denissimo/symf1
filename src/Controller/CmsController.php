@@ -10,6 +10,8 @@ use App\Twig\Render;
 use App\Controller\Api\Fields as Api;
 use App\Controller\Api\Loader;
 use App\Controller\Api\Request\Builder;
+use App\Controller\Api\Response\Validator;
+use App\Exceptions\MalformedResponseException;
 
 class CmsController extends BaseController implements Api
 {
@@ -40,13 +42,22 @@ class CmsController extends BaseController implements Api
             \GuzzleHttp\json_encode($unitList)
         );
 
-        $res = (new Client())->send($unitList[0]);
+        try {
+            $response = (new Client())->sendRequest($unitList[0]);
+//            $response = [1, 2, 3];
+            (new Validator())->validateOrdersList($response);
+        } catch (MalformedResponseException $e) {
+            var_dump($e->getMessage());
+            die;
+        }
+
+        die;
+
 
         return (new Render())->render([
-            Render::CONTENT => \GuzzleHttp\json_encode($res)
+            Render::CONTENT => \GuzzleHttp\json_encode($response)
         ]);
     }
-
 
 
 }

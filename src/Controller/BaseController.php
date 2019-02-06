@@ -61,6 +61,7 @@ abstract class BaseController extends AbstractController
         Proxy::init()->initSession();
         Proxy::init()->startSession();
         Proxy::init()->initValidator();
+        Proxy::init()->initHttpClient();
         Proxy::init()->initLogger();
     }
 
