@@ -14,7 +14,7 @@ class Client
 
     /**
      * @param Unit $unit
-     * @return string
+     * @return array
      * @throws GuzzleHttp\Exception\GuzzleException
      */
     public function sendRequest(Unit $unit)

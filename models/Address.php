@@ -150,6 +150,7 @@ class Address
      */
     private $type;
 
+
     /**
      * @return int
      */
@@ -491,6 +492,4 @@ class Address
         $this->type = $type;
         return $this;
     }
-
-
 }

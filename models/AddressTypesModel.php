@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AddressTypesModel
 {
+    const
+        DEFAULT_ID = '2';
     /**
      * @var int
      *

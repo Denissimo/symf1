@@ -316,17 +316,16 @@ return Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
 //        $user[0]->setName('ZZdddzz');
 //        Proxy::init()->getEntityManager()->flush();
 
-        /*
+
         $newUser = (new Users())
             ->setName('sdfgag')
             ->setEmail('ss@xhx.xx')
             ->setPassword('kjhgfkjfkfku')
             ->setEnabled(true)
         ;
-        */
 
-//        Proxy::init()->getEntityManager()->persist($newUser);
-//        Proxy::init()->getEntityManager()->flush();
+        Proxy::init()->getEntityManager()->persist($newUser);
+        Proxy::init()->getEntityManager()->flush();
 
 
 //        Proxy::init()->getLogger()->addWarning(

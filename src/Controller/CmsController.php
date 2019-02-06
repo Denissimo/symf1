@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Controller\Api\Client;
 use App\Controller\Api\Request\Unit;
+use http\Env\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Proxy;
 use App\Twig\Render;
 use App\Controller\Api\Fields as Api;
 use App\Controller\Api\Loader;
 use App\Controller\Api\Request\Builder;
+use App\Controller\Api\Response\Builder as ResponseBuilser;
 use App\Controller\Api\Response\Validator;
 use App\Exceptions\MalformedResponseException;
 
@@ -46,6 +48,11 @@ class CmsController extends BaseController implements Api
             $response = (new Client())->sendRequest($unitList[0]);
 //            $response = [1, 2, 3];
             (new Validator())->validateOrdersList($response);
+
+//            echo "<pre>";
+//            var_dump($response);
+//            die;
+            (new ResponseBuilser())->buildOrders($response);
         } catch (MalformedResponseException $e) {
             var_dump($e->getMessage());
             die;
