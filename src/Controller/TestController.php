@@ -23,7 +23,6 @@ use Doctrine\Common\Collections\Criteria;
 use GuzzleHttp\Client;
 
 
-
 class TestController extends BaseController
 {
 
@@ -126,7 +125,7 @@ class TestController extends BaseController
     private function oord(string $str)
     {
         $len = mb_strlen($str);
-        for($i = 0; $i< $len; $i++){
+        for ($i = 0; $i < $len; $i++) {
             $res[] = ord($str[$i]);
         }
 //        return \GuzzleHttp\json_encode($res);
@@ -165,7 +164,7 @@ class TestController extends BaseController
     public function sql1()
     {
         $query = "SELECT * FROM goods WHERE goods_status = 4 AND price > 20.0 LIMIT 5";
-        $sth = Proxy::init()->getConnecton()->query($query);
+        $sth = Proxy::init()->getConnection()->query($query);
         $sth->bindValue(':status', 4);
         $sth->bindValue(':price', 20.0);
         $sth->execute();
@@ -235,6 +234,45 @@ class TestController extends BaseController
      */
     public function zorders()
     {
+
+        /*
+$qb = Proxy::init()->getEntityManager()->createQueryBuilder();
+$res = $qb->select('cs', 'o')
+    ->from(\ClientSettings::class, 'cs')
+    ->leftJoin(
+        \Orders::class,
+        'o',
+        Join::WITH,
+        $qb->expr()->eq('o.clientId', 'cs.id')
+    )
+    ->setMaxResults(5)
+    ->getQuery()
+    ->execute();
+foreach ($res as $key => $val) {
+    if (isset($val)) {
+        $as = get_class($val);
+    } else {
+        $as = '';
+    };
+    echo '<br />' . $key . ' >> ' . $as;
+
+}
+var_dump(get_class($res[0]));
+//        echo "<pre >"; var_dump($res);
+
+die;
+//        var_dump($res[0]->getClientId()); die;
+
+
+return Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
+    ->matching(
+        Criteria::create()
+            ->orderBy(['id' => 'ASC'])
+            ->setMaxResults(1)
+
+    )->toArray();
+*/
+
 //        $res = Proxy::init()->getEntityManager()
 //            ->getRepository(\Zorders::class)
 //            ->find(3)->getId();

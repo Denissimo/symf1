@@ -13,4 +13,13 @@ Interface Fields
         LIMIT_START = 'limit_start',
         LIMIT_END = 'limit_end';
 
+    const
+        FORM_PARAMS = 'form_params';
+
+    const
+        GET = 'GET',
+        POST = 'POST',
+        PUT = 'PUT',
+        DELETE = 'DELETE'
+    ;
 }

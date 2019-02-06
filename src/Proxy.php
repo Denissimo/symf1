@@ -8,6 +8,7 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Session\Session;
 //use Symfony\Component\Validator\Validator\RecursiveValidator as Validator;
 use App\Validator;
+use GuzzleHttp\Client as HttpClient;
 use App\Cfg\Config;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -48,6 +49,11 @@ class Proxy
      */
     private static $logger;
 
+    /**
+     * @var HttpClient
+     */
+    private static $httpClient;
+
 
     private function __construct()
     {
@@ -74,7 +80,7 @@ class Proxy
     /**
      * @return Connection
      */
-    public function getConnecton()
+    public function getConnection()
     {
         return self::$connection;
     }
@@ -182,5 +188,21 @@ class Proxy
         return self::$logger;
     }
 
+    /**
+     * @return $this
+     */
+    public function initHttpClient()
+    {
+        self::$httpClient = new HttpClient();
+        return $this;
+    }
+
+    /**
+     * @return HttpClient
+     */
+    public function getHttpClient(): HttpClient
+    {
+        return self::$httpClient;
+    }
 
 }

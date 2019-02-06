@@ -1,7 +1,6 @@
 <?php
 
 
-
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
@@ -13,6 +12,8 @@ use Doctrine\Common\Collections\Collection;
  */
 class ClientSettings
 {
+    const
+        CLIENT_ID = 'client_id';
     /**
      * @var int
      *
