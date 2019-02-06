@@ -11,17 +11,22 @@ class Builder
      * @param array $orders
      * @throws \Doctrine\ORM\ORMException
      */
-    public function buildOrders(array $orders)
+    public function saveOrders(array $orders)
     {
         $fields = Fields::$fields;
         foreach ($orders as $ord) {
 //            $address = $this->buildAddress($ord);
 //            $orderBills = $this->buildOrderBills($ord);
-            $orderSettings = $this->buildOrderSettings($ord);
-            var_dump($orderSettings->getId());
+//            $orderSettings = $this->buildOrderSettings($ord);
+//            var_dump($orderSettings->getId());
             die;
 
         }
+    }
+
+    private function buildOrder(\stdClass $ord)
+    {
+
     }
 
     /**
@@ -108,6 +113,7 @@ class Builder
      */
     private function buildOrderSettings(\stdClass $ord)
     {
+
         $orderSettings = (new \OrdersSettings())
             ->setReciepientName($ord->reciepient_name)
             ->setDocDescription($ord->doc_description)

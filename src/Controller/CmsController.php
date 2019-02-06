@@ -52,7 +52,7 @@ class CmsController extends BaseController implements Api
 //            echo "<pre>";
 //            var_dump($response);
 //            die;
-            (new ResponseBuilser())->buildOrders($response);
+            (new ResponseBuilser())->saveOrders($response);
         } catch (MalformedResponseException $e) {
             var_dump($e->getMessage());
             die;
