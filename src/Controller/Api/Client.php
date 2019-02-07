@@ -21,7 +21,7 @@ class Client
     {
         foreach ($units as $unit)
         {
-            $result [] = $this->sendRequest($unit);
+            $result [] = $this->sendLoadOrdersRequest($unit);
         }
 //        echo "<pre>"; var_dump($result); die;
         return $result;
@@ -32,7 +32,7 @@ class Client
      * @return array
      * @throws GuzzleHttp\Exception\GuzzleException
      */
-    private function sendRequest(Unit $unit)
+    private function sendLoadOrdersRequest(Unit $unit)
     {
         return
             \GuzzleHttp\json_decode(
@@ -48,6 +48,30 @@ class Client
                                 Api::DATE_END => $unit->getDateEnd(),
                                 Api::LIMIT_START => $unit->getLimitStart(),
                                 Api::LIMIT_END => $unit->getLimitEnd()
+                            ]
+                    ]
+                )->getBody()->getContents()
+            );
+    }
+
+    /**
+     * @param string $client_id_list
+     * @return array
+     * @throws GuzzleHttp\Exception\GuzzleException
+     */
+    public function sendOrdersQtyRequest(string $client_id_list)
+    {
+        return
+            \GuzzleHttp\json_decode(
+                Proxy::init()->getHttpClient()->request(
+                    Api::POST,
+                    getenv('cms_api_url1') . self::API_PATH_ORDERS,
+                    [
+                        Api::FORM_PARAMS =>
+                            [
+                                Api::KEY => getenv('cms_api_key'),
+                                Api::CLIENT_ID_LIST => $client_id_list,
+                                Api::ORDERS_QTY => true
                             ]
                     ]
                 )->getBody()->getContents()

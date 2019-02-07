@@ -67,5 +67,36 @@ class CmsController extends BaseController implements Api
         ]);
     }
 
+    /**
+     * @Route("/cmsapi/ordersqty")
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function loadOrdersQty()
+    {
+        $clentIdList = (new Loader())->loadClientsListIds(
+            self::getRequest()->query->all()[self::CLIENT_ID_FROM],
+            self::getRequest()->query->all()[self::CLIENT_ID_TO]
+        );
+
+        $message = 'success';
+
+        try {
+            $response = (new Client())->sendOrdersQtyRequest($clentIdList);
+            (new Validator())->validateOrdersList($response);
+            (new ResponseBuidser())->saveOrdersCount($response);
+        } catch (MalformedResponseException $e) {
+            $message = $e->getMessage();
+        }
+
+        return (new Render())->render([
+            Render::CONTENT => $message
+        ]);
+    }
 
 }

@@ -287,4 +287,21 @@ class Builder
 
     }
 
+    /**
+     * @param array $counts
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function saveOrdersCount(array $counts)
+    {
+        foreach ($counts as $c)
+        {
+            $ordersCount = (new \OrdersCount())
+                ->setClientId($c->client_id)
+                ->setOrdersQty($c->orders_qty);
+            Proxy::init()->getEntityManager()->persist($ordersCount);
+        }
+        Proxy::init()->getEntityManager()->flush();
+    }
+
 }
