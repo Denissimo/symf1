@@ -63,5 +63,4 @@ class GoodsStatusModel
         $this->goodsStatus = $goodsStatus;
         return $this;
     }
-
 }

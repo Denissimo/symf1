@@ -13,7 +13,10 @@ use Doctrine\Common\Collections\Collection;
 class ClientSettings
 {
     const
-        CLIENT_ID = 'client_id';
+        CLIENT_ID = 'clientId';
+
+    public static $test_clients = [2, 238, 1356];
+
     /**
      * @var int
      *

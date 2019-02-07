@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrdersPimpayModel
 {
+    const
+        DEFAULT_ID = 1;
     /**
      * @var int
      *

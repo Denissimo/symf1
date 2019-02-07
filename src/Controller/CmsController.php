@@ -11,7 +11,7 @@ use App\Twig\Render;
 use App\Controller\Api\Fields as Api;
 use App\Controller\Api\Loader;
 use App\Controller\Api\Request\Builder;
-use App\Controller\Api\Response\Builder as ResponseBuilser;
+use App\Controller\Api\Response\Builder as ResponseBuidser;
 use App\Controller\Api\Response\Validator;
 use App\Exceptions\MalformedResponseException;
 
@@ -32,7 +32,7 @@ class CmsController extends BaseController implements Api
      */
     public function loadOrders()
     {
-
+        $get = self::getRequest()->query->all();
         $clentIds = (array)($get[self::CLIENT_ID] ?? (new Loader())->loadClientsJoinOrders());
         /** @var Unit[] $unitList */
         $unitList = (new Builder())->set(
@@ -45,19 +45,20 @@ class CmsController extends BaseController implements Api
         );
 
         try {
-            $response = (new Client())->sendRequest($unitList[0]);
+            $response = (new Client())->process($unitList);
 //            $response = [1, 2, 3];
             (new Validator())->validateOrdersList($response);
 
 //            echo "<pre>";
-//            var_dump($response);
+//            var_dump(\DateTime::createFromFormat('h:i',$response[0]->delivery_time2));
+//            var_dump(\DateTime::createFromFormat('h:i',$response[1]->delivery_time2));
 //            die;
-            (new ResponseBuilser())->saveOrders($response);
+            (new ResponseBuidser())->process($response);
         } catch (MalformedResponseException $e) {
             var_dump($e->getMessage());
             die;
         }
-
+        echo "<br /><br />ZZZZZZ<br />";
         die;
 
 

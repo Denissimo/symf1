@@ -20,7 +20,7 @@ class Loader
                       LEFT JOIN orders o ON c.client_id = o.client_id WHERE o.id IS NULL';
         return array_column(
             Proxy::init()->getConnection()->query($query)->fetchAll(),
-            \ClientSettings::CLIENT_ID
+            'client_id'
         );
     }
 

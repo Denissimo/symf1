@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Goods
  *
- * @ORM\Table(name="goods", indexes={@ORM\Index(name="goods_nds_type", columns={"goods_nds_type"}), @ORM\Index(name="FK_goods_goods_status", columns={"goods_status"}), @ORM\Index(name="order_id", columns={"order_id"})})
+ * @ORM\Table(name="goods", indexes={@ORM\Index(name="goods_nds_type", columns={"goods_nds_type"}), @ORM\Index(name="order_id", columns={"order_id"}), @ORM\Index(name="FK_goods_goods_status", columns={"goods_status"})})
  * @ORM\Entity
  */
 class Goods
@@ -27,13 +27,6 @@ class Goods
      * @ORM\Column(name="article", type="string", length=256, nullable=true, options={"comment"="Бывший articul - Артикул клиента (заказа)"})
      */
     private $article;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="order_id", type="string", length=256, nullable=true, options={"comment"="Наш номер заказа в привязке к таблице ORDERS"})
-     */
-    private $orderId;
 
     /**
      * @var string|null
@@ -78,9 +71,9 @@ class Goods
     private $isCancle;
 
     /**
-     * @var int|null
+     * @var string|null
      *
-     * @ORM\Column(name="v_akt_id", type="integer", nullable=true, options={"comment"="id Акта"})
+     * @ORM\Column(name="v_akt_id", type="string", nullable=true, options={"comment"="id Акта"})
      */
     private $vAktId;
 
@@ -95,7 +88,7 @@ class Goods
     private $goodsStatus;
 
     /**
-     * @var \NdsType
+     * @var \NdsType | null
      *
      * @ORM\ManyToOne(targetEntity="NdsType")
      * @ORM\JoinColumns({
@@ -103,6 +96,16 @@ class Goods
      * })
      */
     private $goodsNdsType;
+
+    /**
+     * @var \Orders
+     *
+     * @ORM\ManyToOne(targetEntity="Orders")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+     * })
+     */
+    private $order;
 
     /**
      * @return int
@@ -137,24 +140,6 @@ class Goods
     public function setArticle(?string $article): Goods
     {
         $this->article = $article;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getOrderId(): ?string
-    {
-        return $this->orderId;
-    }
-
-    /**
-     * @param string|null $orderId
-     * @return Goods
-     */
-    public function setOrderId(?string $orderId): Goods
-    {
-        $this->orderId = $orderId;
         return $this;
     }
 
@@ -267,18 +252,18 @@ class Goods
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getVAktId(): ?int
+    public function getVAktId()
     {
         return $this->vAktId;
     }
 
     /**
-     * @param int|null $vAktId
+     * @param string | null $vAktId
      * @return Goods
      */
-    public function setVAktId(?int $vAktId): Goods
+    public function setVAktId($vAktId): Goods
     {
         $this->vAktId = $vAktId;
         return $this;
@@ -311,12 +296,30 @@ class Goods
     }
 
     /**
-     * @param NdsType $goodsNdsType
+     * @param NdsType $goodsNdsType | null
      * @return Goods
      */
-    public function setGoodsNdsType(NdsType $goodsNdsType): Goods
+    public function setGoodsNdsType($goodsNdsType): Goods
     {
         $this->goodsNdsType = $goodsNdsType;
+        return $this;
+    }
+
+    /**
+     * @return Orders
+     */
+    public function getOrder(): Orders
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param Orders $order
+     * @return Goods
+     */
+    public function setOrder(Orders $order): Goods
+    {
+        $this->order = $order;
         return $this;
     }
 

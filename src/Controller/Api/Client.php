@@ -13,11 +13,26 @@ class Client
         API_PATH_ORDERS = 'change_with_db';
 
     /**
+     * @param Unit[] $units
+     * @return array
+     * @throws GuzzleHttp\Exception\GuzzleException
+     */
+    public function process($units)
+    {
+        foreach ($units as $unit)
+        {
+            $result [] = $this->sendRequest($unit);
+        }
+//        echo "<pre>"; var_dump($result); die;
+        return $result;
+    }
+
+    /**
      * @param Unit $unit
      * @return array
      * @throws GuzzleHttp\Exception\GuzzleException
      */
-    public function sendRequest(Unit $unit)
+    private function sendRequest(Unit $unit)
     {
         return
             \GuzzleHttp\json_decode(
