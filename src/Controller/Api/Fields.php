@@ -28,4 +28,7 @@ Interface Fields
         PUT = 'PUT',
         DELETE = 'DELETE'
     ;
+
+    const
+        LIMIT_CLIENT_ORDERS_LOAD = 10;
 }

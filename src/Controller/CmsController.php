@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Controller\Api\Client;
 use App\Controller\Api\Request\Unit;
+use App\Exceptions\BadResponseException;
+use App\Exceptions\OrdersListEmptyResponseException;
 use http\Env\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Proxy;
@@ -32,46 +34,51 @@ class CmsController extends BaseController implements Api
      */
     public function loadOrders()
     {
+
         $get = self::getRequest()->query->all();
-        if($get[Api::CLIENT_ID]){
-            $unitList[] = (new Unit())
-                ->set($get, $get);
+        if(isset($get[Api::CLIENT_ID])){
+            $orderStat = (new Loader())->loadClientsJoinOrders($get[Api::CLIENT_ID]);
+            if(count($orderStat)) {
+                $unitList[] = (new Unit())->set($orderStat[0], $get);
+            } else {
+                die('Все ордера загружены');
+            }
         } else {
             $orderStat = (new Loader())->loadClientsJoinOrders();
+//            var_dump($orderStat); die;
             /** @var Unit[] $unitList */
             $unitList = (new Builder())->set(
                 $orderStat,
                 self::getRequest()
             )->getUnitlist();
         }
+//        echo "<pre>";  var_dump($unitList);  die;
         Proxy::init()->getLogger()->addWarning(
             \GuzzleHttp\json_encode($unitList)
         );
-
+        $content = 'Orders loaded';
         try {
 //            echo "<pre>";
 //            var_dump($unitList);
 //            die;
             $response = (new Client())->process($unitList);
 //            $response = [1, 2, 3];
+            //var_dump($response[0]->status); die;
+//            echo "<pre>"; var_dump($response); die;
             (new Validator())->validateOrdersList($response);
-
-//            echo "<pre>";
-//            var_dump($response);
-//            var_dump(\DateTime::createFromFormat('h:i',$response[0]->delivery_time2));
-//            var_dump(\DateTime::createFromFormat('h:i',$response[1]->delivery_time2));
-//            die;
-            (new ResponseBuidser())->process($response);
+            if(isset($response[0]->status)) {
+                $content = 'Error';
+            } else {
+                (new ResponseBuidser())->process($response);
+            }
         } catch (MalformedResponseException $e) {
-            var_dump($e->getMessage());
-            die;
+            $content = $e->getMessage();
+        } catch (OrdersListEmptyResponseException $e) {
+            $content = $e->getMessage();
         }
-        echo "<br /><br />ZZZZZZ<br />";
-        die;
-
 
         return (new Render())->render([
-            Render::CONTENT => \GuzzleHttp\json_encode($response)
+            Render::CONTENT =>  $content
         ]);
     }
 

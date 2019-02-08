@@ -30,7 +30,7 @@ class Unit implements Api
 
     private static $defaults = [
         self::DATE_START => '2015-01-01',
-        self::LIMIT_START => '1',
+        self::LIMIT_START => '0',
         self::LIMIT_END => '10',
     ];
 
@@ -44,9 +44,10 @@ class Unit implements Api
     {
         $this->clientId = $orderStat[self::CLIENT_ID];
         $this->dateStart = $get[self::DATE_START] ?? self::$defaults[self::DATE_START];
-        $this->dateEnd =  $get[self::DATE_END] ?? (new \DateTime())->format('Y-m-d');
+        $this->dateEnd =  $get[self::DATE_END] ?? '2019-12-31'; //(new \DateTime())->format('Y-m-d')->;
         $this->limitStart = $get[self::LIMIT_START] ?? $orderStat[self::QTY] ?? self::$defaults[self::LIMIT_START];
         $this->limitEnd = $get[self::LIMIT_END] ?? self::$defaults[self::LIMIT_END];
+//        echo "<pre>"; var_dump($orderStat);var_dump($this); die;
         return $this;
     }
 

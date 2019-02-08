@@ -6,30 +6,36 @@ use App\Proxy;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use App\Twig\Render;
+use App\Controller\Api\Fields as Api;
 
 class Loader
 {
 
     /**
-     * @return []
+     * @param null $clientId
+     * @return array
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function loadClientsJoinOrders()
+    public function loadClientsJoinOrders($clientId = null)
     {
         /*
                 $query = 'SELECT c.client_id, o.order_id FROM client_settings c
                               LEFT JOIN orders o ON c.client_id = o.client_id WHERE o.id IS NULL';
         */
-        // [id, client_id, qty (orders), orders_qty (orders_count)
-        $query = 'SELECT c.id, c.client_id, o.qty, q.orders_qty
+        // [id, client_id, qty (orders), orders_qty (orders_count), last_id
+        //LEFT JOIN (SELECT oc.client_id, MAX(oc.orders_qty) AS orders_qty FROM orders_count oc GROUP BY oc.client_id) q ON c.client_id = q.client_id
+
+        $where = isset($clientId) ? ' AND client_id = ' . $clientId : null ;
+        $query = 'SELECT c.id, c.client_id, o.qty, q.orders_qty, q.last_id
   FROM 
-  (SELECT *FROM client_settings WHERE active = 1) c 
+  (SELECT * FROM client_settings WHERE active = 1 '.$where.' AND client_id NOT IN (2, 238, 1356) ORDER BY client_id) c 
    LEFT JOIN 
   (SELECT o1.client_id, COUNT(o1.id) AS qty  FROM orders o1 GROUP BY o1.client_id) o 
   ON c.id = o.client_id 
-   LEFT JOIN (SELECT oc.client_id, MAX(oc.orders_qty) AS orders_qty FROM orders_count oc GROUP BY oc.client_id) q ON c.client_id = q.client_id
- WHERE o.qty < q.orders_qty OR (o.qty IS NULL AND q.orders_qty > 0)';
-
+   LEFT JOIN (SELECT oc.client_id, oc.orders_qty, oc.last_id FROM orders_count oc) q ON c.client_id = q.client_id
+ WHERE o.qty < q.orders_qty OR (o.qty IS NULL AND (q.orders_qty > 0 OR q.orders_qty IS NULL))
+ LIMIT ' . Api::LIMIT_CLIENT_ORDERS_LOAD;
+//var_dump($query); die;
         return (array)Proxy::init()->getConnection()->query($query)->fetchAll();
     }
 

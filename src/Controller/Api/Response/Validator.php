@@ -5,6 +5,7 @@ namespace App\Controller\Api\Response;
 use App\Proxy;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Exceptions\MalformedResponseException;
+use App\Exceptions\BadResponseException;
 
 class Validator
 {
@@ -24,4 +25,5 @@ class Validator
             MalformedResponseException::class
         );
     }
+
 }

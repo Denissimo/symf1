@@ -132,6 +132,15 @@ class Builder
         $pimpayStatus = Proxy::init()->getEntityManager()->getRepository(\OrdersPimpayModel::class)
             ->find($ord->pimpay_status ?? \OrdersPimpayModel::DEFAULT_ID);
 
+        $delivTime1 = $delivTime2 = null;
+
+        if(isset($ord->delivery_time1) && preg_match('/^\d{1,2}:\d{2}$/', $ord->delivery_time1)) {
+            $delivTime1 = \DateTime::createFromFormat('H:i', $ord->delivery_time1);
+        }
+
+        if(isset($ord->delivery_time2) && preg_match('/^\d{1,2}:\d{2}$/', $ord->delivery_time2)) {
+            $delivTime2 = \DateTime::createFromFormat('H:i', $ord->delivery_time2);
+        }
         $order = (new \Orders())
             ->setClient($client)
             ->setPimpayStatus($pimpayStatus)
@@ -157,8 +166,8 @@ class Builder
             ->setCourierId($ord->courier_id ?? null)
             ->setDateAdd($ord->date_add ?? null)
             ->setDeliveryDate(isset($ord->delivery_date) ? \DateTime::createFromFormat('Y-m-d', $ord->delivery_date) : null)
-            ->setDeliveryTime1(isset($ord->delivery_time1) ? \DateTime::createFromFormat('H:i', $ord->delivery_time1) : null)
-            ->setDeliveryTime2(isset($ord->delivery_time2) ? \DateTime::createFromFormat('H:i', $ord->delivery_time2) : null)
+            ->setDeliveryTime1($delivTime1)
+            ->setDeliveryTime2($delivTime2)
             ->setDocsOption($ord->docs_option ?? null)
             ->setDocsReturnOption($ord->docs_return_option ?? null)
             ->setDressFittingOption($ord->dress_fitting_option ?? null)
@@ -205,15 +214,16 @@ class Builder
             ->find(\AddressTypesModel::DEFAULT_ID);
         $latLon = preg_replace('/,{1}\s*/', '|', $ord->latitude);
         $coords = explode('|', $latLon);
+
         $address = (new \Address())
             ->setBuilding($ord->building)
             ->setCity($ord->city)
             ->setCorpus($ord->corpus)
             ->setDomofon($ord->domofon)
             ->setFloor($ord->floor)
-            ->setLatitude($coords[1])
-            ->setLongitude($coords[0])
-            ->setMoMkad($ord->mo_mkad)
+            ->setLatitude($coords[1] ?? null)
+            ->setLongitude($coords[0] ?? null)
+            ->setMoMkad((int)$ord->mo_mkad)
             ->setMoPunktId($ord->mo_punkt_id)
             ->setOffice($ord->office)
             ->setPostAddr($ord->post_addr)
@@ -307,7 +317,7 @@ class Builder
         $ordIds = array_column($ordCounts, 'id');
         $combine = array_combine($ordCids, $ordIds);
         foreach ($counts as $c) {
-            if ($combine[$c->client_id]) {
+            if (isset($combine[$c->client_id])) {
                 /** @var \OrdersCount $ordersCount */
                 $ordersCount = Proxy::init()->getEntityManager()->getRepository(\OrdersCount::class)
                     ->find($combine[$c->client_id]);
