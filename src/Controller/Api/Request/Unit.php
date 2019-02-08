@@ -35,17 +35,17 @@ class Unit implements Api
     ];
 
     /**
-     * @param string $clientId
+     * @param array $orderStat
      * @param array $get
      * @return $this
      * @throws \Exception
      */
-    public function set(string $clientId, array $get)
+    public function set(array $orderStat, array $get)
     {
-        $this->clientId = $clientId;
+        $this->clientId = $orderStat[self::CLIENT_ID];
         $this->dateStart = $get[self::DATE_START] ?? self::$defaults[self::DATE_START];
         $this->dateEnd =  $get[self::DATE_END] ?? (new \DateTime())->format('Y-m-d');
-        $this->limitStart = $get[self::LIMIT_START] ?? self::$defaults[self::LIMIT_START];
+        $this->limitStart = $get[self::LIMIT_START] ?? $orderStat[self::QTY] ?? self::$defaults[self::LIMIT_START];
         $this->limitEnd = $get[self::LIMIT_END] ?? self::$defaults[self::LIMIT_END];
         return $this;
     }
@@ -91,4 +91,53 @@ class Unit implements Api
         return $this->limitEnd;
     }
 
+    /**
+     * @param string $clientId
+     * @return Unit
+     */
+    public function setClientId(string $clientId): Unit
+    {
+        $this->clientId = $clientId;
+        return $this;
+    }
+
+    /**
+     * @param string $dateStart
+     * @return Unit
+     */
+    public function setDateStart(string $dateStart): Unit
+    {
+        $this->dateStart = $dateStart;
+        return $this;
+    }
+
+    /**
+     * @param string $dateEnd
+     * @return Unit
+     */
+    public function setDateEnd(string $dateEnd): Unit
+    {
+        $this->dateEnd = $dateEnd;
+        return $this;
+    }
+
+    /**
+     * @param string $limitStart
+     * @return Unit
+     */
+    public function setLimitStart(string $limitStart): Unit
+    {
+        $this->limitStart = $limitStart;
+        return $this;
+    }
+
+    /**
+     * @param string $limitEnd
+     * @return Unit
+     */
+    public function setLimitEnd(string $limitEnd): Unit
+    {
+        $this->limitEnd = $limitEnd;
+        return $this;
+    }
 }

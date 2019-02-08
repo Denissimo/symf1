@@ -33,23 +33,31 @@ class CmsController extends BaseController implements Api
     public function loadOrders()
     {
         $get = self::getRequest()->query->all();
-        $clentIds = (array)($get[self::CLIENT_ID] ?? (new Loader())->loadClientsJoinOrders());
-        /** @var Unit[] $unitList */
-        $unitList = (new Builder())->set(
-            $clentIds,
-            self::getRequest()
-        )->getUnitlist();
-
+        if($get[Api::CLIENT_ID]){
+            $unitList[] = (new Unit())
+                ->set($get, $get);
+        } else {
+            $orderStat = (new Loader())->loadClientsJoinOrders();
+            /** @var Unit[] $unitList */
+            $unitList = (new Builder())->set(
+                $orderStat,
+                self::getRequest()
+            )->getUnitlist();
+        }
         Proxy::init()->getLogger()->addWarning(
             \GuzzleHttp\json_encode($unitList)
         );
 
         try {
+//            echo "<pre>";
+//            var_dump($unitList);
+//            die;
             $response = (new Client())->process($unitList);
 //            $response = [1, 2, 3];
             (new Validator())->validateOrdersList($response);
 
 //            echo "<pre>";
+//            var_dump($response);
 //            var_dump(\DateTime::createFromFormat('h:i',$response[0]->delivery_time2));
 //            var_dump(\DateTime::createFromFormat('h:i',$response[1]->delivery_time2));
 //            die;
@@ -88,6 +96,7 @@ class CmsController extends BaseController implements Api
 
         try {
             $response = (new Client())->sendOrdersQtyRequest($clentIdList);
+//            echo '<pre>'; var_dump($response); die;
             (new Validator())->validateOrdersList($response);
             (new ResponseBuidser())->saveOrdersCount($response);
         } catch (MalformedResponseException $e) {

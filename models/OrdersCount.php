@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrdersCount
 {
-
     /**
      * @var int
      *
@@ -35,6 +34,13 @@ class OrdersCount
      * @ORM\Column(name="orders_qty", type="integer", nullable=true)
      */
     private $ordersQty;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="last_id", type="integer", nullable=true)
+     */
+    private $lastId;
 
     /**
      * @return int
@@ -89,5 +95,24 @@ class OrdersCount
         $this->ordersQty = $ordersQty;
         return $this;
     }
+
+    /**
+     * @return int|null
+     */
+    public function getLastId(): ?int
+    {
+        return $this->lastId;
+    }
+
+    /**
+     * @param int|null $lastId
+     * @return OrdersCount
+     */
+    public function setLastId(?int $lastId): OrdersCount
+    {
+        $this->lastId = $lastId;
+        return $this;
+    }
+
 
 }

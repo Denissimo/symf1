@@ -10,19 +10,19 @@ class Builder
     private $unitlist;
 
     /**
-     * @param array $clientIds
+     * @param array $orderStat
      * @param Request $request
      * @return $this
      * @throws \Exception
      */
     public function set(
-        array $clientIds,
+        array $orderStat,
         Request $request
     )
     {
-        foreach ($clientIds as $id)
+        foreach ($orderStat as $os)
         {
-            $this->unitlist[] = (new Unit)->set($id, $request->query->all());
+            $this->unitlist[] = (new Unit)->set($os, $request->query->all());
         }
         return $this;
     }

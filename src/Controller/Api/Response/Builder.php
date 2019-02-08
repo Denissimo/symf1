@@ -30,8 +30,8 @@ class Builder
     private function saveOrders(array $orders)
     {
         //$this->checkDuplicateOrders($orders);
+//        echo '<pre>';
         foreach ($orders as $ord) {
-
             $address = $this->buildAddress($ord);
             $orderBill = $this->buildOrderBill($ord);
             $orderSettings = $this->buildOrderSettings($ord);
@@ -43,6 +43,7 @@ class Builder
 
             Proxy::init()->getEntityManager()->persist($order);
             $this->saveGoods((array)$ord->goods, $order);
+//            var_dump($order->getClient()->getId());
         }
         Proxy::init()->getEntityManager()->flush();
     }
@@ -289,16 +290,37 @@ class Builder
 
     /**
      * @param array $counts
+     * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function saveOrdersCount(array $counts)
     {
-        foreach ($counts as $c)
-        {
-            $ordersCount = (new \OrdersCount())
-                ->setClientId($c->client_id)
-                ->setOrdersQty($c->orders_qty);
+        $idList = [];
+        foreach ($counts as $c) {
+            $idList[] = $c->client_id;
+        }
+        $idRow = implode(',', $idList);
+        $query = 'SELECT  * FROM orders_count WHERE client_id IN (' . $idRow . ')';
+        $ordCounts = Proxy::init()->getConnection()->query($query)->fetchAll();
+        $ordCids = array_column($ordCounts, 'client_id');
+        $ordIds = array_column($ordCounts, 'id');
+        $combine = array_combine($ordCids, $ordIds);
+        foreach ($counts as $c) {
+            if ($combine[$c->client_id]) {
+                /** @var \OrdersCount $ordersCount */
+                $ordersCount = Proxy::init()->getEntityManager()->getRepository(\OrdersCount::class)
+                    ->find($combine[$c->client_id]);
+                $ordersCount
+                    ->setClientId($c->client_id)
+                    ->setOrdersQty($c->orders_qty)
+                    ->setLastId($c->last_id);
+            } else {
+                $ordersCount = (new \OrdersCount())
+                    ->setClientId($c->client_id)
+                    ->setOrdersQty($c->orders_qty)
+                    ->setLastId($c->last_id);
+            }
             Proxy::init()->getEntityManager()->persist($ordersCount);
         }
         Proxy::init()->getEntityManager()->flush();

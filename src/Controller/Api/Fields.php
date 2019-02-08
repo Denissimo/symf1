@@ -10,6 +10,8 @@ Interface Fields
         ORDERS_QTY = 'orders_qty',
         DATE_START = 'date_start',
         DATE_END = 'date_end',
+        ID = 'id',
+        QTY = 'qty',
         CLIENT_ID = 'client_id',
         CLIENT_ID_LIST = 'client_id_list',
         CLIENT_ID_FROM = 'client_id_from',
