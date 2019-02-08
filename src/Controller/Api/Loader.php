@@ -48,7 +48,8 @@ class Loader
     public function loadClientsListIds(int $idFrom, int $idTo)
     {
         $query = 'SELECT c.client_id FROM client_settings c 
-                    WHERE c.client_id BETWEEN ' . $idFrom . ' AND ' . $idTo;
+                    WHERE c.active = 1 AND c.client_id BETWEEN ' . $idFrom . ' AND ' . $idTo;
+
         return implode(
             ',',
             array_column(
