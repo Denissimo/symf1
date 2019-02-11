@@ -15,7 +15,9 @@ class Builder
 
     /**
      * @param array $results
+     * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function process(array $results)
     {
@@ -34,8 +36,6 @@ class Builder
     {
         $duplicates = (array)$this->checkDuplicateOrders($orders);
         foreach ($orders as $ord) {
-//            Output::echo($duplicates);
-//            Output::echo($ord->id, 1);
             if (!in_array($ord->id, $duplicates)) {
                 $address = $this->buildAddress($ord);
                 $orderBill = $this->buildOrderBill($ord);
