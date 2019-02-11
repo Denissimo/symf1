@@ -30,5 +30,5 @@ Interface Fields
     ;
 
     const
-        LIMIT_CLIENT_ORDERS_LOAD = 20;
+        LIMIT_CLIENT_ORDERS_LOAD = 1;
 }

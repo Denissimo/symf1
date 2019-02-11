@@ -6,6 +6,7 @@ use App\Controller\Api\Structure as Fields;
 use App\Proxy;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Expression;
+use App\Helpers\Output;
 
 class Builder
 {
@@ -14,7 +15,9 @@ class Builder
 
     /**
      * @param array $results
+     * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function process(array $results)
     {
@@ -25,39 +28,47 @@ class Builder
 
     /**
      * @param array $orders
+     * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function saveOrders(array $orders)
     {
-        //$this->checkDuplicateOrders($orders);
-//        echo '<pre>';
+        $duplicates = (array)$this->checkDuplicateOrders($orders);
+//        Output::echo($duplicates);
         foreach ($orders as $ord) {
-            $address = $this->buildAddress($ord);
-            $orderBill = $this->buildOrderBill($ord);
-            $orderSettings = $this->buildOrderSettings($ord);
-            $order = $this->buildOrder($ord);
-            $order
-                ->setAddress($address)
-                ->setOrderBill($orderBill)
-                ->setOrderSettings($orderSettings);
+//            Output::echo($ord->client_id . ' >>> ' . $ord->id . ' >>> ' . in_array($ord->id, $duplicates));
+            if (!in_array($ord->id, $duplicates)) {
+                $address = $this->buildAddress($ord);
+                $orderBill = $this->buildOrderBill($ord);
+                $orderSettings = $this->buildOrderSettings($ord);
+                $order = $this->buildOrder($ord);
+                $order
+                    ->setAddress($address)
+                    ->setOrderBill($orderBill)
+                    ->setOrderSettings($orderSettings);
 
-            Proxy::init()->getEntityManager()->persist($order);
-            $this->saveGoods((array)$ord->goods, $order);
-//            var_dump($order->getClient()->getId());
+                Proxy::init()->getEntityManager()->persist($order);
+                isset($ord->goods) ? $this->saveGoods((array)$ord->goods, $order) : null;
+            }
         }
         Proxy::init()->getEntityManager()->flush();
     }
 
-
-    private function checkDuplicateOrders(array $orders)
+    /**
+     * @param array $orders
+     * @return array
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    private
+    function checkDuplicateOrders(array $orders)
     {
         foreach ($orders as $key => $res) {
             $idList[$key] = $res->id;
         }
         $idRow = implode(', ', $idList);
         $query = 'SELECT old_id FROM orders WHERE old_id IN(' . $idRow . ')';
-        var_dump($query);
-        die;
+        return array_column(Proxy::init()->getConnection()->query($query)->fetchAll(), 'old_id');
     }
 
 
@@ -67,7 +78,8 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function saveGoods(array $goods, \Orders $order)
+    private
+    function saveGoods(array $goods, \Orders $order)
     {
         foreach ($goods as $good) {
             if (gettype($good) == self::TYPE) {
@@ -78,7 +90,8 @@ class Builder
     }
 
 
-    private function buildGood(\stdClass $good)
+    private
+    function buildGood(\stdClass $good)
     {
         /** @var \GoodsStatusModel $client */
         $goodStatus = Proxy::init()->getEntityManager()->getRepository(\GoodsStatusModel::class)
@@ -106,7 +119,8 @@ class Builder
      * @param \stdClass $ord
      * @return \Orders
      */
-    private function buildOrder(\stdClass $ord)
+    private
+    function buildOrder(\stdClass $ord)
     {
         /** @var \ClientSettings $client */
         $client = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
@@ -134,11 +148,11 @@ class Builder
 
         $delivTime1 = $delivTime2 = null;
 
-        if(isset($ord->delivery_time1) && preg_match('/^\d{1,2}:\d{2}$/', $ord->delivery_time1)) {
+        if (isset($ord->delivery_time1) && preg_match('/^\d{1,2}:\d{2}$/', $ord->delivery_time1)) {
             $delivTime1 = \DateTime::createFromFormat('H:i', $ord->delivery_time1);
         }
 
-        if(isset($ord->delivery_time2) && preg_match('/^\d{1,2}:\d{2}$/', $ord->delivery_time2)) {
+        if (isset($ord->delivery_time2) && preg_match('/^\d{1,2}:\d{2}$/', $ord->delivery_time2)) {
             $delivTime2 = \DateTime::createFromFormat('H:i', $ord->delivery_time2);
         }
         $order = (new \Orders())
@@ -207,7 +221,8 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function buildAddress(\stdClass $ord)
+    private
+    function buildAddress(\stdClass $ord)
     {
         /** @var \AddressTypesModel $addrType */
         $addrType = Proxy::init()->getEntityManager()->getRepository(\AddressTypesModel::class)
@@ -245,7 +260,8 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function buildOrderBill(\stdClass $ord)
+    private
+    function buildOrderBill(\stdClass $ord)
     {
         $orderBills = (new \OrdersBills())
             ->setAgentCost($ord->agent_cost)
@@ -286,7 +302,8 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function buildOrderSettings(\stdClass $ord)
+    private
+    function buildOrderSettings(\stdClass $ord)
     {
 
         $orderSettings = (new \OrdersSettings())
@@ -304,7 +321,8 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function saveOrdersCount(array $counts)
+    public
+    function saveOrdersCount(array $counts)
     {
         $idList = [];
         foreach ($counts as $c) {
