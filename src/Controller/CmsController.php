@@ -16,6 +16,7 @@ use App\Controller\Api\Request\Builder;
 use App\Controller\Api\Response\Builder as ResponseBuidser;
 use App\Controller\Api\Response\Validator;
 use App\Exceptions\MalformedResponseException;
+use App\Helpers\Output;
 
 class CmsController extends BaseController implements Api
 {
@@ -45,27 +46,24 @@ class CmsController extends BaseController implements Api
             }
         } else {
             $orderStat = (new Loader())->loadClientsJoinOrders();
-//            var_dump($orderStat); die;
+
             /** @var Unit[] $unitList */
             $unitList = (new Builder())->set(
                 $orderStat,
                 self::getRequest()
             )->getUnitlist();
         }
-//        echo "<pre>";  var_dump($unitList);  die;
+
         Proxy::init()->getLogger()->addWarning(
             \GuzzleHttp\json_encode($unitList)
         );
         $content = 'Orders loaded';
         try {
-//            echo "<pre>";
-//            var_dump($unitList);
-//            die;
             $response = (new Client())->process($unitList);
-//            $response = [1, 2, 3];
-            //var_dump($response[0]->status); die;
-//            echo "<pre>"; var_dump($response); die;
+//            Output::echo($unitList);
+//            Output::echo($response, true);
             (new Validator())->validateOrdersList($response);
+
             if(isset($response[0]->status)) {
                 $content = 'Error';
             } else {
@@ -76,6 +74,8 @@ class CmsController extends BaseController implements Api
         } catch (OrdersListEmptyResponseException $e) {
             $content = $e->getMessage();
         }
+
+        Proxy::init()->getConnection()->close();
 
         return (new Render())->render([
             Render::CONTENT =>  $content
@@ -109,6 +109,8 @@ class CmsController extends BaseController implements Api
         } catch (MalformedResponseException $e) {
             $message = $e->getMessage();
         }
+
+        Proxy::init()->getConnection()->close();
 
         return (new Render())->render([
             Render::CONTENT => $message
