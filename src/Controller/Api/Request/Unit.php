@@ -31,7 +31,7 @@ class Unit implements Api
     private static $defaults = [
         self::DATE_START => '2002-01-01',
         self::LIMIT_START => '0',
-        self::LIMIT_END => '400',
+        self::LIMIT_END => '20',
     ];
 
     /**

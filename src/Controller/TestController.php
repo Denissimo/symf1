@@ -210,6 +210,44 @@ class TestController extends BaseController
     }
 
     /**
+     * @Route("/latlong")
+     * @return Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function latlong()
+    {
+        /** @var \Address[] $addresss */
+        $address = Proxy::init()->getEntityManager()->getRepository(\Address::class)
+            ->matching(
+                Criteria::create()
+                    ->where(
+                        Criteria::expr()->eq('latitude', null)
+                    )
+                    ->setMaxResults(5000)
+            );
+        $content = '';
+        foreach ($address as $key => $addr) {
+            $latLon = preg_replace('/,{1}\s*/', '|', $addr->getLatlong());
+//            $latLon = preg_replace('/\./', ',', $latLon);
+            $coords = explode('|', $latLon);
+            $content .= $key . ' >>> ' . ($coords[1] ?? "пусто") . ' >>> ' . ($coords[0] ?? "пусто") . "<br />";
+            $address[$key]
+                ->setLatitude($coords[1] ?? null)
+                ->setLongitude($coords[0] ?? null);
+            Proxy::init()->getEntityManager()->persist($address[$key]);
+        }
+
+        Proxy::init()->getEntityManager()->flush();
+
+        $data[Render::CONTENT] = $content;
+        return (new Render())->render($data, 'simple.html.twig');
+    }
+
+    /**
      * @Route("/testpost")
      * @return Response
      * @throws \Twig_Error_Loader
@@ -321,8 +359,7 @@ return Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
             ->setName('sdfgag')
             ->setEmail('ss@xhx.xx')
             ->setPassword('kjhgfkjfkfku')
-            ->setEnabled(true)
-        ;
+            ->setEnabled(true);
 
         Proxy::init()->getEntityManager()->persist($newUser);
         Proxy::init()->getEntityManager()->flush();
