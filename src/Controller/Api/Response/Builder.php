@@ -39,7 +39,6 @@ class Builder
         $duplicates = (array)$this->checkDuplicateOrders($orders);
 //        Output::echo($duplicates);
         foreach ($orders as $ord) {
-//            Output::echo($ord->client_id . ' >>> ' . $ord->id . ' >>> ' . in_array($ord->id, $duplicates), 1);
             if (!in_array($ord->id, $duplicates)) {
                 $address = $this->buildAddress($ord);
                 $orderBill = $this->buildOrderBill($ord);
@@ -67,6 +66,7 @@ class Builder
     function checkDuplicateOrders(array $orders)
     {
         foreach ($orders as $key => $res) {
+            if(!is_object($res)) continue;
             $idList[$key] = $res->id;
         }
         $idRow = implode(', ', $idList);

@@ -225,7 +225,11 @@ class TestController extends BaseController
             ->matching(
                 Criteria::create()
                     ->where(
-                        Criteria::expr()->eq('latitude', null)
+                        Criteria::expr()->andX(
+                            Criteria::expr()->isNull('latitude'),
+                            Criteria::expr()->neq('latlong', null)
+                        )
+
                     )
                     ->setMaxResults(5000)
             );
