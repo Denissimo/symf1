@@ -11,7 +11,9 @@ use App\Helpers\Output;
 class Builder
 {
     const
-        TYPE = 'object';
+        TYPE = 'object',
+        DEFAULT_ID = 1
+    ;
 
     /**
      * @param array $results
@@ -22,7 +24,7 @@ class Builder
     public function process(array $results)
     {
         foreach ($results as $orders) {
-            $this->saveOrders($orders);
+            $this->saveOrders((array)$orders);
         }
     }
 
@@ -41,6 +43,7 @@ class Builder
                 $orderBill = $this->buildOrderBill($ord);
                 $orderSettings = $this->buildOrderSettings($ord);
                 $order = $this->buildOrder($ord);
+
                 $order
                     ->setAddress($address)
                     ->setOrderBill($orderBill)
@@ -62,6 +65,7 @@ class Builder
     function checkDuplicateOrders(array $orders)
     {
         foreach ($orders as $key => $res) {
+            if(!is_object($res)) continue;
             $idList[$key] = $res->id;
         }
         $idRow = implode(', ', $idList);
@@ -133,12 +137,12 @@ class Builder
             )->current();
 
         /** @var \OrdersStatusModel $status */
-        $status = Proxy::init()->getEntityManager()->getRepository(\OrdersStatusModel::class)
-            ->find($ord->status);
+        $status = isset($ord->status) ? Proxy::init()->getEntityManager()->getRepository(\OrdersStatusModel::class)
+            ->find($ord->status) : null;
 
         /** @var \OrdersTypesModel $status */
-        $type = Proxy::init()->getEntityManager()->getRepository(\OrdersTypesModel::class)
-            ->find($ord->type);
+        $type = isset($ord->type) ? Proxy::init()->getEntityManager()->getRepository(\OrdersTypesModel::class)
+            ->find($ord->type) : null;
 
         /** @var \OrdersPimpayModel | null $pimpayStatus */
         $pimpayStatus = Proxy::init()->getEntityManager()->getRepository(\OrdersPimpayModel::class)
@@ -153,6 +157,8 @@ class Builder
         if (isset($ord->delivery_time2) && preg_match('/^\d{1,2}:\d{2}$/', $ord->delivery_time2)) {
             $delivTime2 = \DateTime::createFromFormat('H:i', $ord->delivery_time2);
         }
+
+
         $order = (new \Orders())
             ->setClient($client)
             ->setPimpayStatus($pimpayStatus)
@@ -324,6 +330,7 @@ class Builder
     {
         $idList = [];
         foreach ($counts as $c) {
+            if(!is_object($c))  continue;
             $idList[] = $c->client_id;
         }
         $idRow = implode(',', $idList);

@@ -129,14 +129,14 @@ class Address
     /**
      * @var string|null
      *
-     * @ORM\Column(name="latitude", type="decimal", precision=8, scale=6, nullable=true)
+     * @ORM\Column(name="latitude", type="string", length=256, nullable=true)
      */
     private $latitude;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="longitude", type="decimal", precision=8, scale=6, nullable=true)
+     * @ORM\Column(name="longitude", type="string", length=256, nullable=true)
      */
     private $longitude;
 
@@ -150,6 +150,12 @@ class Address
      */
     private $type;
 
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="latlong", type="string", length=255, nullable=true)
+     */
+    private $latlong;
 
     /**
      * @return int
@@ -490,6 +496,24 @@ class Address
     public function setType(AddressTypesModel $type): Address
     {
         $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLatlong(): ?string
+    {
+        return $this->latlong;
+    }
+
+    /**
+     * @param string|null $latlong
+     * @return Address
+     */
+    public function setLatlong(?string $latlong): Address
+    {
+        $this->latlong = $latlong;
         return $this;
     }
 }
