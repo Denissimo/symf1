@@ -67,6 +67,7 @@ class Builder
     function checkDuplicateOrders(array $orders)
     {
         foreach ($orders as $key => $res) {
+            if(!is_object($res)) continue;
             $idList[$key] = $res->id;
         }
         $idRow = implode(', ', $idList);
