@@ -78,5 +78,38 @@ class Client
             );
     }
 
+    /**
+     * @param \DateTime $lastOrdersUpdateTime
+     * @return mixed
+     * @throws GuzzleHttp\Exception\GuzzleException
+     */
+    public function sendOrdersUpdateRequest(\DateTime $lastOrdersUpdateTime)
+    {
+        return
+            \GuzzleHttp\json_decode(
+                Proxy::init()->getHttpClient()->request(
+                    Api::POST,
+                    getenv('cms_api_url1') . self::API_PATH_ORDERS,
+                    [
+                        Api::FORM_PARAMS =>
+                            [
+                                Api::KEY => getenv('cms_api_key'),
+                                Api::UPDATE_TIME => $lastOrdersUpdateTime->format(\Options::FORMAT)
+                            ]
+                    ]
+                )->getBody()->getContents()
+            );
+    }
+    /*
+Нашу компанию заинтересовало Ваше резюме.
+Приглашаем Вас на интервью по адресу: Москва, 5-ый Верхний Михайловский проезд, 2 стр 1.
+Чт. 28 февраля 2019г.
+Для уточнения времени интервью свяжитесь со мной.
 
+С уважением,
+Ольга Шабанова
+Компания Последняя Миля
++7 (920) 213-53-97
+o.shabanova@logsis.ru
+     * */
 }

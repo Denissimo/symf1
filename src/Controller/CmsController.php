@@ -117,4 +117,20 @@ class CmsController extends BaseController implements Api
         ]);
     }
 
+
+    /**
+     * @Route("/cmsapi/ordersupdate")
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function loadOrdersUpdate()
+    {
+        $lastTime = (new Loader())->loadLastUpdateTime();
+
+        return (new Render())->render([
+            Render::CONTENT => 'ZZZ'
+        ]);
+    }
 }

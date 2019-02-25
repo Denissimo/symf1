@@ -12,6 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Options
 {
+    const
+        NAME = 'name',
+        VALUE = 'value'
+    ;
+
+    CONST
+        ORDERS_UPDATE = 'orders_update_last_datetime',
+        FORMAT = 'd.m.Y H:i:s'
+    ;
     /**
      * @var int
      *
@@ -94,7 +103,7 @@ class Options
      */
     public function getOrdersUpdateLastDatetime()
     {
-        return DateTime::createFromFormat('Y-m-d h:i:s', $this->value);
+        return DateTime::createFromFormat(self::FORMAT, $this->value);
     }
 
     /**
@@ -103,7 +112,7 @@ class Options
      */
     public function setOrdersUpdateLastDatetime(\DateTime $value)
     {
-        $this->value = $value->format('Y-m-d h:i:s');
+        $this->value = $value->format(self::FORMAT);
         return $this;
     }
 }

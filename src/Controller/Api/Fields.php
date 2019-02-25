@@ -17,7 +17,9 @@ Interface Fields
         CLIENT_ID_FROM = 'client_id_from',
         CLIENT_ID_TO = 'client_id_to',
         LIMIT_START = 'limit_start',
-        LIMIT_END = 'limit_end';
+        LIMIT_END = 'limit_end',
+        UPDATE_TIME = 'update_time'
+    ;
 
     const
         FORM_PARAMS = 'form_params';

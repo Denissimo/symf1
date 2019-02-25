@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Helpers\Output;
 use App\Proxy;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
@@ -10,6 +11,25 @@ use App\Controller\Api\Fields as Api;
 
 class Loader
 {
+
+    /**
+     * @return bool|\DateTime
+     */
+    public function loadLastUpdateTime()
+    {
+        /** @var \Options $lastUpdateTime */
+        $lastUpdateTime = Proxy::init()->getEntityManager()->getRepository(\Options::class)
+            ->matching(
+                Criteria::create()
+                    ->where(
+                        Criteria::expr()->eq(\Options::NAME,
+                            \Options::ORDERS_UPDATE
+                        )
+                    )
+                    ->setMaxResults(1)
+            )->current();
+        return $lastUpdateTime->getOrdersUpdateLastDatetime();
+    }
 
     /**
      * @param null $clientId
@@ -25,10 +45,10 @@ class Loader
         // [id, client_id, qty (orders), orders_qty (orders_count), last_id
         //LEFT JOIN (SELECT oc.client_id, MAX(oc.orders_qty) AS orders_qty FROM orders_count oc GROUP BY oc.client_id) q ON c.client_id = q.client_id
 
-        $where = isset($clientId) ? ' AND client_id = ' . $clientId : null ;
+        $where = isset($clientId) ? ' AND client_id = ' . $clientId : null;
         $query = 'SELECT c.id, c.client_id, o.qty, q.orders_qty, q.last_id
   FROM 
-  (SELECT * FROM client_settings WHERE active = 1 '.$where.' AND client_id NOT IN (2, 238, 1356) ORDER BY client_id) c 
+  (SELECT * FROM client_settings WHERE active = 1 ' . $where . ' AND client_id NOT IN (2, 238, 1356) ORDER BY client_id) c 
    LEFT JOIN 
   (SELECT o1.client_id, COUNT(o1.id) AS qty  FROM orders o1 GROUP BY o1.client_id) o 
   ON c.id = o.client_id 
