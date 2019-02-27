@@ -53,7 +53,7 @@ class Loader
   (SELECT o1.client_id, COUNT(o1.id) AS qty  FROM orders o1 GROUP BY o1.client_id) o 
   ON c.id = o.client_id 
    LEFT JOIN (SELECT oc.client_id, oc.orders_qty, oc.last_id FROM orders_count oc) q ON c.client_id = q.client_id
- WHERE o.qty < q.orders_qty OR (o.qty IS NULL AND (q.orders_qty > 0 OR q.orders_qty IS NULL))
+    WHERE o.qty < q.orders_qty OR (o.qty IS NULL AND (q.orders_qty > 0 OR q.orders_qty IS NULL))
  LIMIT ' . Api::LIMIT_CLIENT_ORDERS_LOAD;
 //var_dump($query); die;
         return (array)Proxy::init()->getConnection()->query($query)->fetchAll();

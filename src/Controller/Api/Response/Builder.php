@@ -102,8 +102,8 @@ class Builder
     {
         foreach ($goods as $good) {
             if (gettype($good) == self::TYPE) {
-                $goodsAll[] = $this->buildGood($good)->setOrder($order);
-                Proxy::init()->getEntityManager()->persist(current($goodsAll));
+                $goodsNew = $this->buildGood($good)->setOrder($order);
+                Proxy::init()->getEntityManager()->persist($goodsNew);
             }
         }
     }
