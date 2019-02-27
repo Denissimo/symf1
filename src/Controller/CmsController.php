@@ -22,6 +22,28 @@ class CmsController extends BaseController implements Api
 {
 
     /**
+     * @Route("/cmsapi/data1")
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function data1()
+    {
+        // GET переменные
+        $get = self::getRequest()->query->all();
+
+        $query = "SELECT * FROM orders ORDER BY id DESC LIMIT 5";
+        $sth = Proxy::init()->getConnection()->query($query);
+        $sth->execute();
+        $res = $sth->fetchAll();
+
+        $data['content'] = \GuzzleHttp\json_encode($res);
+        return (new Render())->render($data);
+    }
+
+    /**
      * @Route("/cmsapi/orders")
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\DBAL\DBALException
