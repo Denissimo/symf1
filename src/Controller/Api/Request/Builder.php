@@ -6,6 +6,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Builder
 {
+    const
+        LIMIT_UPDATE = 100;
+
     /** @var Unit[] */
     private $unitlist;
 

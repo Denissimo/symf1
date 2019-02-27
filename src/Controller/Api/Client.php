@@ -3,9 +3,11 @@
 namespace App\Controller\Api;
 
 use App\Controller\Api\Request\Unit;
+use App\Controller\Api\Request\Builder;
 use App\Proxy;
 use GuzzleHttp;
 use App\Controller\Api\Fields as Api;
+use Symfony\Component\HttpFoundation\Request;
 
 class Client
 {
@@ -80,10 +82,11 @@ class Client
 
     /**
      * @param \DateTime $lastOrdersUpdateTime
+     * @param Request $get
      * @return mixed
      * @throws GuzzleHttp\Exception\GuzzleException
      */
-    public function sendOrdersUpdateRequest(\DateTime $lastOrdersUpdateTime)
+    public function sendOrdersUpdateRequest(\DateTime $lastOrdersUpdateTime, Request $get)
     {
         return
             \GuzzleHttp\json_decode(
@@ -94,6 +97,7 @@ class Client
                         Api::FORM_PARAMS =>
                             [
                                 Api::KEY => getenv('cms_api_key'),
+                                Api::LIMIT_END => $get->query->all()[Api::LIMIT_END] ?? Builder::LIMIT_UPDATE,
                                 Api::UPDATE_TIME => $lastOrdersUpdateTime->format(\Options::FORMAT)
                             ]
                     ]

@@ -29,6 +29,14 @@ class Builder
     }
 
     /**
+     * @param array $results
+     */
+    public function processUpdate(array $results)
+    {
+//        Output::echo($results, 1);
+    }
+
+    /**
      * @param array $orders
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
@@ -37,7 +45,7 @@ class Builder
     private function saveOrders(array $orders)
     {
         $duplicates = (array)$this->checkDuplicateOrders($orders);
-//        Output::echo($duplicates);
+
         foreach ($orders as $ord) {
             if (!in_array($ord->id, $duplicates)) {
                 $address = $this->buildAddress($ord);
@@ -177,7 +185,7 @@ class Builder
             ->setCard($ord->card ?? null)
             ->setCardType($ord->card_type ?? null)
             ->setCargoLift($ord->cargo_lift ?? null)
-            ->setChangeDate($ord->change_date ?? null)
+            ->setChangeDate(\DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date) ?? null)
             ->setChangeOption($ord->change_option ?? null)
             ->setChangeText($ord->change_text ?? null)
             ->setChweightflag($ord->chweightflag ?? null)
