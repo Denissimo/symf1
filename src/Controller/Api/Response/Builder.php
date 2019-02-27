@@ -118,7 +118,7 @@ class Builder
             ->setCount($good->count)
             ->setCountWeight($good->count_weight)
             ->setDescription($good->artname)
-            ->setIsCancle($good->is_cancel)
+            ->setIsCancel($good->is_cancel)
             ->setPrice($good->price)
             ->setVAktId($good->v_akt_id)
             ->setWeight($good->weight);

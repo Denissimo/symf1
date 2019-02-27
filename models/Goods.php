@@ -66,9 +66,9 @@ class Goods
     /**
      * @var int|null
      *
-     * @ORM\Column(name="is_cancle", type="integer", nullable=true, options={"comment"="Отказной товар"})
+     * @ORM\Column(name="is_cancel", type="integer", nullable=true, options={"comment"="Отказной товар"})
      */
-    private $isCancle;
+    private $isCancel;
 
     /**
      * @var string|null
@@ -236,18 +236,18 @@ class Goods
     /**
      * @return int|null
      */
-    public function getisCancle(): ?int
+    public function getIsCancel(): ?int
     {
-        return $this->isCancle;
+        return $this->isCancel;
     }
 
     /**
-     * @param int|null $isCancle
+     * @param int|null $isCancel
      * @return Goods
      */
-    public function setIsCancle(?int $isCancle): Goods
+    public function setIsCancel(?int $isCancel): Goods
     {
-        $this->isCancle = $isCancle;
+        $this->isCancel = $isCancel;
         return $this;
     }
 
