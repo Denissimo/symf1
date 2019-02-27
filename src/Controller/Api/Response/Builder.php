@@ -12,8 +12,7 @@ class Builder
 {
     const
         TYPE = 'object',
-        DEFAULT_ID = 1
-    ;
+        DEFAULT_ID = 1;
 
     /**
      * @param array $results
@@ -29,12 +28,15 @@ class Builder
     }
 
     /**
-     * @param array $results
+     * @param array $orders
      */
-    public function processUpdate(array $results)
+    public function processUpdate(array $orders)
     {
-//        Output::echo($results, 1);
+        $this->saveUpdateOrders($orders);
+        Output::echo('zz', 1);
     }
+
+
 
     /**
      * @param array $orders
@@ -64,6 +66,13 @@ class Builder
         Proxy::init()->getEntityManager()->flush();
     }
 
+    private function saveUpdateOrders(array $orders)
+    {
+        foreach ($orders as $ord) {
+            Output::echo($ord->goods);
+        }
+    }
+
     /**
      * @param array $orders
      * @return array
@@ -73,7 +82,7 @@ class Builder
     function checkDuplicateOrders(array $orders)
     {
         foreach ($orders as $key => $res) {
-            if(!is_object($res)) continue;
+            if (!is_object($res)) continue;
             $idList[$key] = $res->id;
         }
         $idRow = implode(', ', $idList);
@@ -338,7 +347,7 @@ class Builder
     {
         $idList = [];
         foreach ($counts as $c) {
-            if(!is_object($c))  continue;
+            if (!is_object($c)) continue;
             $idList[] = $c->client_id;
         }
         $idRow = implode(',', $idList);

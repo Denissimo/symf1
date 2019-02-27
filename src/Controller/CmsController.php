@@ -84,7 +84,7 @@ class CmsController extends BaseController implements Api
 //            Output::echo($response, true);
             (new Validator())->validateOrdersList($response);
 
-            if (isset($response[0]->status)) {
+            if (isset($response[0]->status) && $response[0]->status == 400) {
                 $content = 'Error';
             } else {
                 (new ResponseBuidser())->process($response);
@@ -152,10 +152,12 @@ class CmsController extends BaseController implements Api
         //$get = self::getRequest()->query->all();
         try {
             $response = (new Client())->sendOrdersUpdateRequest($lastTime, self::getRequest());
-            Output::echo($response, 1);
+//            Output::echo($response[0], 1);
             (new Validator())->validateOrdersList($response);
-            if (isset($response[0]->status)) {
+            if (isset($response[0]->status) && $response[0]->status == 400) {
                 $content = 'Error';
+                Output::echo($content);
+                Output::echo($response[0], 1);
             } else {
                 (new ResponseBuidser())->processUpdate($response);
             }
