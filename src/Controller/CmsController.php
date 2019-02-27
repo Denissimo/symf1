@@ -20,8 +20,28 @@ use App\Helpers\Output;
 
 class CmsController extends BaseController implements Api
 {
-    //@Route("/cmsapi/orders")
 
+    /**
+     * @Route("/cmsapi/data1")
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function data1()
+    {
+        // GET переменные
+        $get = self::getRequest()->query->all();
+
+        $query = "SELECT * FROM orders ORDER BY id DESC LIMIT 5";
+        $sth = Proxy::init()->getConnection()->query($query);
+        $sth->execute();
+        $res = $sth->fetchAll();
+
+        $data['content'] = \GuzzleHttp\json_encode($res);
+        return (new Render())->render($data);
+    }
 
     /**
      * @Route("/cmsapi/orders")
@@ -37,9 +57,9 @@ class CmsController extends BaseController implements Api
     {
 
         $get = self::getRequest()->query->all();
-        if(isset($get[Api::CLIENT_ID])){
+        if (isset($get[Api::CLIENT_ID])) {
             $orderStat = (new Loader())->loadClientsJoinOrders($get[Api::CLIENT_ID]);
-            if(count($orderStat)) {
+            if (count($orderStat)) {
                 $unitList[] = (new Unit())->set($orderStat[0], $get);
             } else {
                 die('Все ордера загружены');
@@ -64,7 +84,7 @@ class CmsController extends BaseController implements Api
 //            Output::echo($response, true);
             (new Validator())->validateOrdersList($response);
 
-            if(isset($response[0]->status)) {
+            if (isset($response[0]->status)) {
                 $content = 'Error';
             } else {
                 (new ResponseBuidser())->process($response);
@@ -78,7 +98,7 @@ class CmsController extends BaseController implements Api
         Proxy::init()->getConnection()->close();
 
         return (new Render())->render([
-            Render::CONTENT =>  $content
+            Render::CONTENT => $content
         ]);
     }
 
@@ -117,4 +137,34 @@ class CmsController extends BaseController implements Api
         ]);
     }
 
+
+    /**
+     * @Route("/cmsapi/ordersupdate")
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function loadOrdersUpdate()
+    {
+        $lastTime = (new Loader())->loadLastUpdateTime();
+        //$get = self::getRequest()->query->all();
+        try {
+            $response = (new Client())->sendOrdersUpdateRequest($lastTime, self::getRequest());
+            Output::echo($response, 1);
+            (new Validator())->validateOrdersList($response);
+            if (isset($response[0]->status)) {
+                $content = 'Error';
+            } else {
+                (new ResponseBuidser())->processUpdate($response);
+            }
+        } catch (MalformedResponseException $e) {
+            $message = $e->getMessage();
+        }
+
+        return (new Render())->render([
+            Render::CONTENT => $lastTime->format('c')
+        ]);
+    }
 }

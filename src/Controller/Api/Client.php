@@ -3,9 +3,11 @@
 namespace App\Controller\Api;
 
 use App\Controller\Api\Request\Unit;
+use App\Controller\Api\Request\Builder;
 use App\Proxy;
 use GuzzleHttp;
 use App\Controller\Api\Fields as Api;
+use Symfony\Component\HttpFoundation\Request;
 
 class Client
 {
@@ -78,5 +80,40 @@ class Client
             );
     }
 
+    /**
+     * @param \DateTime $lastOrdersUpdateTime
+     * @param Request $get
+     * @return mixed
+     * @throws GuzzleHttp\Exception\GuzzleException
+     */
+    public function sendOrdersUpdateRequest(\DateTime $lastOrdersUpdateTime, Request $get)
+    {
+        return
+            \GuzzleHttp\json_decode(
+                Proxy::init()->getHttpClient()->request(
+                    Api::POST,
+                    getenv('cms_api_url1') . self::API_PATH_ORDERS,
+                    [
+                        Api::FORM_PARAMS =>
+                            [
+                                Api::KEY => getenv('cms_api_key'),
+                                Api::LIMIT_END => $get->query->all()[Api::LIMIT_END] ?? Builder::LIMIT_UPDATE,
+                                Api::UPDATE_TIME => $lastOrdersUpdateTime->format(\Options::FORMAT)
+                            ]
+                    ]
+                )->getBody()->getContents()
+            );
+    }
+    /*
+Нашу компанию заинтересовало Ваше резюме.
+Приглашаем Вас на интервью по адресу: Москва, 5-ый Верхний Михайловский проезд, 2 стр 1.
+Чт. 28 февраля 2019г.
+Для уточнения времени интервью свяжитесь со мной.
 
+С уважением,
+Ольга Шабанова
+Компания Последняя Миля
++7 (920) 213-53-97
+o.shabanova@logsis.ru
+     * */
 }
