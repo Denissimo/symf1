@@ -45,7 +45,6 @@ class Builder
     private function saveOrders(array $orders)
     {
         $duplicates = (array)$this->checkDuplicateOrders($orders);
-
         foreach ($orders as $ord) {
             if (!in_array($ord->id, $duplicates)) {
                 $address = $this->buildAddress($ord);
