@@ -27,14 +27,6 @@ class Builder
         }
     }
 
-    /**
-     * @param array $orders
-     */
-    public function processUpdate(array $orders)
-    {
-        $this->saveUpdateOrders($orders);
-        Output::echo('zz', 1);
-    }
 
 
 
@@ -66,12 +58,7 @@ class Builder
         Proxy::init()->getEntityManager()->flush();
     }
 
-    private function saveUpdateOrders(array $orders)
-    {
-        foreach ($orders as $ord) {
-            Output::echo($ord->goods);
-        }
-    }
+
 
     /**
      * @param array $orders

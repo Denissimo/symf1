@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Orders
 {
+
+    const
+        OLDID = 'oldId'
+    ;
+
     /**
      * @var int
      *

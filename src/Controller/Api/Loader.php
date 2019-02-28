@@ -79,4 +79,19 @@ class Loader
         );
     }
 
+
+    public function loadOrderByOid(int $oid)
+    {
+        return Proxy::init()->getEntityManager()->getRepository(\Orders::class)
+            ->matching(
+                Criteria::create()
+                    ->where(
+                        Criteria::expr()->eq(\Orders::OLDID,
+                            $oid
+                        )
+                    )
+                    ->setMaxResults(1)
+            )->current();
+    }
+
 }

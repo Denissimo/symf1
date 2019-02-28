@@ -16,6 +16,7 @@ use App\Controller\Api\Request\Builder;
 use App\Controller\Api\Response\Builder as ResponseBuidser;
 use App\Controller\Api\Response\Validator;
 use App\Exceptions\MalformedResponseException;
+use App\Controller\Api\Process;
 use App\Helpers\Output;
 
 class CmsController extends BaseController implements Api
@@ -149,17 +150,16 @@ class CmsController extends BaseController implements Api
     public function loadOrdersUpdate()
     {
         $lastTime = (new Loader())->loadLastUpdateTime();
+//        Output::echo($lastTime, 1);
         //$get = self::getRequest()->query->all();
         try {
             $response = (new Client())->sendOrdersUpdateRequest($lastTime, self::getRequest());
-//            Output::echo($response[0], 1);
+//            Output::echo($response[1], 1);
             (new Validator())->validateOrdersList($response);
             if (isset($response[0]->status) && $response[0]->status == 400) {
                 $content = 'Error';
-                Output::echo($content);
-                Output::echo($response[0], 1);
             } else {
-                (new ResponseBuidser())->processUpdate($response);
+                (new Process())->processUpdate($response);
             }
         } catch (MalformedResponseException $e) {
             $message = $e->getMessage();

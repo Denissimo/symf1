@@ -19,7 +19,7 @@ class Options
 
     CONST
         ORDERS_UPDATE = 'orders_update_last_datetime',
-        FORMAT = 'd.m.Y H:i:s'
+        FORMAT = 'Y-m-d H:i:s'
     ;
     /**
      * @var int

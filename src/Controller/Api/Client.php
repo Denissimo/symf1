@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Controller\Api\Request\Unit;
 use App\Controller\Api\Request\Builder;
+use App\Helpers\Output;
 use App\Proxy;
 use GuzzleHttp;
 use App\Controller\Api\Fields as Api;
