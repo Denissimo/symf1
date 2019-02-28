@@ -180,7 +180,7 @@ class Builder
             ->setCard($ord->card ?? null)
             ->setCardType($ord->card_type ?? null)
             ->setCargoLift($ord->cargo_lift ?? null)
-            ->setChangeDate(\DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date) ?? null)
+            ->setChangeDate(isset($ord->change_date) ? \DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date) : null)
             ->setChangeOption($ord->change_option ?? null)
             ->setChangeText($ord->change_text ?? null)
             ->setChweightflag($ord->chweightflag ?? null)

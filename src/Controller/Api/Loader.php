@@ -80,6 +80,10 @@ class Loader
     }
 
 
+    /**
+     * @param int $oid
+     * @return \Orders
+     */
     public function loadOrderByOid(int $oid)
     {
         return Proxy::init()->getEntityManager()->getRepository(\Orders::class)
@@ -92,6 +96,23 @@ class Loader
                     )
                     ->setMaxResults(1)
             )->current();
+    }
+
+    /**
+     * @param \Orders $order
+     * @return \Goods []
+     */
+    public function loadGoodsByOrder(\Orders $order)
+    {
+        return Proxy::init()->getEntityManager()->getRepository(\Goods::class)
+            ->matching(
+                Criteria::create()
+                    ->where(
+                        Criteria::expr()->eq(\Goods::ORDERID,
+                            $order->getId()
+                        )
+                    )
+            )->toArray();
     }
 
 }

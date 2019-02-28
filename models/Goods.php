@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Goods
 {
+    const
+        ORDERID = 'orderId'
+    ;
     /**
      * @var int
      *
@@ -106,6 +109,14 @@ class Goods
      * })
      */
     private $order;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="order_id", type="integer", nullable=false)
+     */
+    private $orderId;
+
 
     /**
      * @return int
@@ -320,6 +331,24 @@ class Goods
     public function setOrder(Orders $order): Goods
     {
         $this->order = $order;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrderId(): int
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @param int $orderId
+     * @return Goods
+     */
+    public function setOrderId(int $orderId): Goods
+    {
+        $this->orderId = $orderId;
         return $this;
     }
 

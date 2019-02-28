@@ -20,10 +20,17 @@ class Process
     private function saveUpdateOrders(array $orders)
     {
         foreach ($orders as $ord) {
-            /** @var \Orders $order */
+
+            /** @var  $order */
             $order = (new Loader())->loadOrderByOid($ord->id);
-            Output::echo($order->getId(), 1);
-//            Output::echo((array)$ord->goods);
+            $goods = (new Loader())->loadGoodsByOrder($order);
+            $res = (new Checker())->goodsCompare($ord->goods, $goods);
+
+            /** @var bool goodsQtyMatch */
+            $goodsQtyMatch = (count($ord->goods) == count($goods));
+//            Output::echo($order->getId(). ' >> ' . $order->getOldId() . ' >> ' . count($ord->goods) . ' >> '. count($goods) . '<br />');
+//            Output::echo($goods[0]->getDescription(), 1);
+//            Output::echo($ord->goods[0], 1);
         }
     }
 
