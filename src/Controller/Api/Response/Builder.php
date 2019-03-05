@@ -41,10 +41,10 @@ class Builder
         $duplicates = (array)$this->checkDuplicateOrders($orders);
         foreach ($orders as $ord) {
             if (!in_array($ord->id, $duplicates)) {
-                $address = $this->buildAddress($ord);
-                $orderBill = $this->buildOrderBill($ord);
-                $orderSettings = $this->buildOrderSettings($ord);
-                $order = $this->buildOrder($ord);
+                $address = $this->buildAddress(new \Address(), $ord);
+                $orderBill = $this->buildOrderBill(new \OrdersBills(), $ord);
+                $orderSettings = $this->buildOrderSettings(new \OrdersSettings(), $ord);
+                $order = $this->buildOrder(new \Orders(), $ord);
 
                 $order
                     ->setAddress($address)
@@ -122,15 +122,14 @@ class Builder
     }
 
     /**
+     * @param \Orders $order
      * @param \stdClass $ord
      * @return \Orders
      */
-    private
-    function buildOrder(\stdClass $ord)
+    private function buildOrder(\Orders $order , \stdClass $ord)
     {
         /** @var \ClientSettings $client */
         $client = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
-            //->findBy([\ClientSettings::CLIENT_ID => $ord->client_id]);
             ->matching(
                 Criteria::create()
                     ->where(
@@ -163,7 +162,7 @@ class Builder
         }
 
 
-        $order = (new \Orders())
+        $order
             ->setClient($client)
             ->setPimpayStatus($pimpayStatus)
             ->setStatus($status)
@@ -224,13 +223,14 @@ class Builder
     }
 
     /**
+     * @param \Address $address
      * @param \stdClass $ord
      * @return \Address
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     private
-    function buildAddress(\stdClass $ord)
+    function buildAddress(\Address $address,  \stdClass $ord)
     {
         /** @var \AddressTypesModel $addrType */
         $addrType = Proxy::init()->getEntityManager()->getRepository(\AddressTypesModel::class)
@@ -238,7 +238,7 @@ class Builder
         $latLon = preg_replace('/,{1}\s*/', '|', $ord->latitude);
         $coords = explode('|', $latLon);
 
-        $address = (new \Address())
+        $address
             ->setBuilding($ord->building)
             ->setCity($ord->city)
             ->setCorpus($ord->corpus)
@@ -263,15 +263,16 @@ class Builder
     }
 
     /**
+     * @param \OrdersBills $orderBills
      * @param \stdClass $ord
      * @return \OrdersBills
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     private
-    function buildOrderBill(\stdClass $ord)
+    function buildOrderBill(\OrdersBills $orderBills ,\stdClass $ord)
     {
-        $orderBills = (new \OrdersBills())
+        $orderBills
             ->setAgentCost($ord->agent_cost)
             ->setChangeOs($ord->change_os)
             ->setChangeWeight($ord->change_weight)
@@ -305,16 +306,17 @@ class Builder
     }
 
     /**
+     * @param \OrdersSettings $orderSettings
      * @param \stdClass $ord
      * @return \OrdersSettings
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     private
-    function buildOrderSettings(\stdClass $ord)
+    function buildOrderSettings(\OrdersSettings $orderSettings , \stdClass $ord)
     {
 
-        $orderSettings = (new \OrdersSettings())
+        $orderSettings
             ->setReciepientName($ord->reciepient_name)
             ->setDocDescription($ord->doc_description);
         Proxy::init()->getEntityManager()->persist($orderSettings);
