@@ -112,6 +112,7 @@ class Builder
             ->find($good->nds) : null;
 
         return $goods
+            ->setOldId($good->id)
             ->setGoodsStatus($goodStatus)
             ->setGoodsNdsType($ndsType)
             ->setArticle($good->articul)

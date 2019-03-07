@@ -14,7 +14,8 @@ class Orders
 {
 
     const
-        OLDID = 'oldId'
+        OLDID = 'oldId',
+        ID = 'id'
     ;
 
     /**

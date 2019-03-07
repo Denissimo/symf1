@@ -13,7 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Goods
 {
     const
-        ORDERID = 'orderId'
+        ORDERID = 'orderId',
+        ID = 'id'
     ;
     /**
      * @var int
@@ -23,6 +24,13 @@ class Goods
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="old_id", type="integer", nullable=true, options={"comment"="Старый id из древней БД"})
+     */
+    private $oldId;
 
     /**
      * @var string|null
@@ -352,4 +360,21 @@ class Goods
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
+    public function getOldId(): ?int
+    {
+        return $this->oldId;
+    }
+
+    /**
+     * @param int|null $oldId
+     * @return Goods
+     */
+    public function setOldId(?int $oldId): Goods
+    {
+        $this->oldId = $oldId;
+        return $this;
+    }
 }

@@ -94,6 +94,7 @@ class Loader
                             $oid
                         )
                     )
+                    ->orderBy([\Orders::ID => Criteria::ASC])
                     ->setMaxResults(1)
             )->current();
     }
