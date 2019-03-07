@@ -63,6 +63,13 @@ class Orders
     private $deliveryDate;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="delivery_time", type="integer", nullable=true, options={"comment"="Время доставки"})
+     */
+    private $deliveryTime;
+
+    /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="delivery_time1", type="time", nullable=true, options={"comment"="Время доставки-начало"})
@@ -582,6 +589,25 @@ class Orders
         $this->deliveryDate = $deliveryDate;
         return $this;
     }
+
+    /**
+     * @return int|null
+     */
+    public function getDeliveryTime(): ?int
+    {
+        return $this->deliveryTime;
+    }
+
+    /**
+     * @param int|null $deliveryTime
+     * @return Orders
+     */
+    public function setDeliveryTime(?int $deliveryTime): Orders
+    {
+        $this->deliveryTime = $deliveryTime;
+        return $this;
+    }
+
 
     /**
      * @return DateTime|null

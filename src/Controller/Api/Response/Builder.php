@@ -192,6 +192,7 @@ class Builder
             ->setCourierId($ord->courier_id ?? null)
             ->setDateAdd($ord->date_add ?? null)
             ->setDeliveryDate(isset($ord->delivery_date) ? \DateTime::createFromFormat('Y-m-d', $ord->delivery_date) : null)
+            ->setDeliveryTime($ord->delivery_time)
             ->setDeliveryTime1($delivTime1)
             ->setDeliveryTime2($delivTime2)
             ->setDocsOption($ord->docs_option ?? null)
