@@ -12,6 +12,9 @@ class Validator
     const
         RESPONSE = 'response';
 
+    /**
+     * @param $ordersList
+     */
     public function validateOrdersList($ordersList)
     {
         Proxy::init()->getValidator()->validateType(
@@ -25,5 +28,7 @@ class Validator
             MalformedResponseException::class
         );
     }
+
+
 
 }

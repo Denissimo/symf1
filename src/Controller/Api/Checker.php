@@ -21,12 +21,12 @@ class Checker
 
         $goodsArrayOfStd = [];
         foreach ($stdGoods as $key => $val) {
-            $goodsArrayOfStd[$val->artname]['goods'] = $val;
-            echo '<br />Is Cancel: ' . $val->is_cancel .' >>> ' . $goods[$key]->getIsCancel();
+            $goodsArrayOfStd[$val->id]['goods'] = $val;
+            echo '<br />Old Id : ' . $goods[$key]->getOldId() .' >> Is Cancel: ' . $val->is_cancel .' >>> ' . $goods[$key]->getIsCancel();
         }
 
         foreach ($goods as $g) {
-            $artname = $g->getArticle();
+            $artname = $g->getOldId();
             $gStd = $goodsArrayOfStd[$artname]['goods'];
             $isCountChanged = $this->checkCount($gStd, $g);
         }
