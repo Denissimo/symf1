@@ -4,8 +4,8 @@ namespace App\Controller\Api;
 
 
 use App\Proxy;
-use function Sodium\compare;
 use Symfony\Component\Console\Output\Output;
+use App\Controller\Api\Response\Builder;
 
 class Checker
 {
@@ -40,7 +40,12 @@ class Checker
 //            $goodsArray[$val->id] = (new Comparator())->setStdGoods($val);
 //            $stdGoodsArray[$val->id] = $val;
             $stdGoodsCurrent = $val;
-            (new Comparator())->compare($stdGoodsCurrent, $goodsArray[$val->id]);
+            if(isset($goodsArray[$val->id])) {
+                (new Comparator())->compare($stdGoodsCurrent, $goodsArray[$val->id]);
+            } else {
+                $currentGoods = (new Builder())->buildGoods(new \Goods(), $stdGoodsCurrent);
+                Proxy::init()->getEntityManager()->persist($currentGoods);
+            }
 //            echo '<br />Old Id : ' . $goods[$key]->getOldId() .' >> Is Cancel: ' . $val->is_cancel .' >>> ' . $goods[$key]->getIsCancel();
         }
         Proxy::init()->getEntityManager()->flush();

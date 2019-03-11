@@ -23,25 +23,18 @@ class Comparator
 
     /**
      * @param \stdClass $stdGoods
-     * @param \Goods | null $goods
+     * @param \Goods $goods
      * @return null
      * @throws \Doctrine\ORM\ORMException
      */
-    public function compare($stdGoods,$goods)
+    public function compare($stdGoods, $goods)
     {
-//        $this->stdGoods = $stdGoods;
-//        $this->goods = $goods;
-//        Output::echo($goods->getOldId());
-        if($goods) {
-            $isCountChanged = $this->checkCount($stdGoods, $goods);
-            $isParamsChanged = $this->checkParasms($stdGoods, $goods);
-            if($isCountChanged || $isParamsChanged){
-                $currentGoods = (new Builder())->buildGoods($goods, $stdGoods);
-            } else {
-                $currentGoods = $goods;
-            }
+        $isCountChanged = $this->checkCount($stdGoods, $goods);
+        $isParamsChanged = $this->checkParasms($stdGoods, $goods);
+        if ($isCountChanged || $isParamsChanged) {
+            $currentGoods = (new Builder())->buildGoods($goods, $stdGoods);
         } else {
-            $currentGoods = (new Builder())->buildGoods(new \Goods(), $stdGoods);
+            $currentGoods = $goods;
         }
         Proxy::init()->getEntityManager()->persist($currentGoods);
         return null;
