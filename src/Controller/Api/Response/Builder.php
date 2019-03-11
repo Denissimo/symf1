@@ -89,7 +89,7 @@ class Builder
     {
         foreach ($goods as $good) {
             if (gettype($good) == self::TYPE) {
-                $goodsNew = $this->buildGood(new \Goods(), $good)->setOrder($order);
+                $goodsNew = $this->buildGoods(new \Goods(), $good)->setOrder($order);
                 Proxy::init()->getEntityManager()->persist($goodsNew);
             }
         }
@@ -101,7 +101,7 @@ class Builder
      * @param \stdClass $good
      * @return \Goods
      */
-    private function buildGood(\Goods $goods, \stdClass $good)
+    public function buildGoods(\Goods $goods, \stdClass $good)
     {
         /** @var \GoodsStatusModel $client */
         $goodStatus = Proxy::init()->getEntityManager()->getRepository(\GoodsStatusModel::class)
@@ -131,7 +131,7 @@ class Builder
      * @param \stdClass $ord
      * @return \Orders
      */
-    private function buildOrder(\Orders $order , \stdClass $ord)
+    public function buildOrder(\Orders $order , \stdClass $ord)
     {
         /** @var \ClientSettings $client */
         $client = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)

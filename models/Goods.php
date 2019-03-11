@@ -307,9 +307,9 @@ class Goods
     }
 
     /**
-     * @return NdsType
+     * @return NdsType | null
      */
-    public function getGoodsNdsType(): NdsType
+    public function getGoodsNdsType()
     {
         return $this->goodsNdsType;
     }

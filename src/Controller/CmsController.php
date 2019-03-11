@@ -146,6 +146,7 @@ class CmsController extends BaseController implements Api
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public function loadOrdersUpdate()
     {
@@ -159,7 +160,7 @@ class CmsController extends BaseController implements Api
             if (isset($response[0]->status) && $response[0]->status == 400) {
                 $content = 'Error';
             } else {
-                (new Process())->processUpdate($response);
+                $updateTime = (new Process())->processUpdate($response);
             }
         } catch (MalformedResponseException $e) {
             $message = $e->getMessage();
