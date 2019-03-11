@@ -13,7 +13,7 @@ class Loader
 {
 
     /**
-     * @return bool|\DateTime
+     * @return \Options
      */
     public function loadLastUpdateTime()
     {
@@ -28,7 +28,7 @@ class Loader
                     )
                     ->setMaxResults(1)
             )->current();
-        return $lastUpdateTime->getOrdersUpdateLastDatetime();
+        return $lastUpdateTime;
     }
 
     /**

@@ -154,20 +154,23 @@ class CmsController extends BaseController implements Api
 //        Output::echo($lastTime, 1);
         //$get = self::getRequest()->query->all();
         try {
-            $response = (new Client())->sendOrdersUpdateRequest($lastTime, self::getRequest());
+            $response = (new Client())->sendOrdersUpdateRequest($lastTime->getOrdersUpdateLastDatetime(), self::getRequest());
 //            Output::echo($response[1], 1);
             (new Validator())->validateOrdersList($response);
             if (isset($response[0]->status) && $response[0]->status == 400) {
                 $content = 'Error';
             } else {
                 $updateTime = (new Process())->processUpdate($response);
+                $lastTime->setOrdersUpdateLastDatetime($updateTime);
+                Proxy::init()->getEntityManager()->persist($lastTime);
+                Proxy::init()->getEntityManager()->flush();
             }
         } catch (MalformedResponseException $e) {
             $message = $e->getMessage();
         }
 
         return (new Render())->render([
-            Render::CONTENT => $lastTime->format('c')
+            Render::CONTENT => $lastTime->getOrdersUpdateLastDatetime()->format('c')
         ]);
     }
 }

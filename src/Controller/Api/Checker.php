@@ -20,11 +20,13 @@ class Checker
     {
         /** @var bool $goodsQtyMatch */
         $goodsQtyMatch = (count($stdGoods) == count($goods));
+        /*
         if($goodsQtyMatch) {
             echo '<br />Кол-во совпало: ' . $goodsQtyMatch . '(' . count($stdGoods) . ') <br />';
         } else {
             echo '<br />Кол-во НЕ совпало: ' . $goodsQtyMatch . '( std: ' . count($stdGoods) . 'goods: '.count($goods). ') <br />';
         }
+        */
 
 
 //        $stdGoodsArray = [];

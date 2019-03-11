@@ -51,13 +51,23 @@ class Process
                 $newDt = \DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date);
                 $lostUpdateTime = $newDt < $lostUpdateTime ? $newDt : $lostUpdateTime;
             }
+
+            $address = (new Builder())->buildAddress(new \Address(), $ord);
+            $orderBill = (new Builder())->buildOrderBill(new \OrdersBills(), $ord);
+            $orderSettings = (new Builder())->buildOrderSettings(new \OrdersSettings(), $ord);
             $currentOrder = (new Builder())->buildOrder($order, $ord);
+
+            $currentOrder
+                ->setAddress($address)
+                ->setOrderBill($orderBill)
+                ->setOrderSettings($orderSettings);
+
             Proxy::init()->getEntityManager()->persist($currentOrder);
         }
         Proxy::init()->getEntityManager()->flush();
         $endUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($orders)->change_date);
         $finalUpdateTime = $endUpdateTime <  $lostUpdateTime ? $endUpdateTime : $lostUpdateTime;
-        Output::echo($finalUpdateTime);
+//        Output::echo($finalUpdateTime);
         return $finalUpdateTime;
     }
 

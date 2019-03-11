@@ -235,8 +235,7 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private
-    function buildAddress(\Address $address,  \stdClass $ord)
+    public function buildAddress(\Address $address,  \stdClass $ord)
     {
         /** @var \AddressTypesModel $addrType */
         $addrType = Proxy::init()->getEntityManager()->getRepository(\AddressTypesModel::class)
@@ -275,8 +274,7 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private
-    function buildOrderBill(\OrdersBills $orderBills ,\stdClass $ord)
+    public function buildOrderBill(\OrdersBills $orderBills ,\stdClass $ord)
     {
         $orderBills
             ->setAgentCost($ord->agent_cost)
@@ -318,8 +316,7 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private
-    function buildOrderSettings(\OrdersSettings $orderSettings , \stdClass $ord)
+    public function buildOrderSettings(\OrdersSettings $orderSettings , \stdClass $ord)
     {
 
         $orderSettings
