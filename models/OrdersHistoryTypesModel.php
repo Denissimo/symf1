@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrdersHistoryTypesModel
 {
+
+    const
+        IMPORT_ID = 3,
+        UPDATE_ID = 4;
     /**
      * @var int
      *

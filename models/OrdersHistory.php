@@ -223,5 +223,10 @@ class OrdersHistory
         return $this;
     }
 
+    public function logImport(\Orders $order)
+    {
+
+    }
+
 
 }
