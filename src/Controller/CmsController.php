@@ -218,15 +218,15 @@ class CmsController extends BaseController implements Api
         ]);
     }
 
-        /**
-         * @Route("/cmsapi/statusV3")
-         * @return \Symfony\Component\HttpFoundation\Response
-         * @throws \GuzzleHttp\Exception\GuzzleException
-         * @throws \Twig_Error_Loader
-         * @throws \Twig_Error_Runtime
-         * @throws \Twig_Error_Syntax
-         * @throws \Exception
-         */
+    /**
+     * @Route("/cmsapi/statusV3")
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     * @throws \Exception
+     */
     public function statusV3()
     {
         $content = 'OK';
