@@ -151,14 +151,20 @@ class CmsController extends BaseController implements Api
     public function loadOrdersUpdate()
     {
         $lastTime = (new Loader())->loadLastUpdateTime();
+        $lastId = (new Loader())->loadLastOrderId();
         try {
-            $response = (new Client())->sendOrdersUpdateRequest($lastTime->getOrdersUpdateLastDatetime(), self::getRequest());
+            $response = (new Client())->sendOrdersUpdateRequest(
+                $lastTime->getOrdersUpdateLastDatetime(),
+                $lastId->getOrdersUpdateLastId(),
+                self::getRequest()
+            );
             (new Validator())->validateOrdersList($response);
             if (isset($response[0]->status) && $response[0]->status == 400) {
                 $content = 'Error';
             } else {
-                $updateTime = (new Process())->processUpdate($response);
-                $lastTime->setOrdersUpdateLastDatetime($updateTime);
+                $options = (new Process())->processUpdate($response);
+                $lastTime->setOrdersUpdateLastDatetime($options[Api::UPDATE_TIME]);
+                $lastId->setOrdersUpdateLastId($options[Api::LAST_ID]);
                 Proxy::init()->getEntityManager()->persist($lastTime);
                 Proxy::init()->getEntityManager()->flush();
             }
