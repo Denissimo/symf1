@@ -272,6 +272,7 @@ class CmsController extends BaseController implements Api
             $goodsOne = $goods->toArray()[0];
 //            Output::echo($goodsOne->getArticle());
 
+
         } catch (MalformedRequestException $e) {
             $content = $e->getMessage();
         }
