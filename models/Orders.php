@@ -1,7 +1,8 @@
 <?php
 
 
-
+use Doctrine\ORM\PersistentCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -483,32 +484,34 @@ class Orders
     private $pimpayStatus;
 
     /**
-     * @var \Goods
+     * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Goods")
+     * @ORM\OneToMany(targetEntity="Goods", mappedBy="order")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="id", referencedColumnName="order_id")
      * })
      */
     private $goods;
 
     /**
-     * @return Goods
+     * @return Collection
      */
-    public function getGoods(): Goods
+    public function getGoods(): Collection
     {
         return $this->goods;
     }
 
     /**
-     * @param Goods $goods
+     * @param Collection $goods
      * @return Orders
      */
-    public function setGoods(Goods $goods): Orders
+    public function setGoods(Collection $goods): Orders
     {
         $this->goods = $goods;
         return $this;
     }
+
+
 
 
 
