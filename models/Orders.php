@@ -483,6 +483,36 @@ class Orders
     private $pimpayStatus;
 
     /**
+     * @var \Goods
+     *
+     * @ORM\OneToMany(targetEntity="Goods")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+     * })
+     */
+    private $goods;
+
+    /**
+     * @return Goods
+     */
+    public function getGoods(): Goods
+    {
+        return $this->goods;
+    }
+
+    /**
+     * @param Goods $goods
+     * @return Orders
+     */
+    public function setGoods(Goods $goods): Orders
+    {
+        $this->goods = $goods;
+        return $this;
+    }
+
+
+
+    /**
      * @return int
      */
     public function getId(): int

@@ -272,6 +272,9 @@ class CmsController extends BaseController implements Api
             $goodsOne = $goods->toArray()[0];
 //            Output::echo($goodsOne->getArticle());
 
+            $testOrder = Proxy::init()->getEntityManager()->getRepository(\Orders::class)->find(1393027);
+            Output::echo($testOrder->getGoods()->asArray());
+
 
         } catch (MalformedRequestException $e) {
             $content = $e->getMessage();
