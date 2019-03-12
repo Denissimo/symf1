@@ -1,8 +1,8 @@
 <?php
 
 
-
 use Doctrine\ORM\Mapping as ORM;
+use \Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Users
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="users", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_1483A5E9E7927C74", columns={"email"})}, indexes={@ORM\Index(name="enabled", columns={"enabled"})})
  * @ORM\Entity
  */
-class Users
+class Users implements UserInterface
 {
     /**
      * @var int
@@ -205,4 +205,38 @@ class Users
         return $this;
     }
 
+    /**
+     * массив ролей
+     *
+     * @return array
+     */
+    public function getRoles()
+    {
+        return ['ROLE_ADMIN'/* @todo, $this->getRole() */];
+    }
+
+    /**
+     * Соль для пароля
+     *
+     * @return string|null
+     */
+    public function getSalt()
+    {
+        return '';
+    }
+
+    /**
+     * Имя пользователя
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->getName();
+    }
+
+    public function eraseCredentials()
+    {
+
+    }
 }
