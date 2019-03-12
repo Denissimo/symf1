@@ -13,7 +13,9 @@ use Doctrine\Common\Collections\Collection;
 class ClientSettings
 {
     const
-        CLIENT_ID = 'clientId';
+        CLIENT_ID = 'clientId',
+        API_KEY = 'apikey'
+        ;
 
     public static $test_clients = [2, 238, 1356];
 

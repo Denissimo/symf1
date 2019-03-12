@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Validator
 {
+    const
+        RESPONSE = 'response';
     /**
      * @param $ordersList
      */
@@ -28,5 +30,20 @@ class Validator
         );
     }
 
+    /**
+     * @param $object
+     * @param $errorMessage
+     */
+    public function validateNotBlank($object, $errorMessage)
+    {
+        Proxy::init()->getValidator()->validateType(
+            [self::RESPONSE => $object],
+            [
+                self::RESPONSE => new Assert\NotBlank()
+            ],
+            $errorMessage,
+            MalformedRequestException::class
+        );
+    }
 
 }

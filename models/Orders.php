@@ -15,6 +15,8 @@ class Orders
 {
 
     const
+        CLIENT = 'client',
+        GHANGEDATE = 'changeDate',
         OLDID = 'oldId',
         ID = 'id'
     ;
