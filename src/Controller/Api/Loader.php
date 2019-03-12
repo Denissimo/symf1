@@ -32,6 +32,25 @@ class Loader
     }
 
     /**
+     * @return \Options
+     */
+    public function loadLastOrderId()
+    {
+        /** @var \Options $lastUpdateId */
+        $lastUpdateId = Proxy::init()->getEntityManager()->getRepository(\Options::class)
+            ->matching(
+                Criteria::create()
+                    ->where(
+                        Criteria::expr()->eq(\Options::NAME,
+                            \Options::ORDERS_LAST_ID
+                        )
+                    )
+                    ->setMaxResults(1)
+            )->current();
+        return $lastUpdateId;
+    }
+
+    /**
      * @param null $clientId
      * @return array
      * @throws \Doctrine\DBAL\DBALException

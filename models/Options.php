@@ -19,6 +19,7 @@ class Options
 
     CONST
         ORDERS_UPDATE = 'orders_update_last_datetime',
+        ORDERS_LAST_ID = 'orders_update_last_order_id',
         FORMAT = 'Y-m-d H:i:s'
     ;
     /**
@@ -113,6 +114,25 @@ class Options
     public function setOrdersUpdateLastDatetime(\DateTime $value)
     {
         $this->value = $value->format(self::FORMAT);
+        return $this;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getOrdersUpdateLastId()
+    {
+        return (int)$this->value;
+    }
+
+    /**
+     * @param int $id
+     * @return $this
+     */
+    public function setOrdersUpdateLastId(int $id)
+    {
+        $this->value = $id;
         return $this;
     }
 }

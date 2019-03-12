@@ -83,11 +83,12 @@ class Client
 
     /**
      * @param \DateTime $lastOrdersUpdateTime
+     * @param int $lastOrderId
      * @param Request $get
      * @return mixed
      * @throws GuzzleHttp\Exception\GuzzleException
      */
-    public function sendOrdersUpdateRequest(\DateTime $lastOrdersUpdateTime, Request $get)
+    public function sendOrdersUpdateRequest(\DateTime $lastOrdersUpdateTime, int $lastOrderId ,Request $get)
     {
         return
             \GuzzleHttp\json_decode(
@@ -99,7 +100,8 @@ class Client
                             [
                                 Api::KEY => getenv('cms_api_key'),
                                 Api::LIMIT_END => $get->query->all()[Api::LIMIT_END] ?? Builder::LIMIT_UPDATE,
-                                Api::UPDATE_TIME => $lastOrdersUpdateTime->format(\Options::FORMAT)
+                                Api::UPDATE_TIME => $lastOrdersUpdateTime->format(\Options::FORMAT),
+                                Api::LAST_ID => $lastOrderId
                             ]
                     ]
                 )->getBody()->getContents()

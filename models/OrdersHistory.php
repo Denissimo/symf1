@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrdersHistory
 {
+
+    const API_OID = 1
+    ;
+
     /**
      * @var int
      *
@@ -222,11 +226,5 @@ class OrdersHistory
         $this->type = $type;
         return $this;
     }
-
-    public function logImport(\Orders $order)
-    {
-
-    }
-
 
 }
