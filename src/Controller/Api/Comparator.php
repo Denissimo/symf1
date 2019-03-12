@@ -22,9 +22,9 @@ class Comparator
     private $stdGoods;
 
     /**
-     * @param \stdClass $stdGoods
-     * @param \Goods $goods
-     * @return null
+     * @param $stdGoods
+     * @param $goods
+     * @return \Goods
      * @throws \Doctrine\ORM\ORMException
      */
     public function compare($stdGoods, $goods)
@@ -36,8 +36,7 @@ class Comparator
         } else {
             $currentGoods = $goods;
         }
-        Proxy::init()->getEntityManager()->persist($currentGoods);
-        return null;
+        return $currentGoods;
     }
 
 
