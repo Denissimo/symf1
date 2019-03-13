@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Controller\Api\Client;
 use App\Controller\Api\Request\Unit;
+use App\Exceptions\BadResponseException;
+use App\Exceptions\MalformedRequestException;
 use App\Exceptions\OrdersListEmptyResponseException;
 use http\Env\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,10 +15,14 @@ use App\Twig\Render;
 use App\Controller\Api\Fields as Api;
 use App\Controller\Api\Loader;
 use App\Controller\Api\Request\Builder;
+use App\Controller\Api\Request\Validator as RequestValidator;
 use App\Controller\Api\Response\Builder as ResponseBuidser;
 use App\Controller\Api\Response\Validator;
 use App\Exceptions\MalformedResponseException;
 use App\Controller\Api\Process;
+use App\Helpers\Output;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 
 class CmsController extends BaseController implements Api
 {
@@ -209,6 +215,72 @@ class CmsController extends BaseController implements Api
     {
         return (new Render())->render([
             Render::CONTENT => 'YES'
+        ]);
+    }
+
+    /**
+     * @Route("/cmsapi/statusV3")
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     * @throws \Exception
+     */
+    public function statusV3()
+    {
+        $content = 'OK';
+        try {
+            (new RequestValidator())->validateStatusV3Request(self::getRequest());
+            $clienSettings = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
+                ->findOneBy([\ClientSettings::API_KEY => self::getRequest()->get(Api::KEY)]);
+            (new RequestValidator())->validateNotBlank(
+                $clienSettings,
+                'Сосни хуйца, быдло! (Incorrect Api Key)'
+            );
+            $clientId = $clienSettings->getClientId();
+            $dateFrom = \DateTime::createFromFormat(
+                \Options::FORMAT,
+                self::getRequest()->get(Api::FIELD_FROM)
+            );
+            (new RequestValidator())->validateNotBlank($dateFrom, 'Incorrect field: ' . Api::FIELD_FROM);
+
+            $dateTo = \DateTime::createFromFormat(
+                \Options::FORMAT,
+                self::getRequest()->get(Api::FIELD_TO)
+            );
+            (new RequestValidator())->validateNotBlank($dateTo, 'Incorrect field: ' . Api::FIELD_TO);
+
+            $orders = (new Loader())->loadApiV3Orders(
+                $clienSettings,
+                $dateFrom,
+                $dateTo
+            );
+
+            /** @var Collection $goods */
+            $goods = $orders[0]->getGoods();
+            /** @var \Goods $goodsOne */
+            $goodsOne = $goods->toArray()[0];
+
+            Output::echo($goodsOne->getOrder()->getOrderId(), 1);
+
+            $content = $clienSettings->getClientId();
+            $testOrder = Proxy::init()->getEntityManager()->getRepository(\Orders::class)->find(1393027);
+            /** @var Collection $goods */
+            $goods = $testOrder->getGoods();
+            /** @var \Goods $goodsOne */
+            $goodsOne = $goods->toArray()[0];
+//            Output::echo($goodsOne->getArticle());
+
+            $testOrder = Proxy::init()->getEntityManager()->getRepository(\Orders::class)->find(1393027);
+            Output::echo($testOrder->getGoods()->asArray());
+
+
+        } catch (MalformedRequestException $e) {
+            $content = $e->getMessage();
+        }
+        return (new Render())->render([
+            Render::CONTENT => $content
         ]);
     }
 }

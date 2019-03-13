@@ -13,6 +13,32 @@ class Loader
 {
 
     /**
+     * @param \ClientSettings $clientSettings
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return \Orders[]
+     */
+    public function loadApiV3Orders(\ClientSettings $clientSettings, \DateTime $from, \DateTime $to)
+    {
+        /** @var \Orders[] $orders */
+        $orders =  Proxy::init()->getEntityManager()->getRepository(\Orders::class)
+            ->matching(
+                Criteria::create()
+                    ->where(
+                        Criteria::expr()->eq(\Orders::CLIENT, $clientSettings)
+                    )->andWhere(
+                        Criteria::expr()->gte(\Orders::GHANGEDATE, $from)
+                    )->andWhere(
+                        Criteria::expr()->lte(\Orders::GHANGEDATE, $to)
+                    )
+                    ->setMaxResults(20)
+            )->toArray();
+
+        return  $orders;
+    }
+
+
+    /**
      * @return \Options
      */
     public function loadLastUpdateTime()
