@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
-use App\Kernel;
+use App\Providers\Headers;
 use App\Proxy;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Event\KernelEvent;
 
 
 abstract class BaseController extends AbstractController
 {
+
+    const USER_MODEL = 'user_model';
 
     const
         ADD_COMMENT = 'addcomment',
@@ -45,7 +45,7 @@ abstract class BaseController extends AbstractController
 
 
     /**
-     * @var Request
+     * @var Headers
      */
     private static $request;
 
@@ -55,22 +55,23 @@ abstract class BaseController extends AbstractController
      */
     public function __construct()
     {
-        self::$request = Request::createFromGlobals();
-        Proxy::init()->initTwig();
-        Proxy::init()->initDoctrine();
-        Proxy::init()->initSession();
-        Proxy::init()->startSession();
-        Proxy::init()->initValidator();
-        Proxy::init()->initHttpClient();
-        Proxy::init()->initLogger();
+        self::$request = Headers::createFromGlobals();
     }
 
     /**
-     * @return Request
+     * @return Headers
      */
-    public static function getRequest(): Request
+    public static function getRequest(): Headers
     {
         return self::$request;
+    }
+
+    /**
+     * @return mixed|\Users
+     */
+    public function getUser()
+    {
+        return Proxy::init()->getSession()->get(self::USER_MODEL);
     }
 
 }

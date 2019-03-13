@@ -4,10 +4,10 @@ namespace App\Controller;
 
 use App\Controller\Api\Client;
 use App\Controller\Api\Request\Unit;
-use App\Exceptions\BadResponseException;
 use App\Exceptions\OrdersListEmptyResponseException;
 use http\Env\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Proxy;
 use App\Twig\Render;
 use App\Controller\Api\Fields as Api;
@@ -17,7 +17,6 @@ use App\Controller\Api\Response\Builder as ResponseBuidser;
 use App\Controller\Api\Response\Validator;
 use App\Exceptions\MalformedResponseException;
 use App\Controller\Api\Process;
-use App\Helpers\Output;
 
 class CmsController extends BaseController implements Api
 {
@@ -174,6 +173,42 @@ class CmsController extends BaseController implements Api
 
         return (new Render())->render([
             Render::CONTENT => $lastTime->getOrdersUpdateLastDatetime()->format('c')
+        ]);
+    }
+
+    /**
+     * Метод с авторизацией
+     *
+     * @Route("/is_auth")
+     * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function isAuthMethod()
+    {
+        return (new Render())->render([
+            Render::CONTENT => 'Hello ' . $this->getUser()->getName()
+        ]);
+    }
+
+
+    /**
+     * метод без авторизации
+     *
+     * @Route("/is_not_auth")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function isNotAuthMethod()
+    {
+        return (new Render())->render([
+            Render::CONTENT => 'YES'
         ]);
     }
 }
