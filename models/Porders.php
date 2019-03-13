@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Porders
 {
+
+    const
+        ORDERID = 'orderId'
+    ;
+
     /**
      * @var int
      *

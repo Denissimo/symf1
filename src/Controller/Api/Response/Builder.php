@@ -14,6 +14,41 @@ class Builder
         TYPE = 'object',
         DEFAULT_ID = 1;
 
+    const
+        ORDER_ORDER_ID = 'order_id',
+        ORDER_INNER_ID = 'inner_id',
+        ORDER_SHK = 'shk',
+        ORDER_DELIVERY_DATE = 'delivery_date',
+        ORDER_STATUS = 'status',
+        ORDER_ORDER_WEIGHT = 'order_weight',
+        ORDER_PRICE_DELIVERY = 'price_delivery',
+        ORDER_PRICE_CLIENT = 'price_client',
+        ORDER_CHANGE = 'change',
+        ORDER_RECEPIENT = 'reciepient',
+        ORDER_ORDER_GOODS = 'order_goods',
+        ORDER_PODSTATUS = 'podstatus',
+        ORDER_CANCEL_REASON = 'cancel_reason',
+        ORDER_UPDATE_DATE_FLAG = 'update_date_flag',
+        ORDER_UPDATE_DATE_REASON = 'update_date_reason',
+        ORDER_BILL_ID = 'bill_id',
+        ORDER_PAYMENT_TYPE = 'paymentType',
+        GOODS_ID = "id",
+        GOODS_ARTNAME = "artname",
+        GOODS_WEIGHT = "weight",
+        GOODS_COUNT_WEIGHT = "count_weight",
+        GOODS_COUNT = "count",
+        GOODS_VOC_ID = "voc_id",
+        GOODS_ARTICUL = "articul",
+        GOODS_PRICE = "price",
+        GOODS_IS_CANCEL = "is_cancel",
+        GOODS_ORDER_ID = "order_id",
+        ZORDER_ID = "zorder_id",
+        GOODS_ON_WARE = "on_ware",
+        GOODS_GSTATUS = "gstatus",
+        GOODS_V_AKT_ID = "v_akt_id",
+        GOODS_SA_VACT_ID = "sa_vact_id",
+        GOODS_NDS = "nds";
+
     /**
      * @param array $results
      * @throws \Doctrine\DBAL\DBALException
@@ -26,8 +61,6 @@ class Builder
             $this->saveOrders((array)$orders);
         }
     }
-
-
 
 
     /**
@@ -57,7 +90,6 @@ class Builder
         }
         Proxy::init()->getEntityManager()->flush();
     }
-
 
 
     /**
@@ -131,7 +163,7 @@ class Builder
      * @param \stdClass $ord
      * @return \Orders
      */
-    public function buildOrder(\Orders $order , \stdClass $ord)
+    public function buildOrder(\Orders $order, \stdClass $ord)
     {
         /** @var \ClientSettings $client */
         $client = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
@@ -235,7 +267,7 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function buildAddress(\Address $address,  \stdClass $ord)
+    public function buildAddress(\Address $address, \stdClass $ord)
     {
         /** @var \AddressTypesModel $addrType */
         $addrType = Proxy::init()->getEntityManager()->getRepository(\AddressTypesModel::class)
@@ -274,7 +306,7 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function buildOrderBill(\OrdersBills $orderBills ,\stdClass $ord)
+    public function buildOrderBill(\OrdersBills $orderBills, \stdClass $ord)
     {
         $orderBills
             ->setAgentCost($ord->agent_cost)
@@ -316,7 +348,7 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function buildOrderSettings(\OrdersSettings $orderSettings , \stdClass $ord)
+    public function buildOrderSettings(\OrdersSettings $orderSettings, \stdClass $ord)
     {
 
         $orderSettings
@@ -366,6 +398,55 @@ class Builder
             Proxy::init()->getEntityManager()->persist($ordersCount);
         }
         Proxy::init()->getEntityManager()->flush();
+    }
+
+    /**
+     * @param \Orders[] $orders
+     * @param \Porders[] $porders
+     * @return array
+     */
+    public function buildStatusV3($orders, $porders)
+    {
+
+        /** @var \Porders[] $porsdersSorted */
+        $porsdersSorted = [];
+        foreach ($porders as $pord) {
+            $porsdersSorted[$pord->getOrderId()] = $pord;
+        }
+
+        $ordersArray = [];
+        foreach ($orders as $ord) {
+            $podstatus = isset($porsdersSorted[$ord->getOrderId()]) ?
+                $porsdersSorted[$ord->getOrderId()]->getPodstatus()->getPodstatus() : null;
+            if ($ord->getStatus() == \OrdersStatusModel::PART_DENY_ID && is_array($ord->getGoods())) {
+                /** @var \Goods[] $goodsArray */
+                $goodsArray = [];
+//                foreach ($ord->getGoods() as $goods) {
+
+//                }
+            }
+
+            $ordersArray[$ord->getOrderId()] = [
+                self::ORDER_ORDER_ID => $ord->getOrderId(),
+                self::ORDER_INNER_ID => $ord->getInnerN(),
+                self::ORDER_SHK => $ord->getShk(),
+                self::ORDER_DELIVERY_DATE => $ord->getDeliveryDate()->format('Y-m-d H:i:s'),
+                self::ORDER_STATUS => $ord->getStatus()->getId(),
+                self::ORDER_ORDER_WEIGHT => (float)$ord->getOrderWeight(),
+                self::ORDER_PRICE_DELIVERY => (float)$ord->getOrderBill()->getPriceDelivery(),
+                self::ORDER_PRICE_DELIVERY => (float)$ord->getOrderBill()->getPriceClient(),
+                self::ORDER_CHANGE => $ord->getChangeDate()->format('Y-m-d H:i:s'),
+                self::ORDER_RECEPIENT => $ord->getOrderSettings()->getReciepientName(),
+                self::ORDER_ORDER_GOODS => null,
+                self::ORDER_PODSTATUS => $podstatus,
+                self::ORDER_CANCEL_REASON => null,
+                self::ORDER_UPDATE_DATE_FLAG => $ord->getUpdateDateFlag(),
+                self::ORDER_UPDATE_DATE_REASON => null,
+                self::ORDER_BILL_ID => $ord->getBillId(),
+                self::ORDER_PAYMENT_TYPE => $ord->getCard() == 1 ? 1 : 2
+            ];
+        }
+        return $ordersArray;
     }
 
 }
