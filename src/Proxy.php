@@ -135,6 +135,7 @@ class Proxy
         return $this;
 
     }
+
     /**
      * @return $this
      */
@@ -173,7 +174,7 @@ class Proxy
         self::$logger = new Logger($name);
         self::$logger->pushHandler(
             new StreamHandler(
-                $stream ?? Config::getLoggerPath().'log_'.(new \DateTime())->format('YmdHis').'_.txt',
+                $stream ?? Config::getLoggerPath() . 'log_' . (new \DateTime())->format('YmdHis') . '_.txt',
                 $level ?? Logger::WARNING
             )
         );
