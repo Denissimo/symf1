@@ -419,7 +419,7 @@ class Builder
         foreach ($orders as $ord) {
             $podstatus = isset($porsdersSorted[$ord->getOrderId()]) ?
                 $porsdersSorted[$ord->getOrderId()]->getPodstatus()->getPodstatus() : null;
-            if ($ord->getStatus() == \OrdersStatusModel::PART_DENY_ID && is_array($ord->getGoods())) {
+            if ($ord->getStatus()->getId() == \OrdersStatusModel::PART_DENY_ID && is_array($ord->getGoods())) {
                 /** @var \Goods[] $goodsArray */
                 $goodsArray = [];
 //                foreach ($ord->getGoods() as $goods) {
