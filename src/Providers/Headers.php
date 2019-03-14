@@ -3,8 +3,11 @@
 namespace App\Providers;
 
 
+use App\Exceptions\ErrorApiKey;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
+use App\Proxy;
+use App\Controller\Api\Fields;
 
 class Headers extends Request
 {
@@ -15,5 +18,23 @@ class Headers extends Request
         parent::initialize($query, $request, $attributes, $cookies, $files, $server, $content);
 
         $this->headers = new HeaderBag(array_merge($this->server->getHeaders(), getallheaders()));
+    }
+
+    /**
+     * Вернет api key
+     *
+     * @throws ErrorApiKey
+     * @return string
+     */
+    public function getApiKey()
+    {
+        Proxy::init()->getValidator()->validateRequired(
+            $this->query->all(),
+            [Fields::KEY],
+            'Fields "' . Fields::KEY . '" are REQUIRED !!!',
+            ErrorApiKey::class
+        );
+
+        return $this->get(Fields::KEY);
     }
 }

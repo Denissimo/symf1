@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Providers\Headers;
 use App\Proxy;
+use App\Twig\Render;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\Api\Request\Validator;
 
 
 abstract class BaseController extends AbstractController
@@ -69,9 +72,105 @@ abstract class BaseController extends AbstractController
     /**
      * @return mixed|\Users
      */
-    public function getUser()
+    protected function getUser()
     {
         return Proxy::init()->getSession()->get(self::USER_MODEL);
+    }
+
+
+    /**
+     * Вернет объект ClientSettings на основе переданного api key
+     *
+     * @return \ClientSettings|null
+     * @throws \App\Exceptions\ErrorApiKey
+     */
+    protected function getClientSettings()
+    {
+        $clientSettings = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
+            ->findOneBy([\ClientSettings::API_KEY => self::getRequest()->getApiKey()]);
+        (new Validator())->validateNotBlank(
+            $clientSettings,
+            'Incorrect Api Key!'
+        );
+        return $clientSettings;
+    }
+
+    /**
+     * Рендер ошибки
+     *
+     * @param \Exception $e
+     * @param int $code
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    protected function error(\Exception $e, $code = Response::HTTP_BAD_REQUEST)
+    {
+        $code = $e->getCode() ? $e->getCode() : $code;
+        return $this->prepareResult($e, [], $code);
+    }
+
+    /**
+     * рендер
+     *
+     * @param mixed $content
+     * @param array $customOptions
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    protected function success($content, array $customOptions = [], $code = Response::HTTP_OK)
+    {
+        return $this->prepareResult($content, $customOptions, $code);
+    }
+
+    /**
+     * @param $content
+     * @param array $customOptions
+     * @param int $code
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    protected function prepareResult($content, $customOptions = [], $code = Response::HTTP_OK)
+    {
+        if ($content instanceof \Exception) {
+            $response = [
+                'Error' => $content->getMessage()
+            ];
+        } else {
+            $response = $content;
+        }
+
+        return $this->printJson(\GuzzleHttp\json_encode(array_merge([
+            'status' => $code,
+            'response' => $response
+        ], $customOptions)), $code);
+    }
+
+    /**
+     * @param string $content
+     * @param int $code
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    protected function printJson($content, $code): Response
+    {
+        $headers = [
+            'Content-Type' => 'application/json',
+            'charset' => 'utf-8'
+        ];
+        return (new Render())->render(
+            [Render::CONTENT => $content],
+            'empty.html.twig',
+            $code,
+            $headers
+        );
     }
 
 }
