@@ -95,10 +95,6 @@ class Order
         $this->price_delivery = $order->getOrderBill()->getPriceDelivery();
         $this->price_client = $order->getOrderBill()->getPriceClient();
 
-        $this->client_id = $order->getClient()->getId();
-        $this->client_key = $order->getClient()->getApikey();
-
-
         $this->findPodStatus();
         $this->findGoods();
         $this->findCancelReason();
