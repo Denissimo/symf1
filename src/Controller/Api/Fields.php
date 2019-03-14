@@ -23,8 +23,9 @@ Interface Fields
         LAST_ID = 'last_id',
         LIMIT_START = 'limit_start',
         LIMIT_END = 'limit_end',
-        UPDATE_TIME = 'update_time'
-    ;
+        UPDATE_TIME = 'update_time',
+        INNER_N = 'inner_n',
+        ORDER_ID = 'order_id';
 
     const
         FORM_PARAMS = 'form_params';
@@ -33,8 +34,7 @@ Interface Fields
         GET = 'GET',
         POST = 'POST',
         PUT = 'PUT',
-        DELETE = 'DELETE'
-    ;
+        DELETE = 'DELETE';
 
     const
         LIMIT_CLIENT_ORDERS_LOAD = 10;
