@@ -20,7 +20,7 @@ class Loader
     {
         $orderIds = [];
         foreach ($orders as $ord) {
-            if ($ord->getStatus()->getId() == \OrdersStatusModel::SAMOVYVOZ_ID) {
+            if ($ord->getStatus()->getId() == \OrdersTypesModel::SELF_DELIVERY) {
                 $orderIds[] = $ord->getOrderId();
             }
         }
@@ -31,7 +31,7 @@ class Loader
                 Criteria::create()
                     ->where(
                         Criteria::expr()->in(
-                            \Porders::ORDERID,
+                            \Porders::ORDER_ID,
                             $orderIds
                         )
                     )
@@ -181,7 +181,7 @@ class Loader
             ->matching(
                 Criteria::create()
                     ->where(
-                        Criteria::expr()->eq(\Goods::ORDERID,
+                        Criteria::expr()->eq(\Goods::ORDER_ID,
                             $order->getId()
                         )
                     )

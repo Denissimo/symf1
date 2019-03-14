@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Goods
 {
     const
-        ORDERID = 'orderId',
+        ORDER_ID = 'orderId',
         ID = 'id'
     ;
     /**
