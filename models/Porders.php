@@ -12,10 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Porders
 {
-    const ORDER_ID = 'orderId';
-
     const
-        ORDERID = 'orderId'
+        ORDER_ID = 'orderId'
     ;
 
     /**
