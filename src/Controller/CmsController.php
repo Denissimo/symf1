@@ -23,6 +23,7 @@ use App\Controller\Api\Process;
 use App\Helpers\Output;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
 
 class CmsController extends BaseController implements Api
 {
@@ -260,32 +261,21 @@ class CmsController extends BaseController implements Api
 
             $ordersData = (new ResponseBuidser())->buildStatusV3($orders, $porders);
 
-            Output::echo($ordersData, 1);
 
-            /** @var Collection $goods */
-            $goods = $orders[0]->getGoods();
-            /** @var \Goods $goodsOne */
-            $goodsOne = $goods->toArray()[0];
+            $content = ['status' => '200', $ordersData];
 
-            $content = ['status' => '400',
-                'response' => ['Error' => 'В это время ']
-            ];
-
-            $content = $clienSettings->getClientId();
-            $testOrder = Proxy::init()->getEntityManager()->getRepository(\Orders::class)->find(1393027);
-            /** @var Collection $goods */
-            $goods = $testOrder->getGoods();
-            /** @var \Goods $goodsOne */
-            $goodsOne = $goods->toArray()[0];
-//            Output::echo($goodsOne->getArticle());
-
-            $testOrder = Proxy::init()->getEntityManager()->getRepository(\Orders::class)->find(1393027);
 
         } catch (MalformedRequestException $e) {
-            $content = $e->getMessage();
+
+            $content = ['status' => '400',
+                'response' => ['Error' => $e->getMessage()]];
         }
-        return (new Render())->render([
-            Render::CONTENT => $content
-        ]);
+        
+        return (new Render())->render(
+            [Render::CONTENT => \GuzzleHttp\json_encode($content)],
+            'default.html.twig',
+            200,
+            ['Content-Type' => 'application/json']
+        );
     }
 }
