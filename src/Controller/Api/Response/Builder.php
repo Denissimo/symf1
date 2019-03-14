@@ -421,7 +421,7 @@ class Builder
             $podstatus = isset($porsdersSorted[$ord->getOrderId()]) ?
                 $porsdersSorted[$ord->getOrderId()]->getPodstatus()->getPodstatus() : null;
             /** \Orders $ord */
-            if ($ord->getStatus()->getId() == \OrdersStatusModel::PART_DENY_ID) { // && is_array($ord->getGoods())
+            if ($ord->getStatus()->getId() == \OrdersStatusModel::STATUS_PARTIAL_FAILURE) { // && is_array($ord->getGoods())
                 /** @var \Goods[] $goodsArray */
                 $goodsArray = $this->buildGoodsV3($ord->getGoods());
             }

@@ -17,18 +17,6 @@ class OrdersStatusModel
         STATUS_REJECTION = 7, // полный отказ
         STATUS_CANCEL = 8; // отмена
 
-
-    const
-        SAMOVYVOZ_ID = 2,
-        PART_DENY_ID = 6
-    ;
-
-
-    const
-        STATUS_PARTIAL_FAILURE = 6, // Частичный отказ
-        STATUS_REJECTION = 7, // полный отказ
-        STATUS_CANCEL = 8; // отмена
-
     /**
      * @var int
      *

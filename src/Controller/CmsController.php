@@ -271,117 +271,13 @@ class CmsController extends BaseController implements Api
             $content = ['status' => '400',
                 'response' => ['Error' => $e->getMessage()]];
         }
-        
+
         return (new Render())->render(
             [Render::CONTENT => \GuzzleHttp\json_encode($content)],
             'default.html.twig',
             200,
             ['Content-Type' => 'application/json']
         );
-    }
-
-    /**
-     * @Route("/cmsapi/getStatus")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public function getStatus()
-    {
-        try {
-            $innerId = self::getRequest()->get(Api::INNER_N, 0);
-            $orderId = self::getRequest()->get(Api::ORDER_ID, 0);
-
-            // если нет ни одно или переданны оба значения
-            // мы принимаем только одно значение
-            if ((!$innerId && !$orderId) || ($innerId && $orderId)) {
-                throw new \Exception(sprintf("Error request: One field required %s or %s", Api::INNER_N, Api::ORDER_ID));
-            }
-
-            $client = $this->getClientSettings();
-            $loader = new Loader();
-            if (!empty($inner)) {
-                $order = $loader->loadOrderInner($innerId, $client);
-            } else {
-                $order = $loader->loadOrderId($orderId, $client);
-
-            }
-            if (!$order) {
-                throw new \Exception('Order not found', 404);
-            }
-
-            $wrapperOrder = new Order($order);
-            if ($client->getClientId() === 1584 || $client->getClientId() === 1489) {
-                $wrapperOrder->findUpdateDateReason();
-            }
-
-            $options = [];
-            if ($client->getClientId() === 1391) {
-                $options['options'] = [
-                    'reciepient_name' => $wrapperOrder->reciepient,
-                    'doc_description' => $order->getOrderSettings()->getDocDescription(),
-                    'delivery_time' => $order->getChangeDate()->getTimestamp(),
-                ];
-            }
-
-            return $this->success($wrapperOrder, $options);
-        } catch (\Exception $e) {
-            return $this->error($e);
-        }
-    }
-
-    /**
-     * @Route("/cmsapi/getStatus")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public function getStatus()
-    {
-        try {
-            $innerId = self::getRequest()->get(Api::INNER_N, 0);
-            $orderId = self::getRequest()->get(Api::ORDER_ID, 0);
-
-            // если нет ни одно или переданны оба значения
-            // мы принимаем только одно значение
-            if ((!$innerId && !$orderId) || ($innerId && $orderId)) {
-                throw new \Exception(sprintf("Error request: One field required %s or %s", Api::INNER_N, Api::ORDER_ID));
-            }
-
-            $client = $this->getClientSettings();
-            $loader = new Loader();
-            if (!empty($inner)) {
-                $order = $loader->loadOrderInner($innerId, $client);
-            } else {
-                $order = $loader->loadOrderId($orderId, $client);
-
-            }
-            if (!$order) {
-                throw new \Exception('Order not found', 404);
-            }
-
-            $wrapperOrder = new Order($order);
-            if ($client->getClientId() === 1584 || $client->getClientId() === 1489) {
-                $wrapperOrder->findUpdateDateReason();
-            }
-
-            $options = [];
-            if ($client->getClientId() === 1391) {
-                $options['options'] = [
-                    'reciepient_name' => $wrapperOrder->reciepient,
-                    'doc_description' => $order->getOrderSettings()->getDocDescription(),
-                    'delivery_time' => $order->getChangeDate()->getTimestamp(),
-                ];
-            }
-
-            return $this->success($wrapperOrder, $options);
-        } catch (\Exception $e) {
-            return $this->error($e);
-        }
     }
 
     /**
