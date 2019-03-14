@@ -432,7 +432,7 @@ class Builder
                 self::ORDER_SHK => $ord->getShk(),
                 self::ORDER_DELIVERY_DATE => $ord->getDeliveryDate()->format('Y-m-d H:i:s'),
                 self::ORDER_STATUS => $ord->getStatus()->getId(),
-                self::ORDER_ORDER_WEIGHT => (float)$ord->getOrderWeight(),
+                self::ORDER_ORDER_WEIGHT => round((float)$ord->getOrderWeight(), 2),
                 self::ORDER_PRICE_DELIVERY => (float)$ord->getOrderBill()->getPriceDelivery(),
                 self::ORDER_PRICE_DELIVERY => (float)$ord->getOrderBill()->getPriceClient(),
                 self::ORDER_CHANGE => $ord->getChangeDate()->format('Y-m-d H:i:s'),
