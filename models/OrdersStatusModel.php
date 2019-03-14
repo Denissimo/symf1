@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrdersStatusModel
 {
+
+    const
+        SAMOVYVOZ_ID = 2,
+        PART_DENY_ID = 6
+    ;
+
     /**
      * @var int
      *

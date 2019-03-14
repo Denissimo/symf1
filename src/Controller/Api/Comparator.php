@@ -22,12 +22,11 @@ class Comparator
     private $stdGoods;
 
     /**
-     * @param $stdGoods
+     * Comparator constructor.
+     * @param \stdClass $stdGoods
      * @param $goods
-     * @return \Goods
-     * @throws \Doctrine\ORM\ORMException
      */
-    public function compare($stdGoods, $goods)
+    public function __construct(\stdClass $stdGoods, $goods)
     {
         $isCountChanged = $this->checkCount($stdGoods, $goods);
         $isParamsChanged = $this->checkParasms($stdGoods, $goods);
@@ -38,7 +37,6 @@ class Comparator
         }
         return $currentGoods;
     }
-
 
     /**
      * @return \Goods

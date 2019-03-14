@@ -26,8 +26,8 @@ class Checker
 
         foreach ($stdGoods as $key => $val) {
             $stdGoodsCurrent = $val;
-            if(isset($goodsArray[$val->id])) {
-                $currentGoods = (new Comparator())->compare($stdGoodsCurrent, $goodsArray[$val->id]);
+            if (isset($goodsArray[$val->id])) {
+                $currentGoods = new Comparator($stdGoodsCurrent, $goodsArray[$val->id]);
                 unset($goodsArray[$val->id]);
             } else {
                 $currentGoods = (new Builder())->buildGoods(new \Goods(), $stdGoodsCurrent);
@@ -36,8 +36,7 @@ class Checker
         }
 
         // Остальные элементы goods удаляем
-        foreach ($goodsArray as $key=>$val)
-        {
+        foreach ($goodsArray as $key => $val) {
             Proxy::init()->getEntityManager()->remove($val);
         }
 
@@ -45,7 +44,6 @@ class Checker
 
         return null;
     }
-
 
 
 }

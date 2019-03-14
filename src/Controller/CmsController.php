@@ -238,7 +238,6 @@ class CmsController extends BaseController implements Api
                 $clienSettings,
                 'Сосни хуйца, быдло! (Incorrect Api Key)'
             );
-            $clientId = $clienSettings->getClientId();
             $dateFrom = \DateTime::createFromFormat(
                 \Options::FORMAT,
                 self::getRequest()->get(Api::FIELD_FROM)
@@ -257,12 +256,20 @@ class CmsController extends BaseController implements Api
                 $dateTo
             );
 
+            $porders = (new Loader())->loadPorders($orders);
+
+            $ordersData = (new ResponseBuidser())->buildStatusV3($orders, $porders);
+
+            Output::echo($ordersData, 1);
+
             /** @var Collection $goods */
             $goods = $orders[0]->getGoods();
             /** @var \Goods $goodsOne */
             $goodsOne = $goods->toArray()[0];
 
-            Output::echo($goodsOne->getOrder()->getOrderId(), 1);
+            $content = ['status' => '400',
+                'response' => ['Error' => 'В это время ']
+            ];
 
             $content = $clienSettings->getClientId();
             $testOrder = Proxy::init()->getEntityManager()->getRepository(\Orders::class)->find(1393027);
@@ -273,8 +280,6 @@ class CmsController extends BaseController implements Api
 //            Output::echo($goodsOne->getArticle());
 
             $testOrder = Proxy::init()->getEntityManager()->getRepository(\Orders::class)->find(1393027);
-            Output::echo($testOrder->getGoods()->asArray());
-
 
         } catch (MalformedRequestException $e) {
             $content = $e->getMessage();
