@@ -1,10 +1,14 @@
 <?php
+
 namespace App\Wrappers;
 
 use App\Controller\Api\Loader;
 
 /**
  * обертка для \Orders подготавливает объект для возврата его по апи
+ *
+ * Class Order
+ * @package App\Wrappers
  */
 class Order
 {
@@ -16,10 +20,10 @@ class Order
     /** @var string - id заказа */
     public $order_id;
 
-    /** @var string */
+    /** @var string|null */
     public $inner_id;
 
-    /** @var string - штрихкод */
+    /** @var string|null - штрихкод */
     public $shk;
 
     /** @var string - дата доставки */
@@ -31,16 +35,16 @@ class Order
     /** @var float - вес */
     public $order_weight;
 
-    /** @var string - цена доставки */
+    /** @var string|null - цена доставки */
     public $price_delivery;
 
-    /** @var string - цена клиенту */
+    /** @var string|null - цена клиенту */
     public $price_client;
 
     /** @var string - дата изменения */
     public $change;
 
-    /** @var string */
+    /** @var string|null */
     public $reciepient;
 
     /** @var array */
@@ -58,7 +62,7 @@ class Order
     /** @var string */
     public $update_date_reason;
 
-    /** @var string */
+    /** @var string|null */
     public $bill_id;
 
     /** @var int - тип оплаты (фактически boolean - карта-1/нал-0) */
@@ -125,24 +129,7 @@ class Order
         }
         // Частичный отказ
         $goods = array_map(function (\Goods $good) {
-            return (object)[
-                'artname' => $good->getArticle(),
-                'weight' => $good->getWeight(),
-                'count_weight' => $good->getCountWeight(),
-                'count' => $good->getCount(),
-                'price' => $good->getPrice(),
-                'is_cancel' => $good->getIsCancel(),
-                'v_akt_id' => $good->getVAktId(),
-                'gstatus' => $good->getGoodsStatus()->getGoodsStatus(),
-                'nds' => $good->getGoodsNdsType()->getNds(),
-                'order_id' => $good->getOrderId(),
-                'articul' => $good->getDescription(),
-                // duplicated
-                'voc_id' => null,
-                'zorder_id' => null,
-                'on_ware' => null,
-                'sa_vact_id' => null,
-            ];
+            return new Good($good);
         }, $this->order->getGoods()->toArray());
         $this->order_goods = $goods;
     }
