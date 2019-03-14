@@ -18,8 +18,9 @@ class Orders
         CLIENT = 'client',
         GHANGEDATE = 'changeDate',
         OLDID = 'oldId',
-        ID = 'id'
-    ;
+        ID = 'id',
+        INNER_N = 'innerN',
+        ORDER_ID = 'orderId';
 
     /**
      * @var int
@@ -512,9 +513,6 @@ class Orders
         $this->goods = $goods;
         return $this;
     }
-
-
-
 
 
     /**
