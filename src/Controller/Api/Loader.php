@@ -13,6 +13,33 @@ class Loader
 {
 
     /**
+     * @param \Orders[] $orders
+     * @return array|\Porders
+     */
+    public function loadPorders($orders)
+    {
+        $orderIds = [];
+        foreach ($orders as $ord) {
+            if ($ord->getStatus()->getId() == \OrdersStatusModel::SAMOVYVOZ_ID) {
+                $orderIds[] = $ord->getOrderId();
+            }
+        }
+
+        /** @var \Porders $porders */
+        $porders = Proxy::init()->getEntityManager()->getRepository(\Porders::class)
+            ->matching(
+                Criteria::create()
+                    ->where(
+                        Criteria::expr()->in(
+                            \Porders::ORDERID,
+                            $orderIds
+                        )
+                    )
+            )->toArray();
+        return $porders;
+    }
+
+    /**
      * @param \ClientSettings $clientSettings
      * @param \DateTime $from
      * @param \DateTime $to
@@ -21,7 +48,7 @@ class Loader
     public function loadApiV3Orders(\ClientSettings $clientSettings, \DateTime $from, \DateTime $to)
     {
         /** @var \Orders[] $orders */
-        $orders =  Proxy::init()->getEntityManager()->getRepository(\Orders::class)
+        $orders = Proxy::init()->getEntityManager()->getRepository(\Orders::class)
             ->matching(
                 Criteria::create()
                     ->where(
@@ -31,10 +58,10 @@ class Loader
                     )->andWhere(
                         Criteria::expr()->lte(\Orders::GHANGEDATE, $to)
                     )
-                    ->setMaxResults(20)
+                    ->setMaxResults(200)
             )->toArray();
 
-        return  $orders;
+        return $orders;
     }
 
 
