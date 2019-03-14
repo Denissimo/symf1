@@ -108,7 +108,7 @@ class Proxy
     public function initTwig()
     {
         self::$twigEnvironment = new \Twig_Environment(
-            new \Twig_Loader_Filesystem(".." . Config::getTwigPath()),
+            new \Twig_Loader_Filesystem(__DIR__ . "/.." . Config::getTwigPath()),
             Config::getTwigOptions()
         );
     }

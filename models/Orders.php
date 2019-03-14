@@ -230,6 +230,13 @@ class Orders
     /**
      * @var int|null
      *
+     * @ORM\Column(name="c_reason", type="integer", nullable=true, options={"comment"="id причины отмены"})
+     */
+    private $cReason;
+
+    /**
+     * @var int|null
+     *
      * @ORM\Column(name="reason_7", type="integer", nullable=true, options={"comment"="id статус отказ на месте"})
      */
     private $reason7;
@@ -1035,6 +1042,24 @@ class Orders
     public function setPReason(?int $pReason): Orders
     {
         $this->pReason = $pReason;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCReason()
+    {
+        return $this->cReason;
+    }
+
+    /**
+     * @param int|null $cReason
+     * @return Orders
+     */
+    public function setCReason($cReason) : Orders
+    {
+        $this->cReason = $cReason;
         return $this;
     }
 
