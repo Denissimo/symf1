@@ -42,6 +42,7 @@ class Builder
         GOODS_PRICE = "price",
         GOODS_IS_CANCEL = "is_cancel",
         GOODS_ORDER_ID = "order_id",
+        GOODS_ZORDER_ID = "zorder_id",
         ZORDER_ID = "zorder_id",
         GOODS_ON_WARE = "on_ware",
         GOODS_GSTATUS = "gstatus",
@@ -419,12 +420,10 @@ class Builder
         foreach ($orders as $ord) {
             $podstatus = isset($porsdersSorted[$ord->getOrderId()]) ?
                 $porsdersSorted[$ord->getOrderId()]->getPodstatus()->getPodstatus() : null;
-            if ($ord->getStatus()->getId() == \OrdersStatusModel::PART_DENY_ID && is_array($ord->getGoods())) {
+            /** \Orders $ord */
+            if ($ord->getStatus()->getId() == \OrdersStatusModel::PART_DENY_ID) { // && is_array($ord->getGoods())
                 /** @var \Goods[] $goodsArray */
-                $goodsArray = [];
-//                foreach ($ord->getGoods() as $goods) {
-
-//                }
+                $goodsArray = $this->buildGoodsV3($ord->getGoods());
             }
 
             $ordersArray[$ord->getOrderId()] = [
@@ -438,7 +437,7 @@ class Builder
                 self::ORDER_PRICE_DELIVERY => (float)$ord->getOrderBill()->getPriceClient(),
                 self::ORDER_CHANGE => $ord->getChangeDate()->format('Y-m-d H:i:s'),
                 self::ORDER_RECEPIENT => $ord->getOrderSettings()->getReciepientName(),
-                self::ORDER_ORDER_GOODS => null,
+                self::ORDER_ORDER_GOODS => $goodsArray ?? null,
                 self::ORDER_PODSTATUS => $podstatus,
                 self::ORDER_CANCEL_REASON => null,
                 self::ORDER_UPDATE_DATE_FLAG => $ord->getUpdateDateFlag(),
@@ -448,6 +447,36 @@ class Builder
             ];
         }
         return $ordersArray;
+    }
+
+    /**
+     * @param \Goods $goodsCollection
+     * @return array
+     */
+    private function buildGoodsV3($goodsCollection) : array
+    {
+        $goodsArray = [];
+        foreach ($goodsCollection as $goods) {
+            $goodsArray[] = [
+                self::GOODS_ID => $goods->getId(),
+                self::GOODS_ARTNAME => $goods->getDescription(),
+                self::GOODS_WEIGHT => $goods->getWeight(),
+                self::GOODS_COUNT_WEIGHT => $goods->getCountWeight(),
+                self::GOODS_COUNT => $goods->getCount(),
+                self::GOODS_VOC_ID => null,
+                self::GOODS_ARTICUL => $goods->getArticle(),
+                self::GOODS_PRICE => (float)$goods->getPrice(),
+                self::GOODS_IS_CANCEL => $goods->getIsCancel(),
+                self::GOODS_ORDER_ID => $goods->getOrderId(),
+                self::GOODS_ZORDER_ID => null,
+                self::GOODS_ON_WARE => null,
+                self::GOODS_GSTATUS => null,
+                self::GOODS_V_AKT_ID => $goods->getVAktId(),
+                self::GOODS_SA_VACT_ID => null,
+                self::GOODS_NDS => $goods->getGoodsNdsType()->getNds()
+            ];
+        }
+        return $goodsArray;
     }
 
 }
