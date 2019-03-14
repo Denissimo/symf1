@@ -246,6 +246,7 @@ class Builder
             ->setOrderplace($ord->orderPlace ?? null)
             ->setOtkazmark($ord->otkazmark ?? null)
             ->setPReason($ord->p_reason ?? null)
+            ->setCReason($ord->c_reason ?? null)
             ->setPartialOption($ord->partial_option ?? null)
             ->setPartnerAct($ord->partner_act ?? null)
             ->setPimpSend($ord->pimp_send ?? null)
