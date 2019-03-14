@@ -46,4 +46,18 @@ class Validator
         );
     }
 
+    /**
+     * @param int $diff
+     * @param int $days
+     */
+    public function validateDateDiff($diff, $days)
+    {
+        Proxy::init()->getValidator()->validate(
+            $diff,
+            new Assert\LessThan($days),
+            'Date interval over '. $days . ' days',
+            MalformedRequestException::class
+        );
+    }
+
 }

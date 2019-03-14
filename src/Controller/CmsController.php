@@ -252,6 +252,11 @@ class CmsController extends BaseController implements Api
             );
             (new RequestValidator())->validateNotBlank($dateTo, 'Incorrect field: ' . Api::FIELD_TO);
 
+            $interval = date_diff($dateTo, $dateFrom);
+            $dateDiff =  $interval->format('%a');
+
+            (new RequestValidator())->validateDateDiff($dateDiff, Api::LIMIT_DAYS_API_V3);
+
             $orders = (new Loader())->loadApiV3Orders(
                 $clienSettings,
                 $dateFrom,
@@ -263,14 +268,16 @@ class CmsController extends BaseController implements Api
             $ordersData = (new ResponseBuidser())->buildStatusV3($orders, $porders);
 
 
-            $content = ['status' => '200', $ordersData];
             $code = HttpResponse::HTTP_OK;
+            $content = ['status' => $code, 'response' => $ordersData];
+
 
         } catch (MalformedRequestException $e) {
 
-            $content = ['status' => '400',
-                'response' => ['Error' => $e->getMessage()]];
             $code = HttpResponse::HTTP_BAD_REQUEST;
+            $content = ['status' => $code,
+                'response' => ['Error' => $e->getMessage()]];
+
         }
 
         $headers = [
