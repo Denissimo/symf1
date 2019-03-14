@@ -8,7 +8,7 @@ use App\Exceptions\BadResponseException;
 use App\Exceptions\MalformedRequestException;
 use App\Exceptions\OrdersListEmptyResponseException;
 use App\Wrappers\Order;
-use http\Env\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Proxy;
@@ -264,19 +264,24 @@ class CmsController extends BaseController implements Api
 
 
             $content = ['status' => '200', $ordersData];
-
+            $code = HttpResponse::HTTP_OK;
 
         } catch (MalformedRequestException $e) {
 
             $content = ['status' => '400',
                 'response' => ['Error' => $e->getMessage()]];
+            $code = HttpResponse::HTTP_BAD_REQUEST;
         }
 
+        $headers = [
+            'Content-Type' => 'application/json',
+            'charset' => 'utf-8'
+        ];
         return (new Render())->render(
             [Render::CONTENT => \GuzzleHttp\json_encode($content)],
-            'default.html.twig',
-            200,
-            ['Content-Type' => 'application/json']
+            'empty.html.twig',
+            $code,
+            $headers
         );
     }
 
