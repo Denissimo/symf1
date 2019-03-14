@@ -21,7 +21,7 @@ class Loader
     public function loadApiV3Orders(\ClientSettings $clientSettings, \DateTime $from, \DateTime $to)
     {
         /** @var \Orders[] $orders */
-        $orders =  Proxy::init()->getEntityManager()->getRepository(\Orders::class)
+        $orders = Proxy::init()->getEntityManager()->getRepository(\Orders::class)
             ->matching(
                 Criteria::create()
                     ->where(
@@ -34,7 +34,7 @@ class Loader
                     ->setMaxResults(20)
             )->toArray();
 
-        return  $orders;
+        return $orders;
     }
 
 
@@ -159,6 +159,71 @@ class Loader
                         )
                     )
             )->toArray();
+    }
+
+    /**
+     * заказ по inner_n
+     *
+     * @param $inner
+     * @param \ClientSettings $client
+     * @return \Orders
+     */
+    public function loadOrderInner($inner, \ClientSettings $client)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq(\Orders::CLIENT, $client))
+            ->andWhere(Criteria::expr()->eq(\Orders::INNER_N, $inner));
+
+        return Proxy::init()
+            ->getEntityManager()
+            ->getRepository(\Orders::class)
+            ->matching($criteria)
+            ->first();
+    }
+
+    /**
+     * заказ по order_id
+     *
+     * @param $orderId
+     * @param \ClientSettings $client
+     * @return \Orders
+     */
+    public function loadOrderId($orderId, \ClientSettings $client)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq(\Orders::CLIENT, $client))
+            ->andWhere(Criteria::expr()->eq(\Orders::ORDER_ID, $orderId));
+
+        return Proxy::init()
+            ->getEntityManager()
+            ->getRepository(\Orders::class)
+            ->matching($criteria)
+            ->first();
+    }
+
+    /**
+     * @param $orderId
+     * @return \Porders
+     */
+    public function loadPOrderId($orderId)
+    {
+        return Proxy::init()
+            ->getEntityManager()
+            ->getRepository(\Porders::class)
+            ->matching(Criteria::create()->where(\Porders::ORDER_ID, $orderId))
+            ->first();
+    }
+
+    /**
+     * @param $id
+     * @return \Marks|object|null
+     */
+    public function loadMarksId($id)
+    {
+        return Proxy::init()
+            ->getEntityManager()
+            ->getRepository(\Marks::class)
+            ->find($id);
     }
 
 }
