@@ -25,7 +25,7 @@ services:
         tags: ['controller.service_arguments']
 
     App\Controller\Api\:
-        autoconfigure: fasle
+        autoconfigure: false
         resource: '../src/Controller/Api'
 
     # add more service definitions when explicit configuration is needed
