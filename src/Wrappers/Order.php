@@ -128,10 +128,9 @@ class Order
             return;
         }
         // Частичный отказ
-        $goods = array_map(function (\Goods $good) {
+        $this->order_goods = array_map(function (\Goods $good) {
             return new Good($good);
         }, $this->order->getGoods()->toArray());
-        $this->order_goods = $goods;
     }
 
     /**
@@ -140,7 +139,7 @@ class Order
     public function findUpdateDateReason()
     {
         $this->update_date_flag = $this->order->getUpdateDateFlag();
-        if ($this->update_date_flag) {
+        if ($this->update_date_flag && $this->order->getPReason()) {
             $this->update_date_reason = $this->loader->loadMarksId($this->order->getPReason())->getMarkDescr();
         }
     }
@@ -150,11 +149,11 @@ class Order
      */
     protected function findCancelReason()
     {
-        if ($this->order->getStatus()->getId() !== \OrdersStatusModel::STATUS_CANCEL) {
+        if ($this->order->getStatus()->getId() !== \OrdersStatusModel::STATUS_CANCEL ||
+            !$this->order->getCReason()) {
             return;
         }
         // пишем статус отмены только если была отмена заказа
-        // @TODO раскомментить после реализации метода
-        //$this->cancel_reason = $this->loader->loadMarksId($this->order->getCReason())->getMarkDescr();
+        $this->cancel_reason = $this->loader->loadMarksId($this->order->getCReason())->getMarkDescr();
     }
 }
