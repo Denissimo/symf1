@@ -8,6 +8,7 @@ use App\Exceptions\BadResponseException;
 use App\Exceptions\MalformedRequestException;
 use App\Exceptions\OrdersListEmptyResponseException;
 use App\Wrappers\Order;
+use App\Wrappers\ZOrder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -253,7 +254,7 @@ class CmsController extends BaseController implements Api
             (new RequestValidator())->validateNotBlank($dateTo, 'Incorrect field: ' . Api::FIELD_TO);
 
             $interval = date_diff($dateTo, $dateFrom);
-            $dateDiff =  $interval->format('%a');
+            $dateDiff = $interval->format('%a');
 
             (new RequestValidator())->validateDateDiff($dateDiff, Api::LIMIT_DAYS_API_V3);
 
@@ -306,11 +307,10 @@ class CmsController extends BaseController implements Api
 
             $client = $this->getClientSettings();
             $loader = new Loader();
-            if (!empty($inner)) {
+            if (!empty($innerId)) {
                 $order = $loader->loadOrderInner($innerId, $client);
             } else {
                 $order = $loader->loadOrderId($orderId, $client);
-
             }
             if (!$order) {
                 throw new \Exception('Order not found', 404);
@@ -331,6 +331,42 @@ class CmsController extends BaseController implements Api
             }
 
             return $this->success($wrapperOrder, $options);
+        } catch (\Exception $e) {
+            return $this->error($e);
+        }
+    }
+
+    /**
+     * @Route("/api/v1/getZStatus")
+     *
+     * @return HttpResponse
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function getZStatus()
+    {
+        try {
+            $innerId = self::getRequest()->get(Api::INNER_N, 0);
+            $orderId = self::getRequest()->get(Api::ZORDER_ID, 0);
+
+            // если нет ни одно или переданны оба значения
+            // мы принимаем только одно значение
+            if ((!$innerId && !$orderId) || ($innerId && $orderId)) {
+                throw new \Exception(sprintf("Error request: One field required %s or %s", Api::INNER_N, Api::ORDER_ID));
+            }
+
+            $client = $this->getClientSettings();
+            $loader = new Loader();
+            if (!empty($innerId)) {
+                $order = $loader->loadZOrderInner($innerId, $client);
+            } else {
+                $order = $loader->loadZOrderId($orderId, $client);
+            }
+            if (!$order) {
+                throw new \Exception('Order not found', 404);
+            }
+            return $this->success(new ZOrder($order));
         } catch (\Exception $e) {
             return $this->error($e);
         }

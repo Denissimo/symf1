@@ -13,6 +13,15 @@ class Loader
 {
 
     /**
+     * @param string $entityName
+     * @return \Doctrine\Common\Persistence\ObjectRepository|\Doctrine\ORM\EntityRepository
+     */
+    protected function getRepository($entityName)
+    {
+        return Proxy::init()->getEntityManager()->getRepository($entityName);
+    }
+
+    /**
      * @param \Orders[] $orders
      * @return array|\Porders
      */
@@ -26,7 +35,7 @@ class Loader
         }
 
         /** @var \Porders $porders */
-        $porders = Proxy::init()->getEntityManager()->getRepository(\Porders::class)
+        $porders = $this->getRepository(\Porders::class)
             ->matching(
                 Criteria::create()
                     ->where(
@@ -48,7 +57,7 @@ class Loader
     public function loadApiV3Orders(\ClientSettings $clientSettings, \DateTime $from, \DateTime $to)
     {
         /** @var \Orders[] $orders */
-        $orders = Proxy::init()->getEntityManager()->getRepository(\Orders::class)
+        $orders = $this->getRepository(\Orders::class)
             ->matching(
                 Criteria::create()
                     ->where(
@@ -71,7 +80,7 @@ class Loader
     public function loadLastUpdateTime()
     {
         /** @var \Options $lastUpdateTime */
-        $lastUpdateTime = Proxy::init()->getEntityManager()->getRepository(\Options::class)
+        $lastUpdateTime = $this->getRepository(\Options::class)
             ->matching(
                 Criteria::create()
                     ->where(
@@ -90,7 +99,7 @@ class Loader
     public function loadLastOrderId()
     {
         /** @var \Options $lastUpdateId */
-        $lastUpdateId = Proxy::init()->getEntityManager()->getRepository(\Options::class)
+        $lastUpdateId = $this->getRepository(\Options::class)
             ->matching(
                 Criteria::create()
                     ->where(
@@ -158,7 +167,7 @@ class Loader
      */
     public function loadOrderByOid(int $oid)
     {
-        return Proxy::init()->getEntityManager()->getRepository(\Orders::class)
+        return $this->getRepository(\Orders::class)
             ->matching(
                 Criteria::create()
                     ->where(
@@ -177,7 +186,7 @@ class Loader
      */
     public function loadGoodsByOrder(\Orders $order)
     {
-        return Proxy::init()->getEntityManager()->getRepository(\Goods::class)
+        return $this->getRepository(\Goods::class)
             ->matching(
                 Criteria::create()
                     ->where(
@@ -201,9 +210,7 @@ class Loader
             ->where(Criteria::expr()->eq(\Orders::CLIENT, $client))
             ->andWhere(Criteria::expr()->eq(\Orders::INNER_N, $inner));
 
-        return Proxy::init()
-            ->getEntityManager()
-            ->getRepository(\Orders::class)
+        return $this->getRepository(\Orders::class)
             ->matching($criteria)
             ->first();
     }
@@ -221,9 +228,7 @@ class Loader
             ->where(Criteria::expr()->eq(\Orders::CLIENT, $client))
             ->andWhere(Criteria::expr()->eq(\Orders::ORDER_ID, $orderId));
 
-        return Proxy::init()
-            ->getEntityManager()
-            ->getRepository(\Orders::class)
+        return $this->getRepository(\Orders::class)
             ->matching($criteria)
             ->first();
     }
@@ -234,9 +239,7 @@ class Loader
      */
     public function loadPOrderId($orderId)
     {
-        return Proxy::init()
-            ->getEntityManager()
-            ->getRepository(\Porders::class)
+        return $this->getRepository(\Porders::class)
             ->matching(Criteria::create()->where(\Porders::ORDER_ID, $orderId))
             ->first();
     }
@@ -247,7 +250,7 @@ class Loader
      */
     public function loadMarks()
     {
-        return Proxy::init()->getEntityManager()->getRepository(\Marks::class)->findAll();
+        return $this->getRepository(\Marks::class)->findAll();
     }
 
     /**
@@ -256,10 +259,44 @@ class Loader
      */
     public function loadMarksId($id)
     {
-        return Proxy::init()
-            ->getEntityManager()
-            ->getRepository(\Marks::class)
+        return $this->getRepository(\Marks::class)
             ->find($id);
+    }
+
+    /**
+     * Zorders по inner_n
+     *
+     * @param $inner
+     * @param \ClientSettings $client
+     * @return \Zorders
+     */
+    public function loadZOrderInner($inner, \ClientSettings $client)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq(\Zorders::CLIENT, $client))
+            ->andWhere(Criteria::expr()->eq(\Zorders::INNER, $inner));
+
+        return $this->getRepository(\Zorders::class)
+            ->matching($criteria)
+            ->first();
+    }
+
+    /**
+     * Zorders по order_id
+     *
+     * @param $orderId
+     * @param \ClientSettings $client
+     * @return \Zorders
+     */
+    public function loadZOrderId($orderId, \ClientSettings $client)
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq(\Zorders::CLIENT, $client))
+            ->andWhere(Criteria::expr()->eq(\Zorders::ID, $orderId));
+
+        return $this->getRepository(\Zorders::class)
+            ->matching($criteria)
+            ->first();
     }
 
 }

@@ -1,7 +1,6 @@
 <?php
 
 
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,6 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Zorders
 {
+    const
+        CLIENT = 'client',
+        INNER = 'inner',
+        ID = 'id';
+
     /**
      * @var int
      *
@@ -29,11 +33,14 @@ class Zorders
     private $date;
 
     /**
-     * @var int|null
+     * @var \ClientSettings
      *
-     * @ORM\Column(name="client_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="ClientSettings")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="client_id", referencedColumnName="id")
+     * })
      */
-    private $clientId;
+    private $client;
 
     /**
      * @var int|null
@@ -276,21 +283,21 @@ class Zorders
     }
 
     /**
-     * @return int|null
+     * @param ClientSettings $client
+     * @return Zorders
      */
-    public function getClientId(): ?int
+    public function setClient(ClientSettings $client): Zorders
     {
-        return $this->clientId;
+        $this->client = $client;
+        return $this;
     }
 
     /**
-     * @param int|null $clientId
-     * @return Zorders
+     * @return ClientSettings
      */
-    public function setClientId(?int $clientId): Zorders
+    public function getClient(): ClientSettings
     {
-        $this->clientId = $clientId;
-        return $this;
+        return $this->client;
     }
 
     /**
