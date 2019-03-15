@@ -105,7 +105,7 @@ class Order
      */
     protected function findPodStatus()
     {
-        if ($this->order->getType()->getType() !== \OrdersTypesModel::SELF_DELIVERY) {
+        if ($this->order->getType()->getType() !== \OrdersTypesModel::PICKUP) {
             return;
         }
         // если самовывоз

@@ -20,7 +20,7 @@ class Loader
     {
         $orderIds = [];
         foreach ($orders as $ord) {
-            if ($ord->getStatus()->getId() == \OrdersTypesModel::SELF_DELIVERY) {
+            if ($ord->getStatus()->getId() == \OrdersTypesModel::PICKUP) {
                 $orderIds[] = $ord->getOrderId();
             }
         }
@@ -239,6 +239,15 @@ class Loader
             ->getRepository(\Porders::class)
             ->matching(Criteria::create()->where(\Porders::ORDER_ID, $orderId))
             ->first();
+    }
+
+
+    /**
+     * @return array|\Marks[]
+     */
+    public function loadMarks()
+    {
+        return Proxy::init()->getEntityManager()->getRepository(\Marks::class)->findAll();
     }
 
     /**

@@ -405,9 +405,10 @@ class Builder
     /**
      * @param \Orders[] $orders
      * @param \Porders[] $porders
+     * @param \Marks[] $marks
      * @return array
      */
-    public function buildStatusV3($orders, $porders)
+    public function buildStatusV3($orders, $porders, $marks)
     {
 
         /** @var \Porders[] $porsdersSorted */
@@ -416,14 +417,30 @@ class Builder
             $porsdersSorted[$pord->getOrderId()] = $pord;
         }
 
+        /** @var \Marks[] $marksSorted */
+        $marksSorted = [];
+        foreach ($marks as $mark) {
+            $marksSorted[$mark->getId()] = $mark;
+        }
+
         $ordersArray = [];
         foreach ($orders as $ord) {
             $podstatus = isset($porsdersSorted[$ord->getOrderId()]) ?
                 $porsdersSorted[$ord->getOrderId()]->getPodstatus()->getPodstatus() : null;
+
+
+
             /** \Orders $ord */
             if ($ord->getStatus()->getId() == \OrdersStatusModel::STATUS_PARTIAL_FAILURE) { // && is_array($ord->getGoods())
                 /** @var \Goods[] $goodsArray */
                 $goodsArray = $this->buildGoodsV3($ord->getGoods());
+            }
+
+            $cancelReason = null;
+
+            if(in_array($ord->getStatus()->getId(), [\OrdersStatusModel::STATUS_REJECTION, \OrdersStatusModel::STATUS_CANCEL ])) {
+                $markId = (int)$ord->getCReason();
+                $cancelReason = isset($marksSorted[$markId]) ? $marksSorted[$markId]->getMarkDescr() : null;
             }
 
             $ordersArray[$ord->getOrderId()] = [
@@ -439,7 +456,7 @@ class Builder
                 self::ORDER_RECEPIENT => $ord->getOrderSettings()->getReciepientName(),
                 self::ORDER_ORDER_GOODS => $goodsArray ?? null,
                 self::ORDER_PODSTATUS => $podstatus,
-                self::ORDER_CANCEL_REASON => null,
+                self::ORDER_CANCEL_REASON => $cancelReason,
                 self::ORDER_UPDATE_DATE_FLAG => $ord->getUpdateDateFlag(),
                 self::ORDER_UPDATE_DATE_REASON => null,
                 self::ORDER_BILL_ID => $ord->getBillId(),
