@@ -285,7 +285,7 @@ class CmsController extends BaseController implements Api
     }
 
     /**
-     * @Route("/api/v1/getStatusv1")
+     * @Route("/api/v1/getStatus")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Twig_Error_Loader
