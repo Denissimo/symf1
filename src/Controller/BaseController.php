@@ -163,7 +163,9 @@ abstract class BaseController extends AbstractController
     {
         $headers = [
             'Content-Type' => 'application/json',
-            'charset' => 'utf-8'
+            'charset' => 'utf-8',
+            'Access-Control-Allow-Origin' => 'http://editor.swagger.io',
+            'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type, Accept'
         ];
         return (new Render())->render(
             [Render::CONTENT => $content],
