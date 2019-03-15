@@ -221,7 +221,7 @@ class CmsController extends BaseController implements Api
     }
 
     /**
-     * @Route("/cmsapi/statusV3")
+     * @Route("/api/v1/statusV2")
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Twig_Error_Loader
@@ -270,33 +270,22 @@ class CmsController extends BaseController implements Api
 
 
             $code = HttpResponse::HTTP_OK;
-            $content = ['status' => $code, 'response' => $ordersData];
+//            $content = ['status' => $code, 'response' => $ordersData];
 
 
         } catch (MalformedRequestException $e) {
 
-            $code = HttpResponse::HTTP_BAD_REQUEST;
-            $content = ['status' => $code,
-                'response' => ['Error' => $e->getMessage()]];
+            return $this->error($e);
 
         }
 
         Proxy::init()->getConnection()->close();
 
-        $headers = [
-            'Content-Type' => 'application/json',
-            'charset' => 'utf-8'
-        ];
-        return (new Render())->render(
-            [Render::CONTENT => \GuzzleHttp\json_encode($content)],
-            'empty.html.twig',
-            $code,
-            $headers
-        );
+        return $this->success($ordersData);
     }
 
     /**
-     * @Route("/cmsapi/getStatus")
+     * @Route("/api/v1/status")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Twig_Error_Loader
