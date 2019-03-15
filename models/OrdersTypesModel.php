@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class OrdersTypesModel
 {
     const
-        SELF_DELIVERY = 2; // Самовывоз
+        PICKUP = 2; // Самовывоз
 
 
     /**

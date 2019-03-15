@@ -178,7 +178,7 @@ class CmsController extends BaseController implements Api
         } catch (MalformedResponseException $e) {
             $message = $e->getMessage();
         }
-
+        Proxy::init()->getConnection()->close();
         return (new Render())->render([
             Render::CONTENT => $lastTime->getOrdersUpdateLastDatetime()->format('c')
         ]);
@@ -238,7 +238,7 @@ class CmsController extends BaseController implements Api
                 ->findOneBy([\ClientSettings::API_KEY => self::getRequest()->get(Api::KEY)]);
             (new RequestValidator())->validateNotBlank(
                 $clienSettings,
-                'Сосни хуйца, быдло! (Incorrect Api Key)'
+                'Incorrect Api Key'
             );
             $dateFrom = \DateTime::createFromFormat(
                 \Options::FORMAT,
@@ -264,8 +264,9 @@ class CmsController extends BaseController implements Api
             );
 
             $porders = (new Loader())->loadPorders($orders);
+            $marks = (new Loader())->loadMarks();
 
-            $ordersData = (new ResponseBuidser())->buildStatusV3($orders, $porders);
+            $ordersData = (new ResponseBuidser())->buildStatusV3($orders, $porders, $marks);
 
 
             $code = HttpResponse::HTTP_OK;
@@ -279,6 +280,8 @@ class CmsController extends BaseController implements Api
                 'response' => ['Error' => $e->getMessage()]];
 
         }
+
+        Proxy::init()->getConnection()->close();
 
         $headers = [
             'Content-Type' => 'application/json',
