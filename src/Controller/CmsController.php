@@ -221,7 +221,7 @@ class CmsController extends BaseController implements Api
     }
 
     /**
-     * @Route("/api/v1/statusV2")
+     * @Route("/api/v1/getStatusv2")
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Twig_Error_Loader
@@ -285,7 +285,7 @@ class CmsController extends BaseController implements Api
     }
 
     /**
-     * @Route("/api/v1/status")
+     * @Route("/api/v1/getStatusv1")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Twig_Error_Loader
