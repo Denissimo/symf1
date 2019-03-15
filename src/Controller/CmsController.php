@@ -353,7 +353,7 @@ class CmsController extends BaseController implements Api
             // если нет ни одно или переданны оба значения
             // мы принимаем только одно значение
             if ((!$innerId && !$orderId) || ($innerId && $orderId)) {
-                throw new \Exception(sprintf("Error request: One field required %s or %s", Api::INNER_N, Api::ORDER_ID));
+                throw new \Exception(sprintf("Error request: One field required %s or %s", Api::INNER_N, Api::ZORDER_ID));
             }
 
             $client = $this->getClientSettings();
