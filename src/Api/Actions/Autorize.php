@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Actions;
+namespace App\Api\Actions;
 
 use App\Proxy;
 use App\Cfg\Config;

@@ -11,11 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Proxy;
-use App\Controller\Forms\FormBuilder;
 use Users;
 use Goods;
 use App\Twig\Render;
-use App\Controller\Query;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\User;
 use App\Cfg\Config;
@@ -335,61 +333,6 @@ return Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
         return (new Render())->render($data);
     }
 
-    /**
-     * @Route("/test")
-     * @return Response
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     */
-    public function test()
-    {
-
-        Proxy::init()->initDoctrine();
-
-
-        /** @var \Users[] $user */
-        $user = Proxy::init()->getEntityManager()
-            ->getRepository(\Users::class)
-            ->findBy(['name' => 'Den Drake']);
-
-//        var_dump($user); die;
-//        $user[0]->setName('ZZdddzz');
-//        Proxy::init()->getEntityManager()->flush();
-
-
-        $newUser = (new Users())
-            ->setName('sdfgag')
-            ->setEmail('ss@xhx.xx')
-            ->setPassword('kjhgfkjfkfku')
-            ->setEnabled(true);
-
-        Proxy::init()->getEntityManager()->persist($newUser);
-        Proxy::init()->getEntityManager()->flush();
-
-
-//        Proxy::init()->getLogger()->addWarning(
-//            \GuzzleHttp\json_encode(
-//                $app->getUser()->getName()
-//            )
-//        );
-//
-
-        /*
-                $query = 'INSERT INTO comments SET app_id = :app_id, comment = :comment, uid = :user_id, ts = now(), reminder = :reminder, ctype = :ctype;';
-                $sth = Proxy::init()->getConnecton()->prepare($query);
-                $sth->bindValue(':app_id', (int)self::getRequest()->get('app_id'), \PDO::PARAM_INT);
-                $sth->bindValue(':user_id', (int)self::getRequest()->get('user_id'), \PDO::PARAM_INT);
-                $sth->bindValue(':ctype', $ctype, \PDO::PARAM_INT);
-                $sth->bindValue(':comment', self::getRequest()->get('comment'), \PDO::PARAM_STR);
-                $sth->bindValue(':reminder', $reminderStr);
-                $sth->execute();
-        */
-        $data[Render::CONTENT] = 'zdf';
-        $data['form'] = (new FormBuilder())->buildForm()->createView();
-        return (new Render())->render($data, 'test.html.twig');
-    }
 
     /**
      * @Route("/swag1")

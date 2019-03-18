@@ -6,9 +6,9 @@
  * Time: 15:42
  */
 
-namespace App\Controller\Api\Request;
+namespace App\Api\Request;
 
-use App\Controller\Api\Fields as Api;
+use App\Api\Fields as Api;
 
 
 class Unit implements Api

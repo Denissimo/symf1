@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Api\Response;
+namespace App\Api\Response;
 
-use App\Controller\Api\Structure as Fields;
+use App\Api\Structure as Fields;
 use App\Proxy;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Expression;

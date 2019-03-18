@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Api;
 
-use App\Controller\Api\Response\Builder;
+use App\Api\Response\Builder;
 use App\Helpers\Output;
 use App\Proxy;
-use App\Controller\Api\Fields as Api;
+use App\Api\Fields as Api;
 
 class Process
 {
