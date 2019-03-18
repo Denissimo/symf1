@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Exceptions\ErrorApiKey;
 use App\Providers\Headers;
 use App\Proxy;
 use App\Twig\Render;
@@ -81,17 +82,21 @@ abstract class BaseController extends AbstractController
     /**
      * Вернет объект ClientSettings на основе переданного api key
      *
-     * @return \ClientSettings|null
+     * @return \ClientSettings|null|object
      * @throws \App\Exceptions\ErrorApiKey
      */
     protected function getClientSettings()
     {
+        /** @var \ClientSettings $clientSettings */
         $clientSettings = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
             ->findOneBy([\ClientSettings::API_KEY => self::getRequest()->getApiKey()]);
         (new Validator())->validateNotBlank(
             $clientSettings,
             'Incorrect Api Key!'
         );
+        if (!$clientSettings->getActive()) {
+            throw new ErrorApiKey('ApiKey deactivate');
+        }
         return $clientSettings;
     }
 
@@ -114,8 +119,9 @@ abstract class BaseController extends AbstractController
     /**
      * рендер
      *
-     * @param mixed $content
+     * @param $content
      * @param array $customOptions
+     * @param int $code
      * @return Response
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime

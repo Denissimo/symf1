@@ -25,7 +25,8 @@ Interface Fields
         LIMIT_END = 'limit_end',
         UPDATE_TIME = 'update_time',
         INNER_N = 'inner_n',
-        ORDER_ID = 'order_id';
+        ORDER_ID = 'order_id',
+        ZORDER_ID = 'zorder_id';
 
     const
         FORM_PARAMS = 'form_params';
@@ -38,6 +39,5 @@ Interface Fields
 
     const
         LIMIT_CLIENT_ORDERS_LOAD = 10,
-        LIMIT_DAYS_API_V3 = 3
-    ;
+        LIMIT_DAYS_API_V3 = 3;
 }
