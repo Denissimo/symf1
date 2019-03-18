@@ -74,7 +74,7 @@ class Builder
     {
         $duplicates = (array)$this->checkDuplicateOrders($orders);
         foreach ($orders as $ord) {
-            if (!in_array($ord->id, $duplicates)) {
+            if (isset($ord->id) && !in_array($ord->id, $duplicates)) {
                 $address = $this->buildAddress(new \Address(), $ord);
                 $orderBill = $this->buildOrderBill(new \OrdersBills(), $ord);
                 $orderSettings = $this->buildOrderSettings(new \OrdersSettings(), $ord);
@@ -98,14 +98,14 @@ class Builder
      * @return array
      * @throws \Doctrine\DBAL\DBALException
      */
-    private
-    function checkDuplicateOrders(array $orders)
+    private function checkDuplicateOrders(array $orders)
     {
         foreach ($orders as $key => $res) {
-            if (!is_object($res)) continue;
+            if (!is_object($res) || !isset($res->id)) continue;
             $idList[$key] = $res->id;
         }
-        $idRow = implode(', ', $idList);
+//        die;
+        $idRow = isset($idList) ? implode(', ', $idList) : '0';
         $query = 'SELECT old_id FROM orders WHERE old_id IN(' . $idRow . ')';
         return array_column(Proxy::init()->getConnection()->query($query)->fetchAll(), 'old_id');
     }
@@ -429,7 +429,6 @@ class Builder
                 $porsdersSorted[$ord->getOrderId()]->getPodstatus()->getPodstatus() : null;
 
 
-
             /** \Orders $ord */
             if ($ord->getStatus()->getId() == \OrdersStatusModel::STATUS_PARTIAL_FAILURE) { // && is_array($ord->getGoods())
                 /** @var \Goods[] $goodsArray */
@@ -438,7 +437,7 @@ class Builder
 
             $cancelReason = null;
 
-            if(in_array($ord->getStatus()->getId(), [\OrdersStatusModel::STATUS_REJECTION, \OrdersStatusModel::STATUS_CANCEL ])) {
+            if (in_array($ord->getStatus()->getId(), [\OrdersStatusModel::STATUS_REJECTION, \OrdersStatusModel::STATUS_CANCEL])) {
                 $markId = (int)$ord->getCReason();
                 $cancelReason = isset($marksSorted[$markId]) ? $marksSorted[$markId]->getMarkDescr() : null;
             }
@@ -470,7 +469,7 @@ class Builder
      * @param \Goods $goodsCollection
      * @return array
      */
-    private function buildGoodsV3($goodsCollection) : array
+    private function buildGoodsV3($goodsCollection): array
     {
         $goodsArray = [];
         foreach ($goodsCollection as $goods) {
