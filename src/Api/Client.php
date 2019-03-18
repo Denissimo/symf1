@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Api;
 
-use App\Controller\Api\Request\Unit;
-use App\Controller\Api\Request\Builder;
+use App\Api\Request\Unit;
+use App\Api\Request\Builder;
 use App\Helpers\Output;
 use App\Proxy;
 use GuzzleHttp;
-use App\Controller\Api\Fields as Api;
+use App\Api\Fields as Api;
 use Symfony\Component\HttpFoundation\Request;
 
 class Client

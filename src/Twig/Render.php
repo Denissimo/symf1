@@ -4,7 +4,7 @@ namespace App\Twig;
 
 use App\Proxy;
 use App\Cfg\Config;
-use App\Controller\Actions\Autorize;
+use App\Api\Actions\Autorize;
 use Symfony\Component\HttpFoundation\Response;
 
 

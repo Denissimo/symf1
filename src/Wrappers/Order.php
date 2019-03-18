@@ -2,7 +2,7 @@
 
 namespace App\Wrappers;
 
-use App\Controller\Api\Loader;
+use App\Api\Loader;
 
 /**
  * обертка для \Orders подготавливает объект для возврата его по апи

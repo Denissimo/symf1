@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\Response;
+namespace App\Api\Response;
 
 use App\Proxy;
 use Symfony\Component\Validator\Constraints as Assert;

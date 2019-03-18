@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Api;
 
 use App\Helpers\Output;
 use App\Proxy;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use App\Twig\Render;
-use App\Controller\Api\Fields as Api;
+use App\Api\Fields as Api;
 
 class Loader
 {

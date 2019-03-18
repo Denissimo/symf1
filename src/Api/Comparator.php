@@ -6,10 +6,10 @@
  * Time: 19:07
  */
 
-namespace App\Controller\Api;
+namespace App\Api;
 
 
-use App\Controller\Api\Response\Builder;
+use App\Api\Response\Builder;
 use App\Helpers\Output;
 use App\Proxy;
 

@@ -7,7 +7,7 @@ use App\Exceptions\ErrorApiKey;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use App\Proxy;
-use App\Controller\Api\Fields;
+use App\Api\Fields;
 
 class Headers extends Request
 {
