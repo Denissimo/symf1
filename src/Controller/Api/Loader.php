@@ -240,7 +240,9 @@ class Loader
     public function loadPOrderId($orderId)
     {
         return $this->getRepository(\Porders::class)
-            ->matching(Criteria::create()->where(\Porders::ORDER_ID, $orderId))
+            ->matching(Criteria::create()->where(
+                Criteria::expr()->eq(\Porders::ORDER_ID, $orderId))
+            )
             ->first();
     }
 

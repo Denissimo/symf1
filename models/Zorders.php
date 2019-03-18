@@ -33,6 +33,13 @@ class Zorders
     private $date;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="client_id", type="integer", nullable=true)
+     */
+    private $clientId;
+
+    /**
      * @var \ClientSettings
      *
      * @ORM\ManyToOne(targetEntity="ClientSettings")
@@ -298,6 +305,24 @@ class Zorders
     public function getClient(): ClientSettings
     {
         return $this->client;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getClientId(): ?int
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @param int|null $clientId
+     * @return Zorders
+     */
+    public function setClientId(?int $clientId): Zorders
+    {
+        $this->clientId = $clientId;
+        return $this;
     }
 
     /**
