@@ -63,7 +63,7 @@ abstract class Model
     static public function findOrFail($query)
     {
         $result = static::find($query);
-        if (!$result->count()) {
+        if (!$result || !$result->count()) {
             throw new Exception('Not found', 404);
         }
         return $result;
