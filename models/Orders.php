@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="orders", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="order_id", columns={"order_id"}), @ORM\Index(name="order_type", columns={"type"}), @ORM\Index(name="pimpay_status", columns={"pimpay_status"}), @ORM\Index(name="order_bill_id", columns={"order_bill_id"}), @ORM\Index(name="order_settings_id", columns={"order_settings_id"}), @ORM\Index(name="oid", columns={"old_id"}), @ORM\Index(name="order_status", columns={"status"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="orders_address_id", columns={"address_id"})})
  * @ORM\Entity
  */
-class Orders
+class Orders extends Model
 {
 
     const

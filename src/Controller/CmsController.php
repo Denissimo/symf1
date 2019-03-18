@@ -306,15 +306,17 @@ class CmsController extends BaseController implements Api
             }
 
             $client = $this->getClientSettings();
-            $loader = new Loader();
+
+            $criteria = Criteria::create()
+                ->where(Criteria::expr()->eq(\Zorders::CLIENT, $client));
+
             if (!empty($innerId)) {
-                $order = $loader->loadOrderInner($innerId, $client);
+                $criteria->andWhere(Criteria::expr()->eq(\Orders::INNER_N, $innerId));
             } else {
-                $order = $loader->loadOrderId($orderId, $client);
+                $criteria->andWhere(Criteria::expr()->eq(\Orders::ORDER_ID, $orderId));
             }
-            if (!$order) {
-                throw new \Exception('Order not found', 404);
-            }
+
+            $order = \Orders::findOrFail($criteria)->first();
 
             $wrapperOrder = new Order($order);
             if ($client->getClientId() === 1584 || $client->getClientId() === 1489) {
@@ -357,15 +359,17 @@ class CmsController extends BaseController implements Api
             }
 
             $client = $this->getClientSettings();
-            $loader = new Loader();
+
+            $criteria = Criteria::create()
+                ->where(Criteria::expr()->eq(\Zorders::CLIENT, $client));
+
             if (!empty($innerId)) {
-                $order = $loader->loadZOrderInner($innerId, $client);
+                $criteria->andWhere(Criteria::expr()->eq(\Zorders::INNER, $innerId));
             } else {
-                $order = $loader->loadZOrderId($orderId, $client);
+                $criteria->andWhere(Criteria::expr()->eq(\Zorders::ID, $orderId));
             }
-            if (!$order) {
-                throw new \Exception('Order not found', 404);
-            }
+
+            $order = \Zorders::findOrFail($criteria)->first();
             return $this->success(new ZOrder($order));
         } catch (\Exception $e) {
             return $this->error($e);
