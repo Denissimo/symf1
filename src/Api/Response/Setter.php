@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\Response;
+namespace App\Api\Response;
 
 
 class Setter

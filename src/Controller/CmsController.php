@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Controller\Api\Client;
-use App\Controller\Api\Request\Unit;
+use App\Api\Client;
+use App\Api\Request\Unit;
 use App\Exceptions\BadResponseException;
 use App\Exceptions\MalformedRequestException;
 use App\Exceptions\OrdersListEmptyResponseException;
@@ -14,14 +14,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Proxy;
 use App\Twig\Render;
-use App\Controller\Api\Fields as Api;
-use App\Controller\Api\Loader;
-use App\Controller\Api\Request\Builder;
-use App\Controller\Api\Request\Validator as RequestValidator;
-use App\Controller\Api\Response\Builder as ResponseBuidser;
-use App\Controller\Api\Response\Validator;
+use App\Api\Fields as Api;
+use App\Api\Loader;
+use App\Api\Request\Builder;
+use App\Api\Request\Validator as RequestValidator;
+use App\Api\Response\Builder as ResponseBuidser;
+use App\Api\Response\Validator;
 use App\Exceptions\MalformedResponseException;
-use App\Controller\Api\Process;
+use App\Api\Process;
 use App\Helpers\Output;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;

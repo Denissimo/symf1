@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Api;
 
 
 use App\Proxy;
 use function Sodium\compare;
 use Symfony\Component\Console\Output\Output;
-use App\Controller\Api\Response\Builder;
+use App\Api\Response\Builder;
 
 class Checker
 {

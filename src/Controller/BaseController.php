@@ -8,7 +8,7 @@ use App\Proxy;
 use App\Twig\Render;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Controller\Api\Request\Validator;
+use App\Api\Request\Validator;
 
 
 abstract class BaseController extends AbstractController

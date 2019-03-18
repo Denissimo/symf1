@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controller\Api\Request;
+namespace App\Api\Request;
 
 use App\Proxy;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Exceptions\MalformedRequestException;
-use App\Controller\Api\Fields as Api;
+use App\Api\Fields as Api;
 use Symfony\Component\HttpFoundation\Request;
 
 class Validator

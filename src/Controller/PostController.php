@@ -8,14 +8,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Proxy;
 use App\Cfg\Config;
 use Symfony\Component\HttpFoundation\Request;
-use App\Controller\Actions\Autorize;
+use App\Api\Actions\Autorize;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\Common\Collections\Criteria;
 use App\Twig\Render;
 use App\Validator;
-use App\Controller\Criteria\Builder;
-use App\Controller\Query\Builder as Qb;
+use App\Api\Criteria\Builder;
+use App\Api\Query\Builder as Qb;
 use Monolog\Logger;
 use Symfony\Component\Security\Core\Authentication;
 
