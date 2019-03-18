@@ -22,11 +22,11 @@ class Comparator
     private $stdGoods;
 
     /**
-     * Comparator constructor.
      * @param \stdClass $stdGoods
      * @param $goods
+     * @return \Goods
      */
-    public function __construct(\stdClass $stdGoods, $goods)
+    public function compare(\stdClass $stdGoods, $goods)
     {
         $isCountChanged = $this->checkCount($stdGoods, $goods);
         $isParamsChanged = $this->checkParasms($stdGoods, $goods);
