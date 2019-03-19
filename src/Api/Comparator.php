@@ -22,20 +22,19 @@ class Comparator
     private $stdGoods;
 
     /**
+     * Comparator constructor.
      * @param \stdClass $stdGoods
      * @param $goods
-     * @return \Goods
      */
-    public function compare(\stdClass $stdGoods, $goods)
+    public function __construct(\stdClass $stdGoods, $goods)
     {
         $isCountChanged = $this->checkCount($stdGoods, $goods);
         $isParamsChanged = $this->checkParasms($stdGoods, $goods);
         if ($isCountChanged || $isParamsChanged) {
-            $currentGoods = (new Builder())->buildGoods($goods, $stdGoods);
+            $this->goods = (new Builder())->buildGoods($goods, $stdGoods);
         } else {
-            $currentGoods = $goods;
+            $this->goods = $goods;
         }
-        return $currentGoods;
     }
 
     /**

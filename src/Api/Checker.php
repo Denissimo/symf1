@@ -28,7 +28,7 @@ class Checker
         foreach ($stdGoods as $key => $val) {
             $stdGoodsCurrent = $val;
             if (isset($goodsArray[$val->id])) {
-                $currentGoods = (new Comparator)->compare($stdGoodsCurrent, $goodsArray[$val->id]);
+                $currentGoods =(new Comparator($stdGoodsCurrent, $goodsArray[$val->id]))->getGoods();
                 unset($goodsArray[$val->id]);
             } else {
                 $currentGoods = (new Builder())->buildGoods(new \Goods(), $stdGoodsCurrent);
