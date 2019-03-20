@@ -52,20 +52,27 @@ class Builder
 
     /**
      * @param array $results
+     * @return bool|\DateTime
+     * @throws \Exception
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function process(array $results)
     {
+        $currentChangeDate = new \DateTime();
         foreach ($results as $orders) {
-            $this->saveOrders((array)$orders);
+            $orderChangeDate = $this->saveOrders((array)$orders);
+            $currentChangeDate = ($orderChangeDate < $currentChangeDate) ? $orderChangeDate : $currentChangeDate;
         }
+        return $currentChangeDate;
     }
 
 
     /**
      * @param array $orders
+     * @return bool|\DateTime
+     * @throws \Exception
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -73,12 +80,15 @@ class Builder
     private function saveOrders(array $orders)
     {
         $duplicates = (array)$this->checkDuplicateOrders($orders);
+        $currentChangeDate = new \DateTime();
         foreach ($orders as $ord) {
             if (isset($ord->id) && !in_array($ord->id, $duplicates)) {
                 $address = $this->buildAddress(new \Address(), $ord);
                 $orderBill = $this->buildOrderBill(new \OrdersBills(), $ord);
                 $orderSettings = $this->buildOrderSettings(new \OrdersSettings(), $ord);
                 $order = $this->buildOrder(new \Orders(), $ord);
+                $orderChangeDate = \DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date);
+                $currentChangeDate = ($orderChangeDate < $currentChangeDate) ? $orderChangeDate : $currentChangeDate;
 
                 $order
                     ->setAddress($address)
@@ -90,7 +100,9 @@ class Builder
             }
         }
         Proxy::init()->getEntityManager()->flush();
+        return $currentChangeDate;
     }
+
 
 
     /**

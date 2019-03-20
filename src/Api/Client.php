@@ -25,7 +25,6 @@ class Client
         foreach ($units as $unit) {
             $result [] = $this->sendLoadOrdersRequest($unit);
         }
-//        echo "<pre>"; var_dump($result); die;
         return $result;
     }
 
@@ -36,22 +35,27 @@ class Client
      */
     private function sendLoadOrdersRequest(Unit $unit)
     {
+        $request = [
+            Api::FORM_PARAMS =>
+                [
+                    Api::KEY => getenv('cms_api_key'),
+                    Api::CLIENT_ID => $unit->getClientId(),
+                    Api::DATE_START => $unit->getDateStart(),
+                    Api::DATE_END => $unit->getDateEnd(),
+                    Api::LIMIT_START => $unit->getLimitStart(),
+                    Api::LIMIT_END => $unit->getLimitEnd()
+                ]
+        ];
+        Proxy::init()->getLogger()->addWarning(
+            'Request: '.
+            \GuzzleHttp\json_encode($request)
+        );
         return
             \GuzzleHttp\json_decode(
                 Proxy::init()->getHttpClient()->request(
                     Api::POST,
                     getenv('cms_api_url1') . self::API_PATH_ORDERS,
-                    [
-                        Api::FORM_PARAMS =>
-                            [
-                                Api::KEY => getenv('cms_api_key'),
-                                Api::CLIENT_ID => $unit->getClientId(),
-                                Api::DATE_START => $unit->getDateStart(),
-                                Api::DATE_END => $unit->getDateEnd(),
-                                Api::LIMIT_START => $unit->getLimitStart(),
-                                Api::LIMIT_END => $unit->getLimitEnd()
-                            ]
-                    ]
+                    $request
                 )->getBody()->getContents()
             );
     }
@@ -107,16 +111,4 @@ class Client
                 )->getBody()->getContents()
             );
     }
-    /*
-Нашу компанию заинтересовало Ваше резюме.
-Приглашаем Вас на интервью по адресу: Москва, 5-ый Верхний Михайловский проезд, 2 стр 1.
-Чт. 28 февраля 2019г.
-Для уточнения времени интервью свяжитесь со мной.
-
-С уважением,
-Ольга Шабанова
-Компания Последняя Миля
-+7 (920) 213-53-97
-o.shabanova@logsis.ru
-     * */
 }
