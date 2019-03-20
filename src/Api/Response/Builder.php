@@ -199,7 +199,6 @@ class Builder
             $delivTime2 = \DateTime::createFromFormat('H:i', $ord->delivery_time2);
         }
 
-//        Output::echo($order->getOrderId().' >> '. $order->getStatus()->getStatus().' >> '.$status->getStatus() . ' >> ' . ($order->getStatus()->getStatus() != $status->getStatus() ? "ZZ" : "") );
         $order
             ->setClient($client)
             ->setPimpayStatus($pimpayStatus)

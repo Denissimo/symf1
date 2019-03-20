@@ -48,7 +48,6 @@ class Process
                     ->setAddress($address)
                     ->setOrderBill($orderBill)
                     ->setOrderSettings($orderSettings);
-//                Output::echo($order->getOrderId().' >> '. $order->getStatus()->getStatus());
                 Proxy::init()->getEntityManager()->persist($currentOrder);
             } else {
                 $newDt = \DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date);
@@ -57,7 +56,6 @@ class Process
             }
 
         }
-//        Output::echo($lostId, 1);
         Proxy::init()->getEntityManager()->flush();
         $endUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($orders)->change_date);
         $endOrderId = (int)end($orders)->id;
