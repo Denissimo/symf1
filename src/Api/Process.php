@@ -33,7 +33,10 @@ class Process
     {
         $lostUpdateTime = new \DateTime();
         $lostId = end($orders)->id;
-        $firstUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', current($orders)->change_date);
+        $firstUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($orders)->change_date);
+            Proxy::init()->getLogger()->addWarning('Orders qty: ' . count($orders));
+            Proxy::init()->getLogger()->addWarning('Firest id: ' . \GuzzleHttp\json_encode(reset($orders)->id));
+            Proxy::init()->getLogger()->addWarning('firstUpdateTime: ' . \GuzzleHttp\json_encode($firstUpdateTime));
         foreach ($orders as $ord) {
             $order = (new Loader())->loadOrderByOid($ord->id);
             if (is_object($order)) {
@@ -56,14 +59,21 @@ class Process
             }
 
         }
-        Proxy::init()->getEntityManager()->flush();
+            Proxy::init()->getEntityManager()->flush();
         $endUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($orders)->change_date);
+            Proxy::init()->getLogger()->addWarning('Last ID: ' . \GuzzleHttp\json_encode(end($orders)->id));
+            Proxy::init()->getLogger()->addWarning('endUpdateTime: ' . \GuzzleHttp\json_encode($endUpdateTime));
         $endOrderId = (int)end($orders)->id;
         $finalUpdateTime = $endUpdateTime < $lostUpdateTime ? $endUpdateTime : $lostUpdateTime;
+            Proxy::init()->getLogger()->addWarning('lostId: ' . $lostId);
+            Proxy::init()->getLogger()->addWarning('lostUpdateTime: ' . \GuzzleHttp\json_encode($lostUpdateTime));
+            Proxy::init()->getLogger()->addWarning('finalUpdateTime: ' . \GuzzleHttp\json_encode($endUpdateTime));
         $finalOrderId = $endOrderId < $lostId ? $endOrderId : $lostId;
+        $useLastId = (int)($firstUpdateTime == $endUpdateTime && count($orders) > 1);
         return [
-            Api::UPDATE_TIME => $finalUpdateTime,
-            Api::LAST_ID => $finalOrderId
+            \Options::ORDERS_UPDATE => $finalUpdateTime,
+            \Options::ORDERS_LAST_ID => $finalOrderId,
+            \Options::ORDERS_USE_ID => $useLastId
         ];
     }
 

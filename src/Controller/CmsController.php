@@ -83,9 +83,6 @@ class CmsController extends BaseController implements Api
             )->getUnitlist();
         }
 
-        Proxy::init()->getLogger()->addWarning(
-            \GuzzleHttp\json_encode($unitList)
-        );
         $content = 'Orders loaded';
         try {
             $response = (new Client())->process($unitList);
@@ -160,21 +157,30 @@ class CmsController extends BaseController implements Api
     {
         $lastTime = (new Loader())->loadOption(\Options::ORDERS_UPDATE);
         $lastId = (new Loader())->loadOption(\Options::ORDERS_LAST_ID);
+        $useId = (new Loader())->loadOption(\Options::ORDERS_USE_ID);
+            Proxy::init()->getLogger()->addWarning('BiggestOrderId: '.(new Loader())->loadBiggestOldId());
         try {
             $response = (new Client())->sendOrdersUpdateRequest(
                 $lastTime->getOrdersUpdateLastDatetime(),
-                $lastId->getOrdersUpdateLastId(),
+                $useId->getValue() ? $lastId->getValue() : Api::ZERO,
+                (new Loader())->loadBiggestOldId(),
                 self::getRequest()
             );
+            Proxy::init()->getLogger()->addWarning(\GuzzleHttp\json_encode($response));
+
             (new Validator())->validateOrdersList($response);
-            if (isset($response[0]->status) && $response[0]->status == 400) {
+            if (isset($response->status) && $response->status == 400) {
                 $content = 'Error';
+                Proxy::init()->getLogger()->addWarning('Error: ' . $content);
             } else {
                 $options = (new Process())->processUpdate($response);
-                $lastTime->setOrdersUpdateLastDatetime($options[Api::UPDATE_TIME]);
-                $lastId->setOrdersUpdateLastId($options[Api::LAST_ID]);
+                Proxy::init()->getLogger()->addWarning('Options: '.\GuzzleHttp\json_encode($options));
+                $lastTime->setOrdersUpdateLastDatetime($options[\Options::ORDERS_UPDATE ]);
+                $lastId->setValue($options[\Options::ORDERS_LAST_ID]);
+                $useId->setValue($options[\Options::ORDERS_USE_ID]);
                 Proxy::init()->getEntityManager()->persist($lastTime);
                 Proxy::init()->getEntityManager()->persist($lastId);
+                Proxy::init()->getEntityManager()->persist($useId);
                 Proxy::init()->getEntityManager()->flush();
             }
         } catch (MalformedResponseException $e) {
