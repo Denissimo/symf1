@@ -33,6 +33,7 @@ class Process
     {
         $lostUpdateTime = new \DateTime();
         $lostId = end($orders)->id;
+        $firstUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', current($orders)->change_date);
         foreach ($orders as $ord) {
             $order = (new Loader())->loadOrderByOid($ord->id);
             if (is_object($order)) {
@@ -47,7 +48,6 @@ class Process
                     ->setAddress($address)
                     ->setOrderBill($orderBill)
                     ->setOrderSettings($orderSettings);
-
                 Proxy::init()->getEntityManager()->persist($currentOrder);
             } else {
                 $newDt = \DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date);
