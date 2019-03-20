@@ -20,6 +20,7 @@ class Options
     CONST
         ORDERS_UPDATE = 'orders_update_last_datetime',
         ORDERS_LAST_ID = 'orders_update_last_order_id',
+        ORDERS_USE_ID = 'orders_update_use_order_id',
         FORMAT = 'Y-m-d H:i:s'
     ;
     /**

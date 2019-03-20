@@ -158,8 +158,8 @@ class CmsController extends BaseController implements Api
      */
     public function loadOrdersUpdate()
     {
-        $lastTime = (new Loader())->loadLastUpdateTime();
-        $lastId = (new Loader())->loadLastOrderId();
+        $lastTime = (new Loader())->loadOption(\Options::ORDERS_UPDATE);
+        $lastId = (new Loader())->loadOption(\Options::ORDERS_LAST_ID);
         try {
             $response = (new Client())->sendOrdersUpdateRequest(
                 $lastTime->getOrdersUpdateLastDatetime(),
@@ -174,6 +174,7 @@ class CmsController extends BaseController implements Api
                 $lastTime->setOrdersUpdateLastDatetime($options[Api::UPDATE_TIME]);
                 $lastId->setOrdersUpdateLastId($options[Api::LAST_ID]);
                 Proxy::init()->getEntityManager()->persist($lastTime);
+                Proxy::init()->getEntityManager()->persist($lastId);
                 Proxy::init()->getEntityManager()->flush();
             }
         } catch (MalformedResponseException $e) {

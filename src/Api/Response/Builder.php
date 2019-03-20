@@ -199,7 +199,6 @@ class Builder
             $delivTime2 = \DateTime::createFromFormat('H:i', $ord->delivery_time2);
         }
 
-
         $order
             ->setClient($client)
             ->setPimpayStatus($pimpayStatus)
