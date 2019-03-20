@@ -22,8 +22,7 @@ class Client
      */
     public function process($units)
     {
-        foreach ($units as $unit)
-        {
+        foreach ($units as $unit) {
             $result [] = $this->sendLoadOrdersRequest($unit);
         }
 //        echo "<pre>"; var_dump($result); die;
@@ -88,7 +87,7 @@ class Client
      * @return mixed
      * @throws GuzzleHttp\Exception\GuzzleException
      */
-    public function sendOrdersUpdateRequest(\DateTime $lastOrdersUpdateTime, int $lastOrderId ,Request $get)
+    public function sendOrdersUpdateRequest(\DateTime $lastOrdersUpdateTime, int $lastOrderId, int $biggestId, Request $get)
     {
         return
             \GuzzleHttp\json_decode(
@@ -101,7 +100,8 @@ class Client
                                 Api::KEY => getenv('cms_api_key'),
                                 Api::LIMIT_END => $get->query->all()[Api::LIMIT_END] ?? Builder::LIMIT_UPDATE,
                                 Api::UPDATE_TIME => $lastOrdersUpdateTime->format(\Options::FORMAT),
-                                Api::LAST_ID => $lastOrderId
+                                Api::LAST_ID => $lastOrderId,
+                                Api::BIGGEST_ID => $biggestId
                             ]
                     ]
                 )->getBody()->getContents()
