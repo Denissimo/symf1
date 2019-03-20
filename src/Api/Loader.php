@@ -73,43 +73,21 @@ class Loader
         return $orders;
     }
 
-
     /**
      * @return \Options
      */
-    public function loadLastUpdateTime()
+    public function loadOption(string $name)
     {
-        /** @var \Options $lastUpdateTime */
-        $lastUpdateTime = $this->getRepository(\Options::class)
+        return $this->getRepository(\Options::class)
             ->matching(
                 Criteria::create()
                     ->where(
                         Criteria::expr()->eq(\Options::NAME,
-                            \Options::ORDERS_UPDATE
+                            $name
                         )
                     )
                     ->setMaxResults(1)
             )->current();
-        return $lastUpdateTime;
-    }
-
-    /**
-     * @return \Options
-     */
-    public function loadLastOrderId()
-    {
-        /** @var \Options $lastUpdateId */
-        $lastUpdateId = $this->getRepository(\Options::class)
-            ->matching(
-                Criteria::create()
-                    ->where(
-                        Criteria::expr()->eq(\Options::NAME,
-                            \Options::ORDERS_LAST_ID
-                        )
-                    )
-                    ->setMaxResults(1)
-            )->current();
-        return $lastUpdateId;
     }
 
     /**
