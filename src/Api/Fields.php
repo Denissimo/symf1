@@ -21,11 +21,13 @@ Interface Fields
         CLIENT_ID_FROM = 'client_id_from',
         CLIENT_ID_TO = 'client_id_to',
         LAST_ID = 'last_id',
+        BIGGEST_ID = 'biggest_id',
         LIMIT_START = 'limit_start',
         LIMIT_END = 'limit_end',
         UPDATE_TIME = 'update_time',
         INNER_N = 'inner_n',
         ORDER_ID = 'order_id',
+        ZERO = 0,
         ZORDER_ID = 'zorder_id';
 
     const

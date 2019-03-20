@@ -74,6 +74,7 @@ class Loader
     }
 
     /**
+     * @param string $name
      * @return \Options
      */
     public function loadOption(string $name)
@@ -88,6 +89,21 @@ class Loader
                     )
                     ->setMaxResults(1)
             )->current();
+    }
+
+    /**
+     * @return int
+     */
+    public function loadBiggestOldId()
+    {
+        /** @var \Orders $lastOrder */
+        $lastOrder = $this->getRepository(\Orders::class)
+            ->matching(
+                Criteria::create()
+                    ->orderBy([\Orders::ID => Criteria::DESC])
+                    ->setMaxResults(1)
+            )->current();
+        return $lastOrder->getOldId();
     }
 
     /**
