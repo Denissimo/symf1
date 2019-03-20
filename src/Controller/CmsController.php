@@ -70,12 +70,13 @@ class CmsController extends BaseController implements Api
             $orderStat = (new Loader())->loadClientsJoinOrders($get[Api::CLIENT_ID]);
             if (count($orderStat)) {
                 $unitList[] = (new Unit())->set($orderStat[0], $get);
+
             } else {
                 die('Все ордера загружены');
             }
         } else {
             $orderStat = (new Loader())->loadClientsJoinOrders();
-
+            Proxy::init()->getLogger()->addWarning('OrdsersStat: ' .\GuzzleHttp\json_encode($orderStat));
             /** @var Unit[] $unitList */
             $unitList = (new Builder())->set(
                 $orderStat,
@@ -85,15 +86,17 @@ class CmsController extends BaseController implements Api
 
         $content = 'Orders loaded';
         try {
+//            Proxy::init()->getLogger()->addWarning('UnitList: ' .\GuzzleHttp\json_encode($unitList));
             $response = (new Client())->process($unitList);
-//            Output::echo($unitList);
-//            Output::echo($response, true);
             (new Validator())->validateOrdersList($response);
 
             if (isset($response[0]->status) && $response[0]->status == 400) {
                 $content = 'Error';
             } else {
-                (new ResponseBuidser())->process($response);
+                $currentChangeDate = (new ResponseBuidser())->process($response);
+                $lastTime = (new Loader())->loadOption(\Options::ORDERS_UPDATE);
+                $this->compareOptionsLastUpdateTime($currentChangeDate, $lastTime);
+
             }
         } catch (MalformedResponseException $e) {
             $content = $e->getMessage();
@@ -106,6 +109,22 @@ class CmsController extends BaseController implements Api
         return (new Render())->render([
             Render::CONTENT => $content
         ]);
+    }
+
+    /**
+     * @param \DateTime $current
+     * @param \Options $lastTime
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    private  function compareOptionsLastUpdateTime(\DateTime $current, \Options $lastTime)
+    {
+        $lastCahndeTime = $lastTime->getOrdersUpdateLastDatetime();
+        if($current < $lastCahndeTime) {
+            $lastTime->setOrdersUpdateLastDatetime($current);
+            Proxy::init()->getEntityManager()->persist($lastTime);
+            Proxy::init()->getEntityManager()->flush();
+        }
     }
 
     /**
@@ -158,7 +177,7 @@ class CmsController extends BaseController implements Api
         $lastTime = (new Loader())->loadOption(\Options::ORDERS_UPDATE);
         $lastId = (new Loader())->loadOption(\Options::ORDERS_LAST_ID);
         $useId = (new Loader())->loadOption(\Options::ORDERS_USE_ID);
-            Proxy::init()->getLogger()->addWarning('BiggestOrderId: '.(new Loader())->loadBiggestOldId());
+        Proxy::init()->getLogger()->addWarning('BiggestOrderId: ' . (new Loader())->loadBiggestOldId());
         try {
             $response = (new Client())->sendOrdersUpdateRequest(
                 $lastTime->getOrdersUpdateLastDatetime(),
@@ -174,8 +193,8 @@ class CmsController extends BaseController implements Api
                 Proxy::init()->getLogger()->addWarning('Error: ' . $content);
             } else {
                 $options = (new Process())->processUpdate($response);
-                Proxy::init()->getLogger()->addWarning('Options: '.\GuzzleHttp\json_encode($options));
-                $lastTime->setOrdersUpdateLastDatetime($options[\Options::ORDERS_UPDATE ]);
+                Proxy::init()->getLogger()->addWarning('Options: ' . \GuzzleHttp\json_encode($options));
+                $lastTime->setOrdersUpdateLastDatetime($options[\Options::ORDERS_UPDATE]);
                 $lastId->setValue($options[\Options::ORDERS_LAST_ID]);
                 $useId->setValue($options[\Options::ORDERS_USE_ID]);
                 Proxy::init()->getEntityManager()->persist($lastTime);

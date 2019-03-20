@@ -113,13 +113,6 @@ class Loader
      */
     public function loadClientsJoinOrders($clientId = null)
     {
-        /*
-                $query = 'SELECT c.client_id, o.order_id FROM client_settings c
-                              LEFT JOIN orders o ON c.client_id = o.client_id WHERE o.id IS NULL';
-        */
-        // [id, client_id, qty (orders), orders_qty (orders_count), last_id
-        //LEFT JOIN (SELECT oc.client_id, MAX(oc.orders_qty) AS orders_qty FROM orders_count oc GROUP BY oc.client_id) q ON c.client_id = q.client_id
-
         $where = isset($clientId) ? ' AND client_id = ' . $clientId : null;
         $query = 'SELECT c.id, c.client_id, o.qty, q.orders_qty, q.last_id
   FROM 
@@ -130,7 +123,11 @@ class Loader
    LEFT JOIN (SELECT oc.client_id, oc.orders_qty, oc.last_id FROM orders_count oc) q ON c.client_id = q.client_id
     WHERE o.qty < q.orders_qty OR (o.qty IS NULL AND (q.orders_qty > 0 OR q.orders_qty IS NULL))
  LIMIT ' . Api::LIMIT_CLIENT_ORDERS_LOAD;
-//var_dump($query); die;
+
+        Proxy::init()->getLogger()->addWarning(
+            'loadClientsJoinOrders SQL : '.
+            \GuzzleHttp\json_encode($query)
+        );
         return (array)Proxy::init()->getConnection()->query($query)->fetchAll();
     }
 
