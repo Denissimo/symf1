@@ -93,6 +93,14 @@ class Client
      */
     public function sendOrdersUpdateRequest(\DateTime $lastOrdersUpdateTime, int $lastOrderId, int $biggestId, Request $get)
     {
+        $request = [
+            Api::KEY => getenv('cms_api_key'),
+            Api::LIMIT_END => $get->query->all()[Api::LIMIT_END] ?? Builder::LIMIT_UPDATE,
+            Api::UPDATE_TIME => $lastOrdersUpdateTime->format(\Options::FORMAT),
+            Api::LAST_ID => $lastOrderId,
+            Api::BIGGEST_ID => $biggestId
+        ];
+        Proxy::init()->getLogger()->addWarning('update Request: ' . \GuzzleHttp\json_encode($request));
         return
             \GuzzleHttp\json_decode(
                 Proxy::init()->getHttpClient()->request(
@@ -100,13 +108,7 @@ class Client
                     getenv('cms_api_url1') . self::API_PATH_ORDERS,
                     [
                         Api::FORM_PARAMS =>
-                            [
-                                Api::KEY => getenv('cms_api_key'),
-                                Api::LIMIT_END => $get->query->all()[Api::LIMIT_END] ?? Builder::LIMIT_UPDATE,
-                                Api::UPDATE_TIME => $lastOrdersUpdateTime->format(\Options::FORMAT),
-                                Api::LAST_ID => $lastOrderId,
-                                Api::BIGGEST_ID => $biggestId
-                            ]
+                            $request
                     ]
                 )->getBody()->getContents()
             );
