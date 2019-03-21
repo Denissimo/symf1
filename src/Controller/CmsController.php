@@ -215,6 +215,8 @@ class CmsController extends BaseController implements Api
         ]);
     }
 
+
+
     /**
      * Метод с авторизацией
      *
