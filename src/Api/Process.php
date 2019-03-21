@@ -39,7 +39,9 @@ class Process
             Proxy::init()->getLogger()->addWarning('firstUpdateTime: ' . \GuzzleHttp\json_encode($firstUpdateTime));
         foreach ($orders as $ord) {
             $order = (new Loader())->loadOrderByOid($ord->id);
+
             if (is_object($order)) {
+
                 $goods = (new Loader())->loadGoodsByOrder($order);
                 isset($ord->goods) ? (new Checker())->goodsCompare($ord->goods, $goods) : null;
                 $address = (new Builder())->buildAddress($order->getAddress(), $ord);
