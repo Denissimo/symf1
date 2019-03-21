@@ -234,7 +234,7 @@ class Builder
             ->setChweightflag($ord->chweightflag ?? null)
             ->setCourCid($ord->cour_cid ?? null)
             ->setCourierId($ord->courier_id ?? null)
-            ->setDateAdd($ord->date_add ?? null)
+            ->setDateAdd(isset($ord->date_add) ? \DateTime::createFromFormat('Y-m-d', $ord->date_add) : null)
             ->setDeliveryDate(isset($ord->delivery_date) ? \DateTime::createFromFormat('Y-m-d', $ord->delivery_date) : null)
             ->setDeliveryTime($ord->delivery_time)
             ->setDeliveryTime1($delivTime1)
