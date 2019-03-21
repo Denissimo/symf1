@@ -124,10 +124,6 @@ class Loader
     WHERE o.qty < q.orders_qty OR (o.qty IS NULL AND (q.orders_qty > 0 OR q.orders_qty IS NULL))
  LIMIT ' . Api::LIMIT_CLIENT_ORDERS_LOAD;
 
-        Proxy::init()->getLogger()->addWarning(
-            'loadClientsJoinOrders SQL : '.
-            \GuzzleHttp\json_encode($query)
-        );
         return (array)Proxy::init()->getConnection()->query($query)->fetchAll();
     }
 

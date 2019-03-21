@@ -188,7 +188,6 @@ class CmsController extends BaseController implements Api
                 (new Loader())->loadBiggestOldId(),
                 self::getRequest()
             );
-            Proxy::init()->getLogger()->addWarning(\GuzzleHttp\json_encode($response));
 
             (new Validator())->validateOrdersList($response);
             if (isset($response->status) && $response->status == 400) {
@@ -196,7 +195,6 @@ class CmsController extends BaseController implements Api
                 Proxy::init()->getLogger()->addWarning('Error: ' . $content);
             } else {
                 $options = (new Process())->processUpdate($response);
-                Proxy::init()->getLogger()->addWarning('Options: ' . \GuzzleHttp\json_encode($options));
                 $lastTime->setOrdersUpdateLastDatetime($options[\Options::ORDERS_UPDATE]);
                 $lastId->setValue($options[\Options::ORDERS_LAST_ID]);
                 $useId->setValue($options[\Options::ORDERS_USE_ID]);
