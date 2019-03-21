@@ -42,4 +42,7 @@ Interface Fields
     const
         LIMIT_CLIENT_ORDERS_LOAD = 10,
         LIMIT_DAYS_API_V3 = 3;
+
+    const
+        MAX_LOAD_UPDATE_INTERVAL = 'PT12H';
 }

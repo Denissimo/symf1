@@ -114,13 +114,17 @@ class CmsController extends BaseController implements Api
     /**
      * @param \DateTime $current
      * @param \Options $lastTime
+     * @throws \Exception
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     private  function compareOptionsLastUpdateTime(\DateTime $current, \Options $lastTime)
     {
-        $lastCahndeTime = $lastTime->getOrdersUpdateLastDatetime();
-        if($current < $lastCahndeTime) {
+//        $lastChangeTime = $lastTime->getOrdersUpdateLastDatetime();
+        $checkTime = (new \DateTime())->sub(
+            new \DateInterval(Api::MAX_LOAD_UPDATE_INTERVAL)
+        );
+        if($current > $checkTime) {
             $lastTime->setOrdersUpdateLastDatetime($current);
             Proxy::init()->getEntityManager()->persist($lastTime);
             Proxy::init()->getEntityManager()->flush();
