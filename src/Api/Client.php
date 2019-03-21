@@ -100,6 +100,36 @@ class Client
             Api::LAST_ID => $lastOrderId,
             Api::BIGGEST_ID => $biggestId
         ];
+
+        
+        $andId = '';
+        if( $request['last_id'])
+        {
+            $last_id = (int) $request['last_id'];
+            $andId = ' AND o.id >= ' . $last_id;
+        }
+
+        $andIdBiggest = '';
+        if( $request['biggest_id'])
+        {
+            $biggest_id = (int) $request['biggest_id'];
+            $andIdBiggest = ' AND o.id <= ' . $biggest_id;
+        }
+
+        if( $request['update_time']) {
+            $sql = 'SELECT o.*, o.status+0 as sts, type+0 as tp FROM ORDERS as o 
+	LEFT JOIN CLIENT_SETTINGS cs ON o.client_id = cs.client_id
+	WHERE cs.id IS NOT NULL AND
+	o.client_id NOT IN (2, 238, 1356) AND 
+o.change_date >= "' . $request['update_time'] . '" ' . $andId . $andIdBiggest . ' ORDER BY o.change_date ASC, o.id  ASC
+  LIMIT ' . $request['limit_end'];
+        }
+        Proxy::init()->getLogger()->addWarning('update SQL: ' . $sql);
+
+
+
+
+
         Proxy::init()->getLogger()->addWarning('update Request: ' . \GuzzleHttp\json_encode($request));
         return
             \GuzzleHttp\json_decode(
