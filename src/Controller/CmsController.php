@@ -76,7 +76,6 @@ class CmsController extends BaseController implements Api
             }
         } else {
             $orderStat = (new Loader())->loadClientsJoinOrders();
-            Proxy::init()->getLogger()->addWarning('OrdsersStat: ' .\GuzzleHttp\json_encode($orderStat));
             /** @var Unit[] $unitList */
             $unitList = (new Builder())->set(
                 $orderStat,
