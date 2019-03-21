@@ -101,7 +101,7 @@ class Client
             Api::BIGGEST_ID => $biggestId
         ];
 
-        
+
         $andId = '';
         if( $request['last_id'])
         {
