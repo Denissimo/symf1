@@ -2,6 +2,7 @@
 
 namespace App\Api\Response;
 
+use App\Api\Process;
 use App\Api\Structure as Fields;
 use App\Proxy;
 use Doctrine\Common\Collections\Criteria;
@@ -95,6 +96,11 @@ class Builder
                     ->setOrderBill($orderBill)
                     ->setOrderSettings($orderSettings);
 
+                (new Process())->saveHistory($order,
+                    \OrdersHistoryTypesModel::IMPORT_ID,
+                    'order',
+                    \GuzzleHttp\json_encode($ord)
+                );
                 Proxy::init()->getEntityManager()->persist($order);
                 isset($ord->goods) ? $this->saveGoods((array)$ord->goods, $order) : null;
             }
