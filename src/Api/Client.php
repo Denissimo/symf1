@@ -46,10 +46,6 @@ class Client
                     Api::LIMIT_END => $unit->getLimitEnd()
                 ]
         ];
-        Proxy::init()->getLogger()->addWarning(
-            'Request: '.
-            \GuzzleHttp\json_encode($request)
-        );
         return
             \GuzzleHttp\json_decode(
                 Proxy::init()->getHttpClient()->request(
@@ -127,10 +123,9 @@ o.change_date >= "' . $request['update_time'] . '" ' . $andId . $andIdBiggest . 
         Proxy::init()->getLogger()->addWarning('update SQL: ' . $sql);
 
 
-
-
-
         Proxy::init()->getLogger()->addWarning('update Request: ' . \GuzzleHttp\json_encode($request));
+
+
         return
             \GuzzleHttp\json_decode(
                 Proxy::init()->getHttpClient()->request(
