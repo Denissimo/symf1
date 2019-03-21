@@ -205,6 +205,9 @@ class CmsController extends BaseController implements Api
             }
         } catch (MalformedResponseException $e) {
             $message = $e->getMessage();
+            Proxy::init()->getLogger()->addWarning('MalformedResponseException: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            Proxy::init()->getLogger()->addWarning('Exception: ' . $e->getMessage());
         }
         Proxy::init()->getConnection()->close();
         return (new Render())->render([
