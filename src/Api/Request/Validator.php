@@ -2,6 +2,7 @@
 
 namespace App\Api\Request;
 
+use App\Exceptions\MalformedApiKeyException;
 use App\Proxy;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Exceptions\MalformedRequestException;
@@ -31,9 +32,9 @@ class Validator
     }
 
     /**
-     * @param $object
-     * @param $errorMessage
-     */
+ * @param $object
+ * @param $errorMessage
+ */
     public function validateNotBlank($object, $errorMessage)
     {
         Proxy::init()->getValidator()->validateType(
@@ -43,6 +44,23 @@ class Validator
             ],
             $errorMessage,
             MalformedRequestException::class
+        );
+    }
+
+
+    /**
+     * @param $object
+     * @param $errorMessage
+     */
+    public function validateApiKey($object, $errorMessage)
+    {
+        Proxy::init()->getValidator()->validateType(
+            [self::RESPONSE => $object],
+            [
+                self::RESPONSE => new Assert\NotBlank()
+            ],
+            $errorMessage,
+            MalformedApiKeyException::class
         );
     }
 
