@@ -14,10 +14,12 @@ class Checker
     /**
      * @param \stdClass[] $stdGoods
      * @param \Goods[] $goods
+     * @param \Orders $order
      * @return null
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function goodsCompare($stdGoods, $goods)
+    public function goodsCompare($stdGoods, $goods, $order)
     {
         /** @var \Goods[] $goodsArray */
         $goodsArray = [];
@@ -31,7 +33,9 @@ class Checker
                 $currentGoods =(new Comparator($stdGoodsCurrent, $goodsArray[$val->id]))->getGoods();
                 unset($goodsArray[$val->id]);
             } else {
+
                 $currentGoods = (new Builder())->buildGoods(new \Goods(), $stdGoodsCurrent);
+                $currentGoods->setOrder($order);
             }
             Proxy::init()->getEntityManager()->persist($currentGoods);
         }
