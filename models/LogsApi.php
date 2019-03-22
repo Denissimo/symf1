@@ -1,7 +1,6 @@
 <?php
 
 
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,6 +11,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class LogsApi
 {
+    const
+        IP = 'ip',
+        CLIENT_ID = 'client_id',
+        USER_ID = 'user_id',
+        REQUEST_TYPE = 'request_type',
+        PARAM = 'param',
+        VALUE = 'value',
+        RESULT = 'result',
+        REQUEST = 'request',
+        RESPONSE = 'response';
+
     /**
      * @var int
      *
@@ -34,6 +44,21 @@ class LogsApi
      * @ORM\Column(name="user_id", type="integer", nullable=true, options={"comment"="id юзера"})
      */
     private $userId;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="param", type="string", length=255, nullable=true})
+     */
+    private $param;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="value", type="string", length=255, nullable=true})
+     */
+    private $value;
+
 
     /**
      * @var string|null
@@ -86,5 +111,202 @@ class LogsApi
      */
     private $result;
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return LogsApi
+     */
+    public function setId(int $id): LogsApi
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIp(): ?string
+    {
+        return $this->ip;
+    }
+
+    /**
+     * @param string|null $ip
+     * @return LogsApi
+     */
+    public function setIp(?string $ip): LogsApi
+    {
+        $this->ip = $ip;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getUserId(): ?int
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param int|null $userId
+     * @return LogsApi
+     */
+    public function setUserId(?int $userId): LogsApi
+    {
+        $this->userId = $userId;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getParam(): ?string
+    {
+        return $this->param;
+    }
+
+    /**
+     * @param string|null $param
+     * @return LogsApi
+     */
+    public function setParam(?string $param): LogsApi
+    {
+        $this->param = $param;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getValue(): ?string
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param string|null $value
+     * @return LogsApi
+     */
+    public function setValue(?string $value): LogsApi
+    {
+        $this->value = $value;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRequest(): ?string
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param string|null $request
+     * @return LogsApi
+     */
+    public function setRequest(?string $request): LogsApi
+    {
+        $this->request = $request;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getResponse(): ?string
+    {
+        return $this->response;
+    }
+
+    /**
+     * @param string|null $response
+     * @return LogsApi
+     */
+    public function setResponse(?string $response): LogsApi
+    {
+        $this->response = $response;
+        return $this;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getDatetime(): DateTime
+    {
+        return $this->datetime;
+    }
+
+    /**
+     * @param DateTime $datetime
+     * @return LogsApi
+     */
+    public function setDatetime(DateTime $datetime): LogsApi
+    {
+        $this->datetime = $datetime;
+        return $this;
+    }
+
+    /**
+     * @return ClientSettings
+     */
+    public function getClient(): ClientSettings
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param ClientSettings $client
+     * @return LogsApi
+     */
+    public function setClient(ClientSettings $client): LogsApi
+    {
+        $this->client = $client;
+        return $this;
+    }
+
+    /**
+     * @return LogTypeModel
+     */
+    public function getRequestType(): LogTypeModel
+    {
+        return $this->requestType;
+    }
+
+    /**
+     * @param LogTypeModel $requestType
+     * @return LogsApi
+     */
+    public function setRequestType(LogTypeModel $requestType): LogsApi
+    {
+        $this->requestType = $requestType;
+        return $this;
+    }
+
+    /**
+     * @return LogResultModel
+     */
+    public function getResult(): LogResultModel
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param LogResultModel $result
+     * @return LogsApi
+     */
+    public function setResult(LogResultModel $result): LogsApi
+    {
+        $this->result = $result;
+        return $this;
+    }
 
 }

@@ -13,6 +13,9 @@ use App\Cfg\Config;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Symfony\Component\Security\Core\Authentication;
+use Twig\Environment as TwigEnvironment;
+use Twig\Loader\FilesystemLoader as TwigFilesystemLoader;
+//use MySQLHandler\MySQLHandler;
 
 class Proxy
 {
@@ -107,16 +110,16 @@ class Proxy
 
     public function initTwig()
     {
-        self::$twigEnvironment = new \Twig_Environment(
-            new \Twig_Loader_Filesystem(__DIR__ . "/.." . Config::getTwigPath()),
+        self::$twigEnvironment = new TwigEnvironment(
+            new TwigFilesystemLoader(__DIR__ . "/.." . Config::getTwigPath()),
             Config::getTwigOptions()
         );
     }
 
     /**
-     * @return \Twig_Environment
+     * @return TwigEnvironment
      */
-    public function getTwigEnvironment(): \Twig_Environment
+    public function getTwigEnvironment(): TwigEnvironment
     {
         return self::$twigEnvironment;
     }
@@ -178,6 +181,7 @@ class Proxy
                 $level ?? Logger::WARNING
             )
         );
+
         return $this;
     }
 
