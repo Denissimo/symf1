@@ -120,13 +120,13 @@ class CmsController extends BaseController implements Api
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private  function compareOptionsLastUpdateTime(\DateTime $current, \Options $lastTime)
+    private function compareOptionsLastUpdateTime(\DateTime $current, \Options $lastTime)
     {
 //        $lastChangeTime = $lastTime->getOrdersUpdateLastDatetime();
         $checkTime = (new \DateTime())->sub(
             new \DateInterval(Api::MAX_LOAD_UPDATE_INTERVAL)
         );
-        if($current > $checkTime) {
+        if ($current > $checkTime) {
             $lastTime->setOrdersUpdateLastDatetime($current);
             Proxy::init()->getEntityManager()->persist($lastTime);
             Proxy::init()->getEntityManager()->flush();
@@ -322,7 +322,7 @@ class CmsController extends BaseController implements Api
 
     /**
      *
-     * @Route("/api/v1/getStatus")
+     * @Route("/api/v1/getStatus", methods={"GET"})
      *
      * @return HttpResponse
      * @throws \Twig\Error\LoaderError
@@ -376,7 +376,7 @@ class CmsController extends BaseController implements Api
 
     /**
      *
-     * @Route("/api/v1/getZStatus")
+     * @Route("/api/v1/getZStatus", methods={"GET"})
      *
      * @return HttpResponse
      * @throws \Twig\Error\LoaderError
@@ -408,6 +408,40 @@ class CmsController extends BaseController implements Api
 
             $order = \Zorders::findOrFail($criteria)->first();
             return $this->success(new ZOrder($order));
+        } catch (\Exception $e) {
+            return $this->error($e);
+        }
+    }
+
+    /**
+     * @Route("/api/v1/confirmOrder", methods={"POST"})
+     *
+     */
+    public function confirmOrder(){
+        try{
+            $innerId = self::getRequest()->get(Api::INNER_N, 0);
+            $orderId = self::getRequest()->get(Api::ORDER_ID, 0);
+
+            // если нет ни одно или переданны оба значения
+            // мы принимаем только одно значение
+            if ((!$innerId && !$orderId) || ($innerId && $orderId)) {
+                throw new \Exception(sprintf("Не заполнено одно из полей %s или %s", Api::INNER_N, Api::ORDER_ID), 402);
+            }
+
+            $client = $this->getClientSettings();
+
+            $criteria = Criteria::create()
+                ->where(Criteria::expr()->eq(\Orders::CLIENT, $client));
+
+            if (!empty($innerId)) {
+                $criteria->andWhere(Criteria::expr()->eq(\Orders::INNER_N, $innerId));
+            } else {
+                $criteria->andWhere(Criteria::expr()->eq(\Orders::ORDER_ID, $orderId));
+            }
+
+            $order = \Orders::findOrFail($criteria)->first();
+
+            dd('stop', $innerId, $orderId);
         } catch (\Exception $e) {
             return $this->error($e);
         }
