@@ -55,6 +55,12 @@ class Orders extends Model
     /**
      * @var \DateTime|null
      *
+     * @ORM\Column(name="updated", type="datetime", nullable=true, options={"comment"="Дата изменения"})
+     */
+    private $updated;
+    /**
+     * @var \DateTime|null
+     *
      * @ORM\Column(name="change_date", type="datetime", nullable=true, options={"comment"="Дата изменения"})
      */
     private $changeDate;
@@ -593,6 +599,25 @@ class Orders extends Model
         $this->dateAdd = $dateAdd;
         return $this;
     }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getUpdated(): ?DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param DateTime|null $updated
+     * @return Orders
+     */
+    public function setUpdated(?DateTime $updated): Orders
+    {
+        $this->updated = $updated;
+        return $this;
+    }
+
 
     /**
      * @return DateTime|null
