@@ -185,42 +185,6 @@ class Loader
     }
 
     /**
-     * заказ по inner_n
-     *
-     * @param $inner
-     * @param \ClientSettings $client
-     * @return \Orders
-     */
-    public function loadOrderInner($inner, \ClientSettings $client)
-    {
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq(\Orders::CLIENT, $client))
-            ->andWhere(Criteria::expr()->eq(\Orders::INNER_N, $inner));
-
-        return $this->getRepository(\Orders::class)
-            ->matching($criteria)
-            ->first();
-    }
-
-    /**
-     * заказ по order_id
-     *
-     * @param $orderId
-     * @param \ClientSettings $client
-     * @return \Orders
-     */
-    public function loadOrderId($orderId, \ClientSettings $client)
-    {
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq(\Orders::CLIENT, $client))
-            ->andWhere(Criteria::expr()->eq(\Orders::ORDER_ID, $orderId));
-
-        return $this->getRepository(\Orders::class)
-            ->matching($criteria)
-            ->first();
-    }
-
-    /**
      * @param $orderId
      * @return \Porders
      */
@@ -232,7 +196,6 @@ class Loader
             )
             ->first();
     }
-
 
     /**
      * @return array|\Marks[]
@@ -250,42 +213,6 @@ class Loader
     {
         return $this->getRepository(\Marks::class)
             ->find($id);
-    }
-
-    /**
-     * Zorders по inner_n
-     *
-     * @param $inner
-     * @param \ClientSettings $client
-     * @return \Zorders
-     */
-    public function loadZOrderInner($inner, \ClientSettings $client)
-    {
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq(\Zorders::CLIENT, $client))
-            ->andWhere(Criteria::expr()->eq(\Zorders::INNER, $inner));
-
-        return $this->getRepository(\Zorders::class)
-            ->matching($criteria)
-            ->first();
-    }
-
-    /**
-     * Zorders по order_id
-     *
-     * @param $orderId
-     * @param \ClientSettings $client
-     * @return \Zorders
-     */
-    public function loadZOrderId($orderId, \ClientSettings $client)
-    {
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq(\Zorders::CLIENT, $client))
-            ->andWhere(Criteria::expr()->eq(\Zorders::ID, $orderId));
-
-        return $this->getRepository(\Zorders::class)
-            ->matching($criteria)
-            ->first();
     }
 
 }
