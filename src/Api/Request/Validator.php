@@ -5,6 +5,7 @@ namespace App\Api\Request;
 use App\Exceptions\InactiveCliendException;
 use App\Exceptions\MalformedApiKeyException;
 use App\Proxy;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Exceptions\MalformedRequestException;
 use App\Api\Fields as Api;
@@ -13,7 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 class Validator
 {
     const
-        DATA = 'data';
+        DATA = 'data',
+        RESPONSE = 'response';
 
     /**
      * @param Request $Request
@@ -85,7 +87,7 @@ class Validator
         Proxy::init()->getValidator()->validate(
             $diff,
             new Assert\LessThan($days),
-            'Date interval over '. $days . ' days',
+            'Date interval over ' . $days . ' days',
             MalformedRequestException::class
         );
     }
@@ -96,20 +98,38 @@ class Validator
     public function validateCreateOrder(Request $Request)
     {
         $requiredFields = [
-            Api::MO_PUNKT_ID ,
-            Api::CITY,
             Api::ADDR,
             Api::GOODS,
             Api::NP,
             Api::PRICE_CLIENT,
             Api::OS
         ];
+        $post = $Request->request->all();
         Proxy::init()->getValidator()->validateRequired(
-            $Request->request->all(),
+            $post,
             $requiredFields,
             'Fields ' . implode(', ', $requiredFields) . ' are REQUIRED !!!',
             MalformedRequestException::class
         );
+        if (empty($post[Api::MO_PUNKT_ID]) && empty($post[Api::CITY])) {
+            throw new BadRequestHttpException(sprintf("Не заполнено одно из полей %s или %s", Api::MO_PUNKT_ID, Api::CITY), null, 402);
+        }
+        // вычесляем сумму за все goods
+        $goodsTotal = 0;
+        foreach ($post[Api::GOODS] as $key => $good) {
+            if (!$good[Api::COUNT] || empty($good[Api::COUNT])) {
+                throw new BadRequestHttpException("Goods[$key] count error", null, 402);
+            }
+            $goodsTotal += $good[Api::COUNT] * $good[Api::PRICE];
+        }
+        // проверяем валидность прайса
+        if (intval($post[Api::NP]) === 1) {
+            $goodsTotal += $post[Api::PRICE_CLIENT_DELIVERY];
+            if (floatval($goodsTotal) !== floatval($post[Api::PRICE_CLIENT])) {
+                throw new BadRequestHttpException("price_client != total summ goods $goodsTotal", null, 402);
+            }
+        }
+
     }
 
 }

@@ -213,6 +213,7 @@ class CmsController extends BaseController implements Api
      */
     private function loadOrdersUpdate(string $class)
     {
+
         $lastTime = (new Loader())->loadOption(\Options::fields()[$class][\Options::UPDATE]);
         $lastId = (new Loader())->loadOption(\Options::fields()[$class][\Options::LAST_ID]);
         $useId = (new Loader())->loadOption(\Options::fields()[$class][\Options::USE_ID]);

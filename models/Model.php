@@ -76,8 +76,13 @@ abstract class Model
     static public function findOrFail($query)
     {
         $result = static::find($query);
+<<<<<<< HEAD
         if (!$result || ($result instanceof \Doctrine\Common\Collections\Collection && !$result->count())) {
             throw new \App\Exceptions\NotFoundRecord('Not found', 404);
+=======
+        if (!$result || !$result->count()) {
+            throw new Exception('Запись не найдена', 403);
+>>>>>>> step 3
         }
         return $result;
     }

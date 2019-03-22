@@ -35,7 +35,10 @@ Interface Fields
         GOODS = 'goods',
         NP = 'np',
         PRICE_CLIENT = 'price_client',
-        OS = 'os';
+        OS = 'os',
+        COUNT = 'count',
+        PRICE = 'price',
+        PRICE_CLIENT_DELIVERY = 'price_client_delivery';
 
     const
         FORM_PARAMS = 'form_params',
