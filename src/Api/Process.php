@@ -41,7 +41,7 @@ class Process
             if (is_object($order)) {
                 $oid = $order->getId();
                 $goods = (new Loader())->loadGoodsByOrder($order);
-                isset($ord->goods) ? (new Checker())->goodsCompare($ord->goods, $goods) : null;
+                isset($ord->goods) ? (new Checker())->goodsCompare($ord->goods, $goods, $order) : null;
                 $address = (new Builder())->buildAddress($order->getAddress(), $ord);
                 $orderBill = (new Builder())->buildOrderBill($order->getOrderBill(), $ord);
                 $orderSettings = (new Builder())->buildOrderSettings($order->getOrderSettings(), $ord);

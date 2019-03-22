@@ -102,6 +102,8 @@ class Builder
                     \GuzzleHttp\json_encode($ord)
                 );
                 Proxy::init()->getEntityManager()->persist($order);
+                Output::echo('saveOrders');
+                Output::echo($order->getId(), 1);
                 isset($ord->goods) ? $this->saveGoods((array)$ord->goods, $order) : null;
             }
         }

@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\User\User;
 use App\Cfg\Config;
 use Doctrine\Common\Collections\Criteria;
 use GuzzleHttp\Client;
-
+use App\Api\Loader;
 
 class TestController extends BaseController
 {
@@ -133,20 +133,20 @@ class TestController extends BaseController
     /**
      * @Route("/clset")
      * @return Response
-     * @throws \Doctrine\DBAL\DBALException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function clset()
     {
+        $order = (new Loader())->loadOrderByOid(1);
         /** @var \ClientSettings $cs */
         $cs = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)->find(3);
 
         /** @var \Orders $ord */
         $ord = Proxy::init()->getEntityManager()->getRepository(\Orders::class)->find(1);
 //        echo '<pre>'; var_dump($res); die();
-        $data[Render::CONTENT] = \GuzzleHttp\json_encode($cs->getOrders()) . ' >>> ' . \GuzzleHttp\json_encode($ord->getClient()->getId());
+        $data[Render::CONTENT] = is_object($order). ' >> '; // . \GuzzleHttp\json_encode($order->getOldId());
         return (new Render())->render($data, 'test.html.twig');
     }
 
