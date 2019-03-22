@@ -116,7 +116,7 @@ class Loader
         $where = isset($clientId) ? ' AND client_id = ' . $clientId : null;
         $query = 'SELECT c.id, c.client_id, o.qty, q.orders_qty, q.last_id
   FROM 
-  (SELECT * FROM client_settings WHERE active = 1 ' . $where . ' AND client_id NOT IN (2, 238, 1356) ORDER BY client_id) c 
+  (SELECT * FROM client_settings WHERE active = 1 ' . $where . ' AND client_id NOT IN (1356) ORDER BY client_id) c 
    LEFT JOIN 
   (SELECT o1.client_id, COUNT(o1.id) AS qty  FROM orders o1 GROUP BY o1.client_id) o 
   ON c.id = o.client_id 

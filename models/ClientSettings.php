@@ -17,8 +17,6 @@ class ClientSettings
         API_KEY = 'apikey'
         ;
 
-    public static $test_clients = [2, 238, 1356];
-
     /**
      * @var int
      *

@@ -78,7 +78,7 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function saveOrders(array $orders)
+    public function saveOrders(array $orders)
     {
         $duplicates = (array)$this->checkDuplicateOrders($orders);
         $currentChangeDate = new \DateTime();
