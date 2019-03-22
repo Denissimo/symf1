@@ -61,10 +61,11 @@ class Process
                     \GuzzleHttp\json_encode($ord)
                 );
             } else {
+                (new Builder())->saveOrders([$ord]);
                 $oid = '-';
-                $newDt = \DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date);
-                $lostUpdateTime = $newDt < $lostUpdateTime ? $newDt : $lostUpdateTime;
-                $lostId = (int)$ord->id;
+//                $newDt = \DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date);
+//                $lostUpdateTime = $newDt < $lostUpdateTime ? $newDt : $lostUpdateTime;
+//                $lostId = (int)$ord->id;
             }
             Proxy::init()->getLogger()->addWarning($oid. ' >> ' . $ord->id. ' >> ' . $ord->change_date);
 
@@ -78,7 +79,8 @@ class Process
 //            Proxy::init()->getLogger()->addWarning('lostId: ' . $lostId);
 //            Proxy::init()->getLogger()->addWarning('lostUpdateTime: ' . \GuzzleHttp\json_encode($lostUpdateTime));
             Proxy::init()->getLogger()->addWarning('finalUpdateTime: ' . \GuzzleHttp\json_encode($endUpdateTime));
-        $finalOrderId = $endOrderId < $lostId ? $endOrderId : $lostId;
+//        $finalOrderId = $endOrderId < $lostId ? $endOrderId : $lostId;
+        $finalOrderId = $endOrderId;
         $useLastId = (int)($firstUpdateTime == $endUpdateTime && count($orders) > 1);
         return [
             \Options::ORDERS_UPDATE => $finalUpdateTime,

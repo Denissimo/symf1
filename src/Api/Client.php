@@ -116,7 +116,7 @@ class Client
             $sql = 'SELECT o.*, o.status+0 as sts, type+0 as tp FROM ORDERS as o 
 	LEFT JOIN CLIENT_SETTINGS cs ON o.client_id = cs.client_id
 	WHERE cs.id IS NOT NULL AND
-	o.client_id NOT IN (2, 238, 1356) AND 
+	o.client_id NOT IN (1356) AND 
 o.change_date >= "' . $request['update_time'] . '" ' . $andId . $andIdBiggest . ' ORDER BY o.change_date ASC, o.id  ASC
   LIMIT ' . $request['limit_end'];
         }

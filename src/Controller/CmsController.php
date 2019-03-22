@@ -33,11 +33,11 @@ class CmsController extends BaseController implements Api
 
     /**
      * @Route("/cmsapi/data1")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return HttpResponse
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function data1()
     {
@@ -133,13 +133,14 @@ class CmsController extends BaseController implements Api
 
     /**
      * @Route("/cmsapi/ordersqty")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return HttpResponse
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function loadOrdersQty()
     {
@@ -217,17 +218,14 @@ class CmsController extends BaseController implements Api
     }
 
 
-
     /**
      * Метод с авторизацией
      *
      * @Route("/is_auth")
-     * @Security("has_role('ROLE_ADMIN')")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @return HttpResponse
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function isAuthMethod()
     {
@@ -241,11 +239,10 @@ class CmsController extends BaseController implements Api
      * метод без авторизации
      *
      * @Route("/is_not_auth")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @return HttpResponse
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function isNotAuthMethod()
     {
@@ -319,12 +316,13 @@ class CmsController extends BaseController implements Api
     }
 
     /**
+     *
      * @Route("/api/v1/getStatus")
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @return HttpResponse
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getStatus()
     {
@@ -372,12 +370,13 @@ class CmsController extends BaseController implements Api
     }
 
     /**
+     *
      * @Route("/api/v1/getZStatus")
      *
      * @return HttpResponse
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getZStatus()
     {
