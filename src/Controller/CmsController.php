@@ -21,6 +21,7 @@ use App\Api\Request\Validator as RequestValidator;
 use App\Api\Response\Builder as ResponseBuidser;
 use App\Api\Response\Validator;
 use App\Exceptions\MalformedResponseException;
+use App\Exceptions\MalformedApiKeyException;
 use App\Api\Process;
 use App\Helpers\Output;
 use Doctrine\Common\Collections\Collection;
@@ -267,7 +268,7 @@ class CmsController extends BaseController implements Api
             (new RequestValidator())->validateStatusV3Request(self::getRequest());
             $clienSettings = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
                 ->findOneBy([\ClientSettings::API_KEY => self::getRequest()->get(Api::KEY)]);
-            (new RequestValidator())->validateNotBlank(
+            (new RequestValidator())->validateApiKey(
                 $clienSettings,
                 'Incorrect Api Key'
             );
@@ -307,6 +308,10 @@ class CmsController extends BaseController implements Api
         } catch (MalformedRequestException $e) {
 
             return $this->error($e);
+
+        } catch (MalformedApiKeyException $e) {
+
+            return $this->error($e, HttpResponse::HTTP_UNAUTHORIZED);
 
         }
 
