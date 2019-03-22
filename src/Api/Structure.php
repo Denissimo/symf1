@@ -8,6 +8,7 @@ abstract class Structure
     const
         ORDER_ID = 'order_id',
         DATE_ADD = 'date_add',
+        UPDATED = 'updated',
         CHANGE_DATE = 'change_date',
         DELIVERY_DATE = 'delivery_date',
         DELIVERY_TIME1 = 'delivery_time1',
@@ -112,6 +113,7 @@ abstract class Structure
         \Orders::class => [
             self::ORDER_ID,
             self::DATE_ADD,
+            self::UPDATED,
             self::CHANGE_DATE,
             self::DELIVERY_DATE,
             self::DELIVERY_TIME1,

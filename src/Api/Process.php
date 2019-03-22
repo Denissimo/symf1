@@ -33,7 +33,8 @@ class Process
     {
         $lostUpdateTime = new \DateTime();
         $lostId = end($orders)->id;
-        $firstUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($orders)->change_date);
+//        $firstUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($orders)->change_date);
+        $firstUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($orders)->updated);
         Proxy::init()->getLogger()->addWarning('firstUpdateTime: ' . \GuzzleHttp\json_encode($firstUpdateTime));
         foreach ($orders as $ord) {
             $order = (new Loader())->loadOrderByOid($ord->id);
@@ -67,11 +68,12 @@ class Process
 //                $lostUpdateTime = $newDt < $lostUpdateTime ? $newDt : $lostUpdateTime;
 //                $lostId = (int)$ord->id;
             }
-            Proxy::init()->getLogger()->addWarning($oid. ' >> ' . $ord->id. ' >> ' . $ord->change_date);
+            Proxy::init()->getLogger()->addWarning($oid. ' >> ' . $ord->id. ' >> ' . $ord->updated);
 
         }
             Proxy::init()->getEntityManager()->flush();
-        $endUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($orders)->change_date);
+//        $endUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($orders)->change_date);
+        $endUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($orders)->updated);
 //            Proxy::init()->getLogger()->addWarning('Last ID: ' . \GuzzleHttp\json_encode(end($orders)->id));
             Proxy::init()->getLogger()->addWarning('endUpdateTime: ' . \GuzzleHttp\json_encode($endUpdateTime));
         $endOrderId = (int)end($orders)->id;

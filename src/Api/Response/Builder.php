@@ -88,7 +88,7 @@ class Builder
                 $orderBill = $this->buildOrderBill(new \OrdersBills(), $ord);
                 $orderSettings = $this->buildOrderSettings(new \OrdersSettings(), $ord);
                 $order = $this->buildOrder(new \Orders(), $ord);
-                $orderChangeDate = \DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date);
+                $orderChangeDate = \DateTime::createFromFormat('Y-m-d H:i:s', $ord->updated);
                 $currentChangeDate = ($orderChangeDate < $currentChangeDate) ? $orderChangeDate : $currentChangeDate;
 
                 $order
@@ -235,6 +235,7 @@ class Builder
             ->setCardType($ord->card_type ?? null)
             ->setCargoLift($ord->cargo_lift ?? null)
             ->setChangeDate(isset($ord->change_date) ? \DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date) : null)
+            ->setUpdated(isset($ord->updated) ? \DateTime::createFromFormat('Y-m-d H:i:s', $ord->updated) : null)
             ->setChangeOption($ord->change_option ?? null)
             ->setChangeText($ord->change_text ?? null)
             ->setChweightflag($ord->chweightflag ?? null)
