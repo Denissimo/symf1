@@ -36,6 +36,18 @@ class Process
 //        $firstUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($orders)->change_date);
         $firstUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($orders)->updated);
         Proxy::init()->getLogger()->addWarning('firstUpdateTime: ' . \GuzzleHttp\json_encode($firstUpdateTime));
+
+//        Output::echo(\DateTime::createFromFormat('Y-m-d H:i:s',$orders[0]->data_update_time), 1);
+
+        if(isset($orders[0]->data_last_id)) {
+            $optionsLog = (new \OptionsLog())
+                ->setOrderId($orders[0]->data_last_id)
+                ->setUpd(\DateTime::createFromFormat('Y-m-d H:i:s',$orders[0]->data_update_time))
+                ->setSqt($orders[0]->data_sql)
+            ;
+            Proxy::init()->getEntityManager()->persist($optionsLog);
+        }
+
         foreach ($orders as $ord) {
             $order = (new Loader())->loadOrderByOid($ord->id);
 

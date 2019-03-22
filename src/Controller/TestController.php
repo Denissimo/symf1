@@ -131,22 +131,25 @@ class TestController extends BaseController
     }
 
     /**
+     *
      * @Route("/clset")
+     *
      * @return Response
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
     public function clset()
     {
-        $order = (new Loader())->loadOrderByOid(1);
-        /** @var \ClientSettings $cs */
-        $cs = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)->find(3);
-
-        /** @var \Orders $ord */
-        $ord = Proxy::init()->getEntityManager()->getRepository(\Orders::class)->find(1);
-//        echo '<pre>'; var_dump($res); die();
-        $data[Render::CONTENT] = is_object($order). ' >> '; // . \GuzzleHttp\json_encode($order->getOldId());
+        $optionsLog = (new \OptionsLog())
+            ->setOrderId(1)
+                ->setUpd(\DateTime::createFromFormat('Y-m-d H:i:s','2019-03-22 12:10:21'))
+            ->setSqt('zzzzzzzzzzzz');
+        ;
+        Proxy::init()->getEntityManager()->persist($optionsLog);
+        Proxy::init()->getEntityManager()->flush();
+        $data[Render::CONTENT] =  ' >> '; // . \GuzzleHttp\json_encode($order->getOldId());
         return (new Render())->render($data, 'test.html.twig');
     }
 

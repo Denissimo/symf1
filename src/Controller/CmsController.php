@@ -191,7 +191,6 @@ class CmsController extends BaseController implements Api
                 (new Loader())->loadBiggestOldId(),
                 self::getRequest()
             );
-
             (new Validator())->validateOrdersList($response);
             if (isset($response->status) && $response->status == 400) {
                 $content = 'Error';
