@@ -102,13 +102,12 @@ abstract class BaseController extends AbstractController
 
     /**
      * Рендер ошибки
-     *
      * @param \Exception $e
      * @param int $code
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     protected function error(\Exception $e, $code = Response::HTTP_BAD_REQUEST)
     {
@@ -118,14 +117,13 @@ abstract class BaseController extends AbstractController
 
     /**
      * рендер
-     *
      * @param $content
      * @param array $customOptions
      * @param int $code
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     protected function success($content, array $customOptions = [], $code = Response::HTTP_OK)
     {
@@ -137,9 +135,9 @@ abstract class BaseController extends AbstractController
      * @param array $customOptions
      * @param int $code
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     protected function prepareResult($content, $customOptions = [], $code = Response::HTTP_OK)
     {
@@ -158,12 +156,12 @@ abstract class BaseController extends AbstractController
     }
 
     /**
-     * @param string $content
-     * @param int $code
+     * @param $content
+     * @param $code
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     protected function printJson($content, $code): Response
     {

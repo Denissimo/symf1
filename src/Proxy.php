@@ -13,6 +13,9 @@ use App\Cfg\Config;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Symfony\Component\Security\Core\Authentication;
+use Twig\Environment as TwigEnvironment;
+use Twig\Loader\FilesystemLoader as TwigFilesystemLoader;
+//use MySQLHandler\MySQLHandler;
 
 class Proxy
 {
@@ -107,16 +110,16 @@ class Proxy
 
     public function initTwig()
     {
-        self::$twigEnvironment = new \Twig_Environment(
-            new \Twig_Loader_Filesystem(__DIR__ . "/.." . Config::getTwigPath()),
+        self::$twigEnvironment = new TwigEnvironment(
+            new TwigFilesystemLoader(__DIR__ . "/.." . Config::getTwigPath()),
             Config::getTwigOptions()
         );
     }
 
     /**
-     * @return \Twig_Environment
+     * @return TwigEnvironment
      */
-    public function getTwigEnvironment(): \Twig_Environment
+    public function getTwigEnvironment(): TwigEnvironment
     {
         return self::$twigEnvironment;
     }
@@ -172,12 +175,24 @@ class Proxy
     public function initLogger($name = Config::FIELD_DEFAULT, $stream = null, $level = null)
     {
         self::$logger = new Logger($name);
+        /*
         self::$logger->pushHandler(
             new StreamHandler(
                 $stream ?? Config::getLoggerPath() . 'log_' . (new \DateTime())->format('YmdHis') . '_.txt',
                 $level ?? Logger::WARNING
             )
         );
+        */
+/*
+        self::$logger->pushHandler(
+            new MySQLHandler(self::$entityManager, "log", array('username', 'userid'), \Monolog\Logger::DEBUG)
+        );
+*/
+
+        self::$logger->pushHandler(
+            new MonologDBHandler()
+        );
+
         return $this;
     }
 
