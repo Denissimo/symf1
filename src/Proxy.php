@@ -175,22 +175,11 @@ class Proxy
     public function initLogger($name = Config::FIELD_DEFAULT, $stream = null, $level = null)
     {
         self::$logger = new Logger($name);
-        /*
         self::$logger->pushHandler(
             new StreamHandler(
                 $stream ?? Config::getLoggerPath() . 'log_' . (new \DateTime())->format('YmdHis') . '_.txt',
                 $level ?? Logger::WARNING
             )
-        );
-        */
-/*
-        self::$logger->pushHandler(
-            new MySQLHandler(self::$entityManager, "log", array('username', 'userid'), \Monolog\Logger::DEBUG)
-        );
-*/
-
-        self::$logger->pushHandler(
-            new MonologDBHandler()
         );
 
         return $this;
