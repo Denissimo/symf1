@@ -26,7 +26,8 @@
         "symfony/validator": "4.2.*",
         "symfony/web-link": "4.2.*",
         "symfony/yaml": "4.2.*",
-        "twig/extensions": "^1.5"
+        "twig/extensions": "^1.5",
+        "wazaari/monolog-mysql": ">1.0.0"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

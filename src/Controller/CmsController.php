@@ -27,6 +27,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 
+
 class CmsController extends BaseController implements Api
 {
 
