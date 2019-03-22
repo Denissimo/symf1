@@ -28,7 +28,14 @@ Interface Fields
         INNER_N = 'inner_n',
         ORDER_ID = 'order_id',
         ZERO = 0,
-        ZORDER_ID = 'zorder_id';
+        ZORDER_ID = 'zorder_id',
+        MO_PUNKT_ID = 'mo_punkt_id',
+        CITY = 'city',
+        ADDR = 'addr',
+        GOODS = 'goods',
+        NP = 'np',
+        PRICE_CLIENT = 'price_client',
+        OS = 'os';
 
     const
         FORM_PARAMS = 'form_params',

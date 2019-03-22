@@ -90,4 +90,26 @@ class Validator
         );
     }
 
+    /**
+     * @param Request $Request
+     */
+    public function validateCreateOrder(Request $Request)
+    {
+        $requiredFields = [
+            Api::MO_PUNKT_ID ,
+            Api::CITY,
+            Api::ADDR,
+            Api::GOODS,
+            Api::NP,
+            Api::PRICE_CLIENT,
+            Api::OS
+        ];
+        Proxy::init()->getValidator()->validateRequired(
+            $Request->request->all(),
+            $requiredFields,
+            'Fields ' . implode(', ', $requiredFields) . ' are REQUIRED !!!',
+            MalformedRequestException::class
+        );
+    }
+
 }

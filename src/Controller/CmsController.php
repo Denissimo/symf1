@@ -385,11 +385,18 @@ class CmsController extends BaseController implements Api
         try {
             $client = $this->getClientSettings();
 
+            (new RequestValidator())->validateCreateOrder(self::getRequest());
+
             $post = self::getRequest()->request->all();
 
             $criteria = Criteria::create()
                 ->where(Criteria::expr()->eq(\Orders::INNER_N, $post[Fields::INNER_N]))
                 ->andWhere(Criteria::expr()->eq(\Orders::CLIENT, $client));
+
+            $order = \Orders::find($criteria)->first();
+            if ($order && !$client->getId() !== 1489) {
+                throw new \Exception('Duplicate order: ' . $post[Fields::INNER_N]);
+            }
 
             dd($criteria);
 
@@ -398,5 +405,10 @@ class CmsController extends BaseController implements Api
         } catch (\Exception $e) {
             return $this->error($e);
         }
+    }
+
+    protected function createNewOrder()
+    {
+
     }
 }
