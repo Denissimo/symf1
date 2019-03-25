@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="orders_status_model", uniqueConstraints={@ORM\UniqueConstraint(name="UK_order_status_model_id", columns={"id"})})
  * @ORM\Entity
  */
-class OrdersStatusModel
+class OrdersStatusModel extends Model
 {
 
     const

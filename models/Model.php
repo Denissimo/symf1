@@ -21,7 +21,15 @@ abstract class Model
      */
     static public function getRepository()
     {
-        return Proxy::init()->getEntityManager()->getRepository(static::class);
+        return static::getEntity()->getRepository(static::class);
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
+    static public function getEntity()
+    {
+        return Proxy::init()->getEntityManager();
     }
 
     /**
@@ -38,7 +46,7 @@ abstract class Model
      * вернет результат по условию Criteria или id
      *
      * @param Criteria|int $query
-     * @return \Doctrine\Common\Collections\Collection|object|null
+     * @return \Doctrine\Common\Collections\Collection|object|static
      * @throws Exception
      */
     static public function find($query)
@@ -57,14 +65,14 @@ abstract class Model
      * если результат пустой, выкинет исключение
      *
      * @param Criteria|int $query
-     * @return \Doctrine\Common\Collections\Collection|object|null
+     * @return \Doctrine\Common\Collections\Collection|object|static
      * @throws Exception
      */
     static public function findOrFail($query)
     {
         $result = static::find($query);
-        if (!$result || !$result->count()) {
-            throw new \App\Exceptions\NotFoundRecord('Not found');
+        if (!$result || ($result instanceof \Doctrine\Common\Collections\Collection && !$result->count())) {
+            throw new \App\Exceptions\NotFoundRecord('Not found', 404);
         }
         return $result;
     }

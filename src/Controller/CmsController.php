@@ -417,8 +417,9 @@ class CmsController extends BaseController implements Api
      * @Route("/api/v1/confirmOrder", methods={"POST"})
      *
      */
-    public function confirmOrder(){
-        try{
+    public function confirmOrder()
+    {
+        try {
             $innerId = self::getRequest()->get(Api::INNER_N, 0);
             $orderId = self::getRequest()->get(Api::ORDER_ID, 0);
 
@@ -439,9 +440,35 @@ class CmsController extends BaseController implements Api
                 $criteria->andWhere(Criteria::expr()->eq(\Orders::ORDER_ID, $orderId));
             }
 
+            /** @var \Orders $order */
             $order = \Orders::findOrFail($criteria)->first();
 
-            dd('stop', $innerId, $orderId);
+            // если ордер уже активирован
+            if ($order->getStatus() !== 1) {
+                //throw new \Exception('Ордер ' . $order->getInnerN() . ' уже подтвержден!');
+            }
+
+            if ($order->getType()->getId() === 2) {
+                // забор из ПВЗ
+            }
+
+            $status = \OrdersStatusModel::findOrFail(2);
+            $order->setStatus($status);
+            if (in_array($client->getId(), [1511, 1850, 2]) ||
+                ($order->getType()->getId() !== 2 && $order->getDeliveryDate()->format('Y-m-d') <= date('Y-m-d'))) {
+                $date = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime('+1 day')));
+                $order->setDeliveryDate($date);
+            }
+
+            \Orders::getEntity()->persist($order);
+            \Orders::getEntity()->flush();
+
+
+            return $this->success([
+                'order_id' => $order->getOrderId(),
+                'inner_id' => $order->getInnerN(),
+                'Confirmed' => 'Ok'
+            ]);
         } catch (\Exception $e) {
             return $this->error($e);
         }
