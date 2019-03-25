@@ -450,6 +450,7 @@ class CmsController extends BaseController implements Api
 
             if ($order->getType()->getId() === 2) {
                 // забор из ПВЗ
+                // @todo ВАЛИДАЦИЯ ПВЗ
             }
 
             $status = \OrdersStatusModel::findOrFail(2);
