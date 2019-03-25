@@ -28,13 +28,11 @@ class Headers extends Request
      */
     public function getApiKey()
     {
-        Proxy::init()->getValidator()->validateRequired(
-            $this->query->all(),
-            [Fields::KEY],
-            'Fields "' . Fields::KEY . '" are REQUIRED !!!',
-            ErrorApiKey::class
-        );
+        $param = array_merge($this->query->all(), $this->request->all());
+        if (!isset($param[Fields::KEY])) {
+            throw new ErrorApiKey('Поле "' . Fields::KEY . '" обязательно!');
+        }
 
-        return $this->get(Fields::KEY);
+        return $param[Fields::KEY];
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Exceptions;
 
 
-class ErrorApiKey extends \Exception
+class ErrorApiKey extends DefaultException
 {
     protected $code = 401;
 }
