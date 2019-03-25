@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Api\Client;
 use App\Api\Request\Unit;
 use App\Exceptions\BadResponseException;
+use App\Exceptions\InvalidRequestAgrs;
 use App\Exceptions\MalformedRequestException;
 use App\Exceptions\OrdersListEmptyResponseException;
 use App\Wrappers\Order;
@@ -337,7 +338,7 @@ class CmsController extends BaseController implements Api
             // если нет ни одно или переданны оба значения
             // мы принимаем только одно значение
             if ((!$innerId && !$orderId) || ($innerId && $orderId)) {
-                throw new \Exception(sprintf("Error request: One field required %s or %s", Api::INNER_N, Api::ORDER_ID));
+                throw new InvalidRequestAgrs(sprintf("Error request: One field required %s or %s", Api::INNER_N, Api::ORDER_ID));
             }
 
             $client = $this->getClientSettings();
@@ -391,7 +392,7 @@ class CmsController extends BaseController implements Api
             // если нет ни одно или переданны оба значения
             // мы принимаем только одно значение
             if ((!$innerId && !$orderId) || ($innerId && $orderId)) {
-                throw new \Exception(sprintf("Error request: One field required %s or %s", Api::INNER_N, Api::ZORDER_ID));
+                throw new InvalidRequestAgrs(sprintf("Error request: One field required %s or %s", Api::INNER_N, Api::ZORDER_ID));
             }
 
             $client = $this->getClientSettings();

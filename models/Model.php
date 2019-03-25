@@ -11,7 +11,7 @@ abstract class Model
      *
      * @return string
      */
-    static protected function getPrimaryKey()
+    static public function getPrimaryKey()
     {
         return 'id';
     }
@@ -19,7 +19,7 @@ abstract class Model
     /**
      * @return \Doctrine\Common\Persistence\ObjectRepository|\Doctrine\ORM\EntityRepository
      */
-    static protected function getRepository()
+    static public function getRepository()
     {
         return Proxy::init()->getEntityManager()->getRepository(static::class);
     }
@@ -48,7 +48,7 @@ abstract class Model
         }
         $query = (int)$query;
         if (!$query) {
-            throw new Exception('Invalid query model: ' . static::class);
+            throw new \App\Exceptions\BadResponseException('Invalid query model: ' . static::class);
         }
         return static::getRepository()->find($query);
     }
@@ -64,7 +64,7 @@ abstract class Model
     {
         $result = static::find($query);
         if (!$result || !$result->count()) {
-            throw new Exception('Not found', 404);
+            throw new \App\Exceptions\NotFoundRecord('Not found');
         }
         return $result;
     }

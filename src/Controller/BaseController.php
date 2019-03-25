@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Exceptions\DeactivateApiKey;
 use App\Exceptions\ErrorApiKey;
 use App\Providers\Headers;
 use App\Proxy;
@@ -83,19 +84,20 @@ abstract class BaseController extends AbstractController
      * Вернет объект ClientSettings на основе переданного api key
      *
      * @return \ClientSettings|null|object
-     * @throws \App\Exceptions\ErrorApiKey
+     * @throws DeactivateApiKey
+     * @throws ErrorApiKey
      */
     protected function getClientSettings()
     {
         /** @var \ClientSettings $clientSettings */
-        $clientSettings = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
+        $clientSettings = \ClientSettings::getRepository()
             ->findOneBy([\ClientSettings::API_KEY => self::getRequest()->getApiKey()]);
-        (new Validator())->validateNotBlank(
-            $clientSettings,
-            'Incorrect Api Key!'
-        );
+
+        if (!$clientSettings) {
+            throw new ErrorApiKey('Ошибка: неверный ApiKey');
+        }
         if (!$clientSettings->getActive()) {
-            throw new ErrorApiKey('ApiKey deactivate');
+            throw new DeactivateApiKey('ApiKey не активен');
         }
         return $clientSettings;
     }

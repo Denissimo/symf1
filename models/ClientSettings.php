@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
  * @ORM\Table(name="client_settings", uniqueConstraints={@ORM\UniqueConstraint(name="client_id", columns={"client_id"})})
  * @ORM\Entity
  */
-class ClientSettings
+class ClientSettings extends Model
 {
     const
         CLIENT_ID = 'clientId',
