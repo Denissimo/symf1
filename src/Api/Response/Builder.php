@@ -280,6 +280,58 @@ class Builder
         return $order;
     }
 
+
+    /**
+     * @param \Pvz $pvz
+     * @param \stdClass $stdPvz
+     * @return \Pvz
+     */
+    public function buildPvz(\Pvz $pvz, \stdClass $stdPvz) {
+        $pvz
+            ->setOldId($stdPvz->id)
+            ->setMxmId($stdPvz->mxm_id)
+            ->setName($stdPvz->name)
+            ->setCode($stdPvz->code)
+            ->setContactName($stdPvz->contact_name)
+            ->setContactNumber($stdPvz->contact_number)
+            ->setContactMail($stdPvz->contact_mail)
+            ->setDognum($stdPvz->dognum)
+            ->setDogdate($stdPvz->dogdate)
+            ->setPathdesc($stdPvz->pathDesc)
+            ->setWorktime($stdPvz->workTime)
+            ->setWorktime2($stdPvz->workTime2)
+            ->setAddrfull($stdPvz->addrFull)
+            ->setAddrstreet($stdPvz->addrStreet)
+            ->setAddrhouse($stdPvz->addrHouse)
+            ->setCoords($stdPvz->coords)
+            ->setDeliverycost($stdPvz->deliveryCost)
+            ->setRoute($stdPvz->route)
+            ->setMoPunktId($stdPvz->mo_punkt_id)
+            ->setPvzType($stdPvz->pvz_type)
+            ->setPvzTar($stdPvz->pvz_tar)
+            ->setPagentId($stdPvz->pagent_id)
+            ->setInternal($stdPvz->internal)
+            ->setNp($stdPvz->np)
+            ->setTar($stdPvz->tar)
+            ->setWeight((int)$stdPvz->weight)
+            ->setStatus($stdPvz->status)
+            ->setChdate($stdPvz->chdate ? \DateTime::createFromFormat('Y-m-d H:i:s', $stdPvz->chdate) : null)
+            ->setComment($stdPvz->comment)
+            ->setComment2($stdPvz->comment2)
+            ->setPostalCode($stdPvz->postal_code)
+            ->setRegionWithType($stdPvz->region_with_type)
+            ->setAreaWithType($stdPvz->area_with_type)
+            ->setCityWithType($stdPvz->city_with_type)
+            ->setCityDistrictWithType($stdPvz->city_district_with_type)
+            ->setSettlementWithType($stdPvz->settlement_with_type)
+            ->setSettlementWithType($stdPvz->street_with_type)
+            ->setHouse($stdPvz->house)
+            ->setBlock($stdPvz->block)
+            ->setParentCompany($stdPvz->parent_company)
+            ->setEk($stdPvz->ek);
+        return $pvz;
+    }
+
     /**
      * @param \Address $address
      * @param \stdClass $ord

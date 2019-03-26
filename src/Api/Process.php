@@ -30,6 +30,7 @@ class Process
     public function processLists(\stdClass $lists)
     {
         $res['clients'] = $this->processClients($lists->clients);
+        $res['pvz'] = $this->processPvz($lists->pvz);
         Proxy::init()->getEntityManager()->flush();
         return $res;
     }
@@ -59,7 +60,6 @@ class Process
             unset($sortedClients[$clientId]);
             }
         }
-//        Output::echo($sortedClients, 1);
 
         foreach ($sortedClients as $cli) {
             $newClient = (new \ClientSettings())
@@ -68,6 +68,36 @@ class Process
                 ->setApikey($cli->apikey)
                 ->setActive($cli->active);
             Proxy::init()->getEntityManager()->persist($newClient);
+        }
+        return [];
+    }
+
+    /**
+     * @param array $pvz
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     */
+    private function processPvz(array $pvz)
+    {
+
+        $sortedPvz = $this->sortedArray($pvz, \Model::ID);
+        /** @var \Pvz[] $pvzAll */
+        $pvzAll = \Pvz::all();
+
+        foreach ($pvzAll as $p) {
+            $id = $p->getId();
+
+            if(isset($sortedPvz[$id])) {
+                $pvzNewData = $sortedPvz[$id];
+                $currentPvz = (new Builder())->buildPvz($p, $pvzNewData);
+                Proxy::init()->getEntityManager()->persist($currentPvz);
+                unset($sortedPvz[$id]);
+            }
+        }
+
+        foreach ($sortedPvz as $pv) {
+            $newPvz = (new Builder())->buildPvz((new \Pvz()), $pv);
+            Proxy::init()->getEntityManager()->persist($newPvz);
         }
         return [];
     }
