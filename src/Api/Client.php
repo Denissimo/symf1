@@ -112,13 +112,15 @@ class Client
     }
 
     /**
+     * @param \DateTime $lastStockUpdateTime
      * @return mixed
      * @throws GuzzleHttp\Exception\GuzzleException
      */
-    public function sendListsUpdateRequest()
+    public function sendListsUpdateRequest(\DateTime $lastStockUpdateTime)
     {
         $request = [
-            Api::KEY => getenv('cms_api_key')
+            Api::KEY => getenv('cms_api_key'),
+            Api::UPDATE_TIME => $lastStockUpdateTime->format(Api::DATETIME_FORMAT)
         ];
         return
             \GuzzleHttp\json_decode(

@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ZordersStocksModels extends Model
 {
+    const UPDATED = 'updated';
+
     /**
      * @var int
      *
@@ -35,6 +37,12 @@ class ZordersStocksModels extends Model
      */
     private $name;
 
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="updated", type="datetime", nullable=true, options={"comment"="Дата изменения"})
+     */
+    private $updated;
     /**
      * @var string|null
      *
@@ -166,6 +174,24 @@ class ZordersStocksModels extends Model
     public function setName(?string $name): ZordersStocksModels
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getUpdated(): ?DateTime
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param DateTime|null $updated
+     * @return ZordersStocksModels
+     */
+    public function setUpdated(?DateTime $updated): ZordersStocksModels
+    {
+        $this->updated = $updated;
         return $this;
     }
 

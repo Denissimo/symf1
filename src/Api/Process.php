@@ -112,7 +112,7 @@ class Process
     {
 
         $sortedStocks = $this->sortedArray($stocks, \Model::ID);
-        /** @var \Pvz[] $stocksAll */
+        /** @var \ZordersStocksModels[] $stocksAll */
         $stocksAll = \ZordersStocksModels::all();
 
         foreach ($stocksAll as $stock) {
