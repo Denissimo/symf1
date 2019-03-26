@@ -5,6 +5,7 @@ use Doctrine\Common\Collections\Criteria;
 
 abstract class Model
 {
+    const ID = 'id';
 
     /**
      * первичный ключ модели
