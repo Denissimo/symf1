@@ -10,8 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="address", indexes={@ORM\Index(name="address_type", columns={"type"})})
  * @ORM\Entity
  */
-class Address
+class Address extends Model
 {
+    const MO_PUNKT_ID = 'moPunktId';
     /**
      * @var int
      *

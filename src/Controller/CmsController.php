@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Api\Client;
-use App\Api\Fields;
 use App\Api\Request\Unit;
 use App\Exceptions\BadResponseException;
 use App\Exceptions\InvalidRequestAgrs;
@@ -213,7 +212,6 @@ class CmsController extends BaseController implements Api
      */
     private function loadOrdersUpdate(string $class)
     {
-
         $lastTime = (new Loader())->loadOption(\Options::fields()[$class][\Options::UPDATE]);
         $lastId = (new Loader())->loadOption(\Options::fields()[$class][\Options::LAST_ID]);
         $useId = (new Loader())->loadOption(\Options::fields()[$class][\Options::USE_ID]);
@@ -374,42 +372,5 @@ class CmsController extends BaseController implements Api
         return (new Render())->render([
             Render::CONTENT => $content
         ]);
-    }
-
-
-    /**
-     *
-     * @Route("/api/v1/createOrder")
-     */
-    public function createOrder()
-    {
-        try {
-            $client = $this->getClientSettings();
-
-            (new RequestValidator())->validateCreateOrder(self::getRequest());
-
-            $post = self::getRequest()->request->all();
-
-            $criteria = Criteria::create()
-                ->where(Criteria::expr()->eq(\Orders::INNER_N, $post[Fields::INNER_N]))
-                ->andWhere(Criteria::expr()->eq(\Orders::CLIENT, $client));
-
-            $order = \Orders::find($criteria)->first();
-            if ($order && !$client->getId() !== 1489) {
-                throw new \Exception('Duplicate order: ' . $post[Fields::INNER_N]);
-            }
-
-            dd($criteria);
-
-
-            return $this->success([]);
-        } catch (\Exception $e) {
-            return $this->error($e);
-        }
-    }
-
-    protected function createNewOrder()
-    {
-
     }
 }

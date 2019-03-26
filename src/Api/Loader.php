@@ -251,4 +251,45 @@ class Loader
             ->find($id);
     }
 
+    public function findAddress($city, $address)
+    {
+        $daData = $this->parseAddressDaData($city . ', ' . $address);
+        dd($daData);
+    }
+
+    public function parseAddressDaData($address)
+    {
+        $pos = strpos($address, 'елезнодорожны');
+        if ($pos !== false) {
+            $address = 'Балашиха ' . $address;
+        }
+        $dataPost = [
+            'headers' => [
+                'Accept' => 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type' => 'application/json; charset=UTF-8',
+                'X-Requested-With' => 'XMLHttpRequest',
+                'Authorization' => 'Token 3ad30a9739966ebbc1ea59dfdddcfabc97803c89',
+                'X-Secret' => '0401a0f4f4c063da5268a76afb8afc3ba55e69bb'
+            ],
+            'body' => \GuzzleHttp\json_encode([$address])
+        ];
+
+        $addressData = Proxy::init()->getHttpClient()->request(
+            Api::POST,
+            'https://dadata.ru/api/v2/clean/address',
+            $dataPost
+        )->getBody()->getContents();
+
+        $addressData = \GuzzleHttp\json_decode($addressData);
+        dump($addressData[0]);
+
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq(\Address::MO_PUNKT_ID, $addressData[0]->kladr_id));
+
+        $address = \Address::find($criteria);
+
+        dd($address->count(), $address);
+
+    }
+
 }
