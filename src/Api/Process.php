@@ -23,6 +23,67 @@ class Process
 
 
     /**
+     * @param \stdClass $lists
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function processLists(\stdClass $lists)
+    {
+        $res['clients'] = $this->processClients($lists->clients);
+        Proxy::init()->getEntityManager()->flush();
+        return $res;
+    }
+
+    /**
+     * @param array $clients
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     */
+    private function processClients(array $clients)
+    {
+
+        $sortedClients = $this->sortedArray($clients, \ClientSettings::CLIENT_ID);
+        /** @var \ClientSettings[] $clientsAll */
+        $clientsAll = \ClientSettings::all();
+
+        foreach ($clientsAll as $client) {
+            $clientId = $client->getClientId();
+
+            if(isset($sortedClients[$clientId])) {
+              $clientNewData = $sortedClients[$clientId];
+                            $client
+                                ->setIsOff($clientNewData->is_off)
+                                ->setApikey($clientNewData->apikey)
+                                ->setActive($clientNewData->active);
+                            Proxy::init()->getEntityManager()->persist($client);
+            unset($sortedClients[$clientId]);
+            }
+        }
+//        Output::echo($sortedClients, 1);
+
+        foreach ($sortedClients as $cli) {
+            $newClient = (new \ClientSettings())
+                ->setClientId($cli->client_id)
+                ->setIsOff($cli->is_off)
+                ->setApikey($cli->apikey)
+                ->setActive($cli->active);
+            Proxy::init()->getEntityManager()->persist($newClient);
+        }
+        return [];
+    }
+
+    /**
+     * @param array $array
+     * @param string $column
+     * @return array
+     */
+    private  function sortedArray(array $array, string $column) : array
+    {
+        $columnArray = array_column($array, $column);
+        return array_combine($columnArray, $array);
+    }
+
+    /**
      * @param array $orders
      * @return array
      * @throws \Doctrine\ORM\ORMException
@@ -39,12 +100,11 @@ class Process
 
 //        Output::echo(\DateTime::createFromFormat('Y-m-d H:i:s',$orders[0]->data_update_time), 1);
 
-        if(isset($orders[0]->data_last_id)) {
+        if (isset($orders[0]->data_last_id)) {
             $optionsLog = (new \OptionsLog())
                 ->setOrderId($orders[0]->data_last_id)
-                ->setUpd(\DateTime::createFromFormat('Y-m-d H:i:s',$orders[0]->data_update_time))
-                ->setSqt($orders[0]->data_sql)
-            ;
+                ->setUpd(\DateTime::createFromFormat('Y-m-d H:i:s', $orders[0]->data_update_time))
+                ->setSqt($orders[0]->data_sql);
             Proxy::init()->getEntityManager()->persist($optionsLog);
         }
 
@@ -69,7 +129,7 @@ class Process
 
                 $this->saveHistory(
                     $currentOrder,
-                    \OrdersHistoryTypesModel::UPDATE_ID ,
+                    \OrdersHistoryTypesModel::UPDATE_ID,
                     'order',
                     \GuzzleHttp\json_encode($ord)
                 );
@@ -80,19 +140,19 @@ class Process
 //                $lostUpdateTime = $newDt < $lostUpdateTime ? $newDt : $lostUpdateTime;
 //                $lostId = (int)$ord->id;
             }
-            Proxy::init()->getLogger()->addWarning($oid. ' >> ' . $ord->id. ' >> ' . $ord->updated);
+            Proxy::init()->getLogger()->addWarning($oid . ' >> ' . $ord->id . ' >> ' . $ord->updated);
 
         }
-            Proxy::init()->getEntityManager()->flush();
+        Proxy::init()->getEntityManager()->flush();
 //        $endUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($orders)->change_date);
         $endUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($orders)->updated);
 //            Proxy::init()->getLogger()->addWarning('Last ID: ' . \GuzzleHttp\json_encode(end($orders)->id));
-            Proxy::init()->getLogger()->addWarning('endUpdateTime: ' . \GuzzleHttp\json_encode($endUpdateTime));
+        Proxy::init()->getLogger()->addWarning('endUpdateTime: ' . \GuzzleHttp\json_encode($endUpdateTime));
         $endOrderId = (int)end($orders)->id;
         $finalUpdateTime = $endUpdateTime < $lostUpdateTime ? $endUpdateTime : $lostUpdateTime;
 //            Proxy::init()->getLogger()->addWarning('lostId: ' . $lostId);
 //            Proxy::init()->getLogger()->addWarning('lostUpdateTime: ' . \GuzzleHttp\json_encode($lostUpdateTime));
-            Proxy::init()->getLogger()->addWarning('finalUpdateTime: ' . \GuzzleHttp\json_encode($endUpdateTime));
+        Proxy::init()->getLogger()->addWarning('finalUpdateTime: ' . \GuzzleHttp\json_encode($endUpdateTime));
 //        $finalOrderId = $endOrderId < $lostId ? $endOrderId : $lostId;
         $finalOrderId = $endOrderId;
         $useLastId = (int)($firstUpdateTime == $endUpdateTime && count($orders) > 1);
@@ -121,8 +181,7 @@ class Process
             ->setValue($value)
             ->setType($ordersHirtoryType)
             ->setOid($order)
-            ->setClient($order->getClient())
-        ;
+            ->setClient($order->getClient());
         Proxy::init()->getEntityManager()->persist($ordersHirtory);
 
     }

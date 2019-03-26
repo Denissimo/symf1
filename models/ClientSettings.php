@@ -13,9 +13,12 @@ use Doctrine\Common\Collections\Collection;
 class ClientSettings extends Model
 {
     const
-        CLIENT_ID = 'clientId',
-        API_KEY = 'apikey'
-        ;
+        CLIENTID = 'clientId',
+        CLIENT_ID = 'client_id',
+        API_KEY = 'apikey',
+        IS_OFF = 'is_off',
+        ACTIVE = 'active';
+
 
     /**
      * @var int
