@@ -34,6 +34,13 @@ class ClientSettings extends Model
     private $clientId;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="is_off", type="integer", nullable=true)
+     */
+    private $isOff;
+
+    /**
      * @var string|null
      *
      * @ORM\Column(name="apikey", type="string", length=111, nullable=true, options={"comment"="API key"})
@@ -93,6 +100,25 @@ class ClientSettings extends Model
         $this->clientId = $clientId;
         return $this;
     }
+
+    /**
+     * @return int|null
+     */
+    public function getisOff(): ?int
+    {
+        return $this->isOff;
+    }
+
+    /**
+     * @param int|null $isOff
+     * @return ClientSettings
+     */
+    public function setIsOff(?int $isOff): ClientSettings
+    {
+        $this->isOff = $isOff;
+        return $this;
+    }
+
 
     /**
      * @return string|null
