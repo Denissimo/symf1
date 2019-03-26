@@ -31,6 +31,7 @@ class Process
     {
         $res['clients'] = $this->processClients($lists->clients);
         $res['pvz'] = $this->processPvz($lists->pvz);
+        $res['stocks'] = $this->processStock($lists->stocks);
         Proxy::init()->getEntityManager()->flush();
         return $res;
     }
@@ -98,6 +99,36 @@ class Process
         foreach ($sortedPvz as $pv) {
             $newPvz = (new Builder())->buildPvz((new \Pvz()), $pv);
             Proxy::init()->getEntityManager()->persist($newPvz);
+        }
+        return [];
+    }
+
+    /**
+     * @param array $stocks
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     */
+    private function processStock(array $stocks)
+    {
+
+        $sortedStocks = $this->sortedArray($stocks, \Model::ID);
+        /** @var \Pvz[] $stocksAll */
+        $stocksAll = \ZordersStocksModels::all();
+
+        foreach ($stocksAll as $stock) {
+            $id = $stock->getId();
+
+            if(isset($sortedStocks[$id])) {
+                $stockNewData = $sortedStocks[$id];
+                $currentStock = (new Builder())->buildStock($stock, $stockNewData);
+                Proxy::init()->getEntityManager()->persist($currentStock);
+                unset($sortedStocks[$id]);
+            }
+        }
+
+        foreach ($sortedStocks as $st) {
+            $newStock = (new Builder())->buildStock((new \ZordersStocksModels()), $st);
+            Proxy::init()->getEntityManager()->persist($newStock);
         }
         return [];
     }

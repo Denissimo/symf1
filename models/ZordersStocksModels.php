@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="zorders_stocks_models", indexes={@ORM\Index(name="mo_punkt_id", columns={"mo_punkt_id"}), @ORM\Index(name="client_id", columns={"client_id"})})
  * @ORM\Entity
  */
-class ZordersStocksModels
+class ZordersStocksModels extends Model
 {
     /**
      * @var int
@@ -20,6 +20,13 @@ class ZordersStocksModels
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="old_id", type="integer", nullable=true)
+     */
+    private $old_id;
 
     /**
      * @var string|null
@@ -114,6 +121,24 @@ class ZordersStocksModels
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOldId(): ?int
+    {
+        return $this->old_id;
+    }
+
+    /**
+     * @param int|null $old_id
+     * @return ZordersStocksModels
+     */
+    public function setOldId(?int $old_id): ZordersStocksModels
+    {
+        $this->old_id = $old_id;
+        return $this;
     }
 
     /**

@@ -333,6 +333,45 @@ class Builder
     }
 
     /**
+     * @param \ZordersStocksModels $stock
+     * @param \stdClass $stdStock
+     * @return \ZordersStocksModels
+     */
+    public function buildStock(\ZordersStocksModels $stock, \stdClass $stdStock) {
+        /** @var \ClientSettings $client */
+        $client = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
+            ->matching(
+                Criteria::create()
+                    ->where(
+                        Criteria::expr()->eq(\ClientSettings::CLIENTID, $stdStock->client_id)
+                    )
+                    ->setMaxResults(1)
+
+            )->current();
+
+//        if(!isset($client)) {
+//            Output::echo($stdStock, 1);
+//        }
+
+        $stock
+            ->setOldId($stdStock->id)
+            ->setName($stdStock->name)
+            ->setAddr($stdStock->addr)
+            ->setCity($stdStock->city)
+            ->setLongtitude($stdStock->longtitude)
+            ->setLatitude($stdStock->latitude)
+            ->setClient($client)
+            ->setComments($stdStock->comments)
+            ->setContLico($stdStock->cont_lico)
+            ->setContTel($stdStock->cont_tel)
+            ->setTime($stdStock->time)
+            ->setMoPunktId($stdStock->mo_punkt_id)
+            ->setInnerN($stdStock->inner_n)
+        ;
+        return $stock;
+    }
+
+    /**
      * @param \Address $address
      * @param \stdClass $ord
      * @return \Address
