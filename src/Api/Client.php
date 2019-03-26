@@ -13,7 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 class Client
 {
     const
-        API_PATH_ORDERS = 'change_with_db';
+        API_PATH_ORDERS = 'change_with_db',
+        API_PATH_LISTS = 'change_with_db_lists';
 
     /**
      * @param Unit[] $units
@@ -97,14 +98,33 @@ class Client
             Api::BIGGEST_ID => $biggestId
         ];
 
-        Proxy::init()->getLogger()->addWarning('update Request: ' . \GuzzleHttp\json_encode($request));
-
-
         return
             \GuzzleHttp\json_decode(
                 Proxy::init()->getHttpClient()->request(
                     Api::POST,
                     getenv('cms_api_url1') . self::API_PATH_ORDERS,
+                    [
+                        Api::FORM_PARAMS =>
+                            $request
+                    ]
+                )->getBody()->getContents()
+            );
+    }
+
+    /**
+     * @return mixed
+     * @throws GuzzleHttp\Exception\GuzzleException
+     */
+    public function sendListsUpdateRequest()
+    {
+        $request = [
+            Api::KEY => getenv('cms_api_key')
+        ];
+        return
+            \GuzzleHttp\json_decode(
+                Proxy::init()->getHttpClient()->request(
+                    Api::POST,
+                    getenv('cms_api_url1') . self::API_PATH_LISTS,
                     [
                         Api::FORM_PARAMS =>
                             $request

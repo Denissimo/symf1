@@ -220,6 +220,43 @@ class CmsController extends BaseController implements Api
 
 
     /**
+     * @Route("/cmsapi/listsupdate")
+     * @return HttpResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function loadListsUpdate()
+    {
+
+        $content = null;
+        try {
+            $response = (new Client())->sendListsUpdateRequest();
+
+            (new Validator())->validateOrdersList($response->clients);
+
+            if (isset($response->status) && $response->status == 400) {
+                $content = 'Error';
+                Proxy::init()->getLogger()->addWarning('UpdateListError: ' . $content);
+            } else {
+
+                $result = (new Process())->processLists($response);
+
+                $content = 'OK';
+            }
+        } catch (MalformedResponseException $e) {
+            $message = $e->getMessage();
+            Proxy::init()->getLogger()->addWarning('MalformedResponseException: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            Proxy::init()->getLogger()->addWarning('Exception: ' . $e->getMessage());
+        }
+        return (new Render())->render([
+            Render::CONTENT => $content
+        ]);
+    }
+
+    /**
      * Метод с авторизацией
      *
      * @Route("/is_auth")

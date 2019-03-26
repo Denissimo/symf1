@@ -189,7 +189,7 @@ class Builder
             ->matching(
                 Criteria::create()
                     ->where(
-                        Criteria::expr()->eq(\ClientSettings::CLIENT_ID, $ord->client_id)
+                        Criteria::expr()->eq(\ClientSettings::CLIENTID, $ord->client_id)
                     )
                     ->setMaxResults(1)
 

@@ -13,9 +13,12 @@ use Doctrine\Common\Collections\Collection;
 class ClientSettings extends Model
 {
     const
-        CLIENT_ID = 'clientId',
-        API_KEY = 'apikey'
-        ;
+        CLIENTID = 'clientId',
+        CLIENT_ID = 'client_id',
+        API_KEY = 'apikey',
+        IS_OFF = 'is_off',
+        ACTIVE = 'active';
+
 
     /**
      * @var int
@@ -32,6 +35,13 @@ class ClientSettings extends Model
      * @ORM\Column(name="client_id", type="integer", nullable=true)
      */
     private $clientId;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="is_off", type="integer", nullable=true)
+     */
+    private $isOff;
 
     /**
      * @var string|null
@@ -93,6 +103,25 @@ class ClientSettings extends Model
         $this->clientId = $clientId;
         return $this;
     }
+
+    /**
+     * @return int|null
+     */
+    public function getisOff(): ?int
+    {
+        return $this->isOff;
+    }
+
+    /**
+     * @param int|null $isOff
+     * @return ClientSettings
+     */
+    public function setIsOff(?int $isOff): ClientSettings
+    {
+        $this->isOff = $isOff;
+        return $this;
+    }
+
 
     /**
      * @return string|null
