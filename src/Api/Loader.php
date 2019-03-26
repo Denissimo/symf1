@@ -107,6 +107,21 @@ class Loader
     }
 
     /**
+     * @return \DateTime|null
+     */
+    public function loadLastStockUpdated()
+    {
+        /** @var \ZordersStocksModels $lastStock */
+        $lastStock = $this->getRepository(\ZordersStocksModels::class)
+            ->matching(
+                Criteria::create()
+                    ->orderBy([\ZordersStocksModels::UPDATED => Criteria::DESC])
+                    ->setMaxResults(1)
+            )->current();
+        return $lastStock->getUpdated();
+    }
+
+    /**
      * @param null $clientId
      * @return array
      * @throws \Doctrine\DBAL\DBALException

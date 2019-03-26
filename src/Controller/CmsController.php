@@ -231,8 +231,9 @@ class CmsController extends BaseController implements Api
     {
 
         $content = null;
+        $updatedStock = (new Loader())->loadLastStockUpdated();
         try {
-            $response = (new Client())->sendListsUpdateRequest();
+            $response = (new Client())->sendListsUpdateRequest($updatedStock);
 
             (new Validator())->validateOrdersList($response->clients);
 

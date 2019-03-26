@@ -31,7 +31,8 @@ Interface Fields
         ZORDER_ID = 'zorder_id';
 
     const
-        FORM_PARAMS = 'form_params';
+        FORM_PARAMS = 'form_params',
+        DATETIME_FORMAT = 'Y-m-d H:i:s';
 
     const
         GET = 'GET',
