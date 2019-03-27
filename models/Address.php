@@ -24,13 +24,6 @@ class Address
     /**
      * @var string|null
      *
-     * @ORM\Column(name="pvz_id", type="string", length=255, nullable=true, options={"comment"="Номер склада / null если заказчик"})
-     */
-    private $pvzId;
-
-    /**
-     * @var string|null
-     *
      * @ORM\Column(name="post_index", type="string", length=6, nullable=true, options={"comment"="почтовый индекс"})
      */
     private $postIndex;
@@ -172,24 +165,6 @@ class Address
     public function setId(int $id): Address
     {
         $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPvzId(): ?string
-    {
-        return $this->pvzId;
-    }
-
-    /**
-     * @param string|null $pvzId
-     * @return Address
-     */
-    public function setPvzId(?string $pvzId): Address
-    {
-        $this->pvzId = $pvzId;
         return $this;
     }
 
