@@ -3,6 +3,9 @@
 
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Collection;
+use App\Proxy;
 
 /**
  * OrdersPvz
@@ -10,8 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="orders_pvz", indexes={@ORM\Index(name="IDX_orders_pvz_order_id", columns={"order_id"}), @ORM\Index(name="IDX_orders_pvz_pvz_id", columns={"pvz_id"})})
  * @ORM\Entity
  */
-class OrdersPvz
+class OrdersPvz extends Model
 {
+
+    const
+        ORDER = 'order',
+        PVZ = 'pvz';
+
     /**
      * @var int
      *
@@ -28,6 +36,7 @@ class OrdersPvz
      */
     private $orderIdTxt;
 
+
     /**
      * @var \Orders
      *
@@ -37,6 +46,7 @@ class OrdersPvz
      * })
      */
     private $order;
+
 
     /**
      * @var \Pvz
@@ -100,6 +110,21 @@ class OrdersPvz
     {
         $this->pvz = $pvz;
         return $this;
+    }
+
+    /**
+     * @param Orders $order
+     * @param Pvz $pvz
+     * @return OrdersPvz|null
+     * @throws Exception
+     */
+    public static function exists(\Orders $order, \Pvz $pvz)
+    {
+        return Proxy::init()->getEntityManager()->getRepository(self::class)->matching(
+            Criteria::create()
+                ->where(Criteria::expr()->eq(self::ORDER, $order))
+                ->andWhere(Criteria::expr()->eq(self::PVZ, $pvz))
+        )->first();
     }
 
 }
