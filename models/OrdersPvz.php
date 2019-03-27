@@ -120,7 +120,7 @@ class OrdersPvz extends Model
      */
     public static function exists(\Orders $order, \Pvz $pvz)
     {
-        return Proxy::init()->getEntityManager()->getRepository(self::class)->matching(
+        return self::find(
             Criteria::create()
                 ->where(Criteria::expr()->eq(self::ORDER, $order))
                 ->andWhere(Criteria::expr()->eq(self::PVZ, $pvz))
