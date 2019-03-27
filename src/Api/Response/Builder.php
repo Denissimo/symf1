@@ -88,6 +88,8 @@ class Builder
                 $orderBill = $this->buildOrderBill(new \OrdersBills(), $ord);
                 $orderSettings = $this->buildOrderSettings(new \OrdersSettings(), $ord);
                 $order = $this->buildOrder(new \Orders(), $ord);
+                $ordersPvz = $this->buildOrdersPvz($order, $ord);
+                if(is_object($ordersPvz)) Proxy::init()->getEntityManager()->persist($ordersPvz);
                 $orderChangeDate = \DateTime::createFromFormat('Y-m-d H:i:s', $ord->updated);
                 $currentChangeDate = ($orderChangeDate < $currentChangeDate) ? $orderChangeDate : $currentChangeDate;
 
@@ -109,7 +111,31 @@ class Builder
         return $currentChangeDate;
     }
 
+    /**
+     * @param \Orders $order
+     * @param \stdClass $ord
+     * @return \Doctrine\Common\Collections\Collection|object|\OrdersPvz|null
+     * @throws \Exception
+     */
+    public function buildOrdersPvz(\Orders $order, \stdClass $ord)
+    {
+        $pregPvzId = preg_match('/^\(?([0-9]+)\)?.*$/', $ord->pvz_id, $pvzIdMatch);
+        if($pregPvzId) {
+            $pvz = \Pvz::find((int)$pvzIdMatch[1]);
+            $ordersPvzExists = \OrdersPvz::exists($order, $pvz);
+            if(is_object($ordersPvzExists)){
+                $ordersPvz = $ordersPvzExists;
+            } else {
+                $ordersPvz = (new \OrdersPvz())
+                        ->setOrder($order)
+                        ->setPvz($pvz);
+            }
+            return $ordersPvz;
+        } else {
+            return null;
+        }
 
+    }
 
     /**
      * @param array $orders
@@ -122,7 +148,6 @@ class Builder
             if (!is_object($res) || !isset($res->id)) continue;
             $idList[$key] = $res->id;
         }
-//        die;
         $idRow = isset($idList) ? implode(', ', $idList) : '0';
         $query = 'SELECT old_id FROM orders WHERE old_id IN(' . $idRow . ')';
         return array_column(Proxy::init()->getConnection()->query($query)->fetchAll(), 'old_id');
@@ -399,7 +424,6 @@ class Builder
             ->setOffice($ord->office)
             ->setPostAddr($ord->post_addr)
             ->setPostIndex($ord->post_index)
-            ->setPvzId($ord->pvz_id)
             ->setRegCity($ord->reg_city)
             ->setRegFulladdr($ord->reg_fulladdr)
             ->setStreet($ord->street)
