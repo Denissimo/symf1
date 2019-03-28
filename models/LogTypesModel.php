@@ -5,13 +5,17 @@
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * LogTypeModel
+ * LogTypesModel
  *
- * @ORM\Table(name="log_type_model", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
+ * @ORM\Table(name="log_types_model", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
  * @ORM\Entity
  */
-class LogTypeModel
+class LogTypesModel extends Model
 {
+
+    const
+        API_STATUS_V1_ID = 11,
+        API_STATUS_V2_ID = 12;
     /**
      * @var int
      *
@@ -38,9 +42,9 @@ class LogTypeModel
 
     /**
      * @param int $id
-     * @return LogTypeModel
+     * @return LogTypesModel
      */
-    public function setId(int $id): LogTypeModel
+    public function setId(int $id): LogTypesModel
     {
         $this->id = $id;
         return $this;
@@ -56,9 +60,9 @@ class LogTypeModel
 
     /**
      * @param string|null $type
-     * @return LogTypeModel
+     * @return LogTypesModel
      */
-    public function setType(?string $type): LogTypeModel
+    public function setType(?string $type): LogTypesModel
     {
         $this->type = $type;
         return $this;

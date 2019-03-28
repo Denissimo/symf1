@@ -123,13 +123,15 @@ class ApiController extends BaseController implements Api
         } catch (MalformedApiKeyException $e) {
 
             return $this->error($e, HttpResponse::HTTP_UNAUTHORIZED);
-
         }
 
-        Proxy::init()->getConnection()->close();
-        Proxy::init()->getLogger()->addWarning('apiV2 Request: ' . $clienSettings->getClientId());
-        Proxy::init()->getLogger()->addWarning(self::getRequest()->getClientIp());
-        Proxy::init()->getLogger()->addWarning(\GuzzleHttp\json_encode(self::getRequest()->query->all()));
+        $this->logApi(
+            $clienSettings,
+            \LogTypesModel::find(\LogTypesModel::API_STATUS_V2_ID),
+            \LogResultModel::find(\LogResultModel::HTTP_OK_ID),
+            \GuzzleHttp\json_encode($ordersData)
+        );
+
         return $this->success($ordersData);
     }
 
@@ -180,13 +182,43 @@ class ApiController extends BaseController implements Api
                     'delivery_time' => $order->getChangeDate()->getTimestamp(),
                 ];
             }
-            Proxy::init()->getLogger()->addWarning('apiV1 Request: ' . $client->getClientId());
-            Proxy::init()->getLogger()->addWarning(self::getRequest()->getClientIp());
-            Proxy::init()->getLogger()->addWarning(\GuzzleHttp\json_encode(self::getRequest()->query->all()));
+
+            $this->logApi(
+                $client,
+                \LogTypesModel::find(\LogTypesModel::API_STATUS_V1_ID),
+                \LogResultModel::find(\LogResultModel::HTTP_OK_ID),
+                \GuzzleHttp\json_encode($wrapperOrder)
+            );
             return $this->success($wrapperOrder, $options);
         } catch (\Exception $e) {
             return $this->error($e);
         }
+    }
+
+    /**
+     * @param \ClientSettings $client
+     * @param \LogTypesModel $type
+     * @param \LogResultModel $result
+     * @param string $response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    private function logApi(
+        \ClientSettings $client,
+        \LogTypesModel $type,
+        \LogResultModel $result,
+        string $response
+    )
+    {
+        $logsApi = (new \LogsApi())
+            ->setClient($client)
+            ->setIp(self::getRequest()->getClientIp())
+            ->setRequest(\GuzzleHttp\json_encode(self::getRequest()->query->all()))
+            ->setRequestType($type)
+            ->setResult($result)
+            ->setResponse($response);
+        Proxy::init()->getEntityManager()->persist($logsApi);
+        Proxy::init()->getEntityManager()->flush();
     }
 
     /**

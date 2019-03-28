@@ -1,27 +1,17 @@
 <?php
 
 
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LogsApi
  *
- * @ORM\Table(name="logs_api", indexes={@ORM\Index(name="request_type", columns={"request_type"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="result", columns={"result"})})
+ * @ORM\Table(name="logs_api", indexes={@ORM\Index(name="result", columns={"result"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="request_type", columns={"request_type"})})
  * @ORM\Entity
  */
-class LogsApi
+class LogsApi extends Model
 {
-    const
-        IP = 'ip',
-        CLIENT_ID = 'client_id',
-        USER_ID = 'user_id',
-        REQUEST_TYPE = 'request_type',
-        PARAM = 'param',
-        VALUE = 'value',
-        RESULT = 'result',
-        REQUEST = 'request',
-        RESPONSE = 'response';
-
     /**
      * @var int
      *
@@ -48,17 +38,16 @@ class LogsApi
     /**
      * @var string|null
      *
-     * @ORM\Column(name="param", type="string", length=255, nullable=true})
+     * @ORM\Column(name="param", type="string", length=255, nullable=true)
      */
     private $param;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="value", type="string", length=255, nullable=true})
+     * @ORM\Column(name="value", type="string", length=255, nullable=true)
      */
     private $value;
-
 
     /**
      * @var string|null
@@ -79,7 +68,7 @@ class LogsApi
      *
      * @ORM\Column(name="datetime", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
      */
-    private $datetime = 'CURRENT_TIMESTAMP';
+    private $datetime;
 
     /**
      * @var \ClientSettings
@@ -92,9 +81,9 @@ class LogsApi
     private $client;
 
     /**
-     * @var \LogTypeModel
+     * @var \LogTypesModel
      *
-     * @ORM\ManyToOne(targetEntity="LogTypeModel")
+     * @ORM\ManyToOne(targetEntity="LogTypesModel")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="request_type", referencedColumnName="id")
      * })
@@ -274,18 +263,18 @@ class LogsApi
     }
 
     /**
-     * @return LogTypeModel
+     * @return LogTypesModel
      */
-    public function getRequestType(): LogTypeModel
+    public function getRequestType(): LogTypesModel
     {
         return $this->requestType;
     }
 
     /**
-     * @param LogTypeModel $requestType
+     * @param LogTypesModel $requestType
      * @return LogsApi
      */
-    public function setRequestType(LogTypeModel $requestType): LogsApi
+    public function setRequestType(LogTypesModel $requestType): LogsApi
     {
         $this->requestType = $requestType;
         return $this;
