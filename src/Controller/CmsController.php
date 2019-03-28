@@ -342,7 +342,6 @@ class CmsController extends BaseController implements Api
 
 
             $code = HttpResponse::HTTP_OK;
-//            $content = ['status' => $code, 'response' => $ordersData];
 
 
         } catch (MalformedRequestException $e) {
@@ -356,7 +355,9 @@ class CmsController extends BaseController implements Api
         }
 
         Proxy::init()->getConnection()->close();
-
+        Proxy::init()->getLogger()->addWarning('apiV2 Request: ' . $clienSettings->getClientId());
+        Proxy::init()->getLogger()->addWarning(self::getRequest()->getClientIp());
+        Proxy::init()->getLogger()->addWarning(\GuzzleHttp\json_encode(self::getRequest()->query->all()));
         return $this->success($ordersData);
     }
 
@@ -407,6 +408,9 @@ class CmsController extends BaseController implements Api
                     'delivery_time' => $order->getChangeDate()->getTimestamp(),
                 ];
             }
+            Proxy::init()->getLogger()->addWarning('apiV1 Request: ' . $client->getClientId());
+            Proxy::init()->getLogger()->addWarning(self::getRequest()->getClientIp());
+            Proxy::init()->getLogger()->addWarning(\GuzzleHttp\json_encode(self::getRequest()->query->all()));
 
             return $this->success($wrapperOrder, $options);
         } catch (\Exception $e) {
