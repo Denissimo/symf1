@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="logs_api", indexes={@ORM\Index(name="request_type", columns={"request_type"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="result", columns={"result"})})
  * @ORM\Entity
  */
-class LogsApi
+class LogsApi extends Model
 {
     const
         IP = 'ip',
@@ -79,7 +79,7 @@ class LogsApi
      *
      * @ORM\Column(name="datetime", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
      */
-    private $datetime = 'CURRENT_TIMESTAMP';
+    private $datetime;
 
     /**
      * @var \ClientSettings
@@ -92,9 +92,9 @@ class LogsApi
     private $client;
 
     /**
-     * @var \LogTypeModel
+     * @var \LogTypesModel
      *
-     * @ORM\ManyToOne(targetEntity="LogTypeModel")
+     * @ORM\ManyToOne(targetEntity="LogTypesModel.php")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="request_type", referencedColumnName="id")
      * })
@@ -274,18 +274,18 @@ class LogsApi
     }
 
     /**
-     * @return LogTypeModel
+     * @return LogTypesModel
      */
-    public function getRequestType(): LogTypeModel
+    public function getRequestType(): LogTypesModel
     {
         return $this->requestType;
     }
 
     /**
-     * @param LogTypeModel $requestType
+     * @param LogTypesModel $requestType
      * @return LogsApi
      */
-    public function setRequestType(LogTypeModel $requestType): LogsApi
+    public function setRequestType(LogTypesModel $requestType): LogsApi
     {
         $this->requestType = $requestType;
         return $this;

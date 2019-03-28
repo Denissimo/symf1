@@ -10,8 +10,16 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="log_result_model", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
  * @ORM\Entity
  */
-class LogResultModel
+class LogResultModel extends Model
 {
+    const
+        HTTP_OK_ID = 8,
+        HTTP_BAD_REQUEST_ID = 27,
+        HTTP_UNAUTHORIZED_ID = 28,
+        HTTP_PAYMENT_REQUIRED_ID = 29,
+        HTTP_FORBIDDEN_ID = 30,
+        HTTP_NOT_FOUND_ID = 31,
+        HTTP_METHOD_NOT_ALLOWED_ID = 32;
     /**
      * @var int
      *
