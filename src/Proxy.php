@@ -48,7 +48,7 @@ class Proxy
     private static $validator;
 
     /**
-     * @var Logger
+     * @var Logger[]
      */
     private static $logger;
 
@@ -174,8 +174,8 @@ class Proxy
      */
     public function initLogger($name = Config::FIELD_DEFAULT, $stream = null, $level = null)
     {
-        self::$logger = new Logger($name);
-        self::$logger->pushHandler(
+        self::$logger[$name] = new Logger($name);
+        self::$logger[$name]->pushHandler(
             new StreamHandler(
                 $stream ?? Config::getLoggerPath() . 'log_' . (new \DateTime())->format('YmdHis') . '_.txt',
                 $level ?? Logger::WARNING
@@ -186,11 +186,12 @@ class Proxy
     }
 
     /**
+     * @param string $name
      * @return Logger
      */
-    public function getLogger(): Logger
+    public function getLogger($name = Config::FIELD_DEFAULT): Logger
     {
-        return self::$logger;
+        return self::$logger[$name];
     }
 
     /**

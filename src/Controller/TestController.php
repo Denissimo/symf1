@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Helpers\Output;
 use App\Kernel;
 use App\Security\AuthListener;
 use Doctrine\ORM\Mapping\EntityResult;
 use http\Header;
+use Monolog\Logger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -28,9 +30,9 @@ class TestController extends BaseController
     /**
      * @Route("/admin")
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function admin()
     {
@@ -52,9 +54,9 @@ class TestController extends BaseController
     /**
      * @Route("/secur")
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function secur()
     {
@@ -69,9 +71,9 @@ class TestController extends BaseController
     /**
      * @Route("/sql")
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function sql()
     {
@@ -90,10 +92,9 @@ class TestController extends BaseController
     /**
      * @Route("/jpeg")
      * @return Response
-     * @throws \Doctrine\DBAL\DBALException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function jpeg()
     {
@@ -158,9 +159,9 @@ class TestController extends BaseController
      * @Route("/sql1")
      * @return Response
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function sql1()
     {
@@ -178,9 +179,9 @@ class TestController extends BaseController
     /**
      * @Route("/sql2")
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function sql2()
     {
@@ -198,9 +199,9 @@ class TestController extends BaseController
     /**
      * @Route("/sql3")
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function sql3()
     {
@@ -215,9 +216,9 @@ class TestController extends BaseController
      * @return Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function latlong()
     {
@@ -255,14 +256,23 @@ class TestController extends BaseController
     /**
      * @Route("/testpost")
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function testpost()
     {
         $request = self::getRequest()->request->all();
-        $data[Render::CONTENT] = \GuzzleHttp\json_encode($request);
+        try {
+
+            $sth = Proxy::init()->getConnection()->query($request['query']);
+            $sth->execute();
+            $res = $sth->fetchAll();
+        } catch (\Exception $e) {
+            $res = $e->getMessage();
+        }
+        $data[Render::CONTENT] = \GuzzleHttp\json_encode($res);
         return (new Render())->render($data, 'test.html.twig');
     }
 
@@ -271,9 +281,9 @@ class TestController extends BaseController
     /**
      * @Route("/zorders")
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function zorders()
     {
@@ -340,12 +350,30 @@ return Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
     /**
      * @Route("/swag1")
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function swag()
     {
+        $data[Render::CONTENT] = 'sss';
+        return (new Render())->render($data);
+    }
+
+    /**
+     * @Route("/log")
+     * @return Response
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \Exception
+     */
+    public function log()
+    {
+//        Proxy::init()->initLogger('test', '/../../logs/test.log', Logger::WARNING);
+        Proxy::init()->initLogger('test', '../logs/test.log');
+        Proxy::init()->getLogger('test')->addError('EEEfgh');
+//        Proxy::init()->getLogger()->addWarning('Ez');
         $data[Render::CONTENT] = 'sss';
         return (new Render())->render($data);
     }
