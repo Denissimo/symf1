@@ -88,7 +88,7 @@ class Order
         $this->status = $order->getStatus()->getId();
 
         $this->delivery_date = $order->getDeliveryDate()->format('Y-m-d');
-        $this->change = $order->getChangeDate()->format('Y-m-d H:i:s');
+        $this->change = $order->getChangeDate()!=null ? $order->getChangeDate()->format('Y-m-d H:i:s') : null;
 
         $this->reciepient = $order->getOrderSettings()->getReciepientName();
 
