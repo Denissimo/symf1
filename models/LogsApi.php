@@ -263,18 +263,18 @@ class LogsApi extends Model
     }
 
     /**
-     * @return LogTypesModel
+     * @return LogTypesModel | null
      */
-    public function getRequestType(): LogTypesModel
+    public function getRequestType()
     {
         return $this->requestType;
     }
 
     /**
-     * @param LogTypesModel $requestType
+     * @param LogTypesModel | null $requestType
      * @return LogsApi
      */
-    public function setRequestType(LogTypesModel $requestType): LogsApi
+    public function setRequestType($requestType): LogsApi
     {
         $this->requestType = $requestType;
         return $this;

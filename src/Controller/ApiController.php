@@ -78,6 +78,8 @@ class ApiController extends BaseController implements Api
     {
         $content = 'OK';
         try {
+            $typeModel = \LogTypesModel::find(\LogTypesModel::API_STATUS_V2_ID);
+
             (new RequestValidator())->validateStatusV3Request(self::getRequest());
             $clienSettings = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
                 ->findOneBy([\ClientSettings::API_KEY => self::getRequest()->get(Api::KEY)]);
@@ -117,11 +119,22 @@ class ApiController extends BaseController implements Api
             $code = HttpResponse::HTTP_OK;
 
         } catch (MalformedRequestException $e) {
+            $this->logApi(
+                $client ?? null,
+                $typeModel ?? null,
+                $this->loadErrorResultModel($e->getCode()),
+                $e->getMessage()
+            );
 
             return $this->error($e);
 
         } catch (MalformedApiKeyException $e) {
-
+            $this->logApi(
+                $client ?? null,
+                $typeModel ?? null,
+                $this->loadErrorResultModel($e->getCode()),
+                $e->getMessage()
+            );
             return $this->error($e, HttpResponse::HTTP_UNAUTHORIZED);
         }
 
@@ -140,6 +153,8 @@ class ApiController extends BaseController implements Api
      * @Route("/api/v1/getStatus", methods={"GET"})
      *
      * @return HttpResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
@@ -149,6 +164,7 @@ class ApiController extends BaseController implements Api
         try {
             $innerId = self::getRequest()->get(Api::INNER_N, 0);
             $orderId = self::getRequest()->get(Api::ORDER_ID, 0);
+            $typeModel = \LogTypesModel::find(\LogTypesModel::API_STATUS_V1_ID);
 
             // если нет ни одно или переданны оба значения
             // мы принимаем только одно значение
@@ -183,32 +199,49 @@ class ApiController extends BaseController implements Api
                 ];
             }
 
+
+            $successModel = \LogResultModel::find(HttpResponse::HTTP_OK);
             $this->logApi(
                 $client,
-                \LogTypesModel::find(\LogTypesModel::API_STATUS_V1_ID),
-                \LogResultModel::find(HttpResponse::HTTP_OK),
+                $typeModel,
+                $successModel,
                 \GuzzleHttp\json_encode($wrapperOrder)
             );
             return $this->success($wrapperOrder, $options);
         } catch (\Exception $e) {
+            $this->logApi(
+                $client ?? null,
+                $typeModel ?? null,
+                $this->loadErrorResultModel($e->getCode()),
+                $e->getMessage()
+            );
             return $this->error($e);
         }
     }
 
     /**
-     * @param \ClientSettings $client
-     * @param \LogTypesModel $type
-     * @param \LogResultModel $result
-     * @param string $response
+     * @param int $code
+     * @return Collection|\LogResultModel|object|null
+     */
+    private function loadErrorResultModel(int $code)
+    {
+        try {
+            return \LogResultModel::find($code);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param \ClientSettings  | null $client
+     * @param \LogTypesModel | null $type
+     * @param \LogResultModel | null $result
+     * @param string | null $response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
      */
-    private function logApi(
-        \ClientSettings $client,
-        \LogTypesModel $type,
-        \LogResultModel $result,
-        string $response
-    )
+    private function logApi($client, $type, $result, $response)
     {
         $logsApi = (new \LogsApi())
             ->setClient($client)
