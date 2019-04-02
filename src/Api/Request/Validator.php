@@ -2,6 +2,7 @@
 
 namespace App\Api\Request;
 
+use App\Exceptions\InactiveCliendException;
 use App\Exceptions\MalformedApiKeyException;
 use App\Proxy;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -12,22 +13,33 @@ use Symfony\Component\HttpFoundation\Request;
 class Validator
 {
     const
-        RESPONSE = 'response';
+        DATA = 'data';
+
     /**
-     * @param $ordersList
+     * @param Request $Request
+     * @param array $requiredFields
      */
-    public function validateStatusV3Request(Request $Request)
+    public function validateRequiredFields(Request $Request, array $requiredFields)
     {
-        $requiredFields = [
-            Api::FIELD_FROM,
-            Api::FIELD_TO,
-            Api::KEY
-        ];
+
         Proxy::init()->getValidator()->validateRequired(
             $Request->query->all(),
             $requiredFields,
-            'Fields ' . implode(', ', $requiredFields) . ' are REQUIRED !!!',
+            'Required fields missing: ' . implode(', ', $requiredFields),
             MalformedRequestException::class
+        );
+    }
+
+
+    public function validateClientActive(\ClientSettings $client)
+    {
+        Proxy::init()->getValidator()->validateType(
+            [self::DATA => $client->getActive()],
+            [
+                self::DATA => new Assert\EqualTo(\ClientSettings::VALUE_ACTIVE)
+            ],
+            'Inactive cletnt !',
+            InactiveCliendException::class
         );
     }
 
@@ -38,9 +50,9 @@ class Validator
     public function validateNotBlank($object, $errorMessage)
     {
         Proxy::init()->getValidator()->validateType(
-            [self::RESPONSE => $object],
+            [self::DATA => $object],
             [
-                self::RESPONSE => new Assert\NotBlank()
+                self::DATA => new Assert\NotBlank()
             ],
             $errorMessage,
             MalformedRequestException::class
@@ -55,9 +67,9 @@ class Validator
     public function validateApiKey($object, $errorMessage)
     {
         Proxy::init()->getValidator()->validateType(
-            [self::RESPONSE => $object],
+            [self::DATA => $object],
             [
-                self::RESPONSE => new Assert\NotBlank()
+                self::DATA => new Assert\NotBlank()
             ],
             $errorMessage,
             MalformedApiKeyException::class

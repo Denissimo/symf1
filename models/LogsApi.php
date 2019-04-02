@@ -253,10 +253,10 @@ class LogsApi extends Model
     }
 
     /**
-     * @param ClientSettings $client
+     * @param ClientSettings | null $client
      * @return LogsApi
      */
-    public function setClient(ClientSettings $client): LogsApi
+    public function setClient(?ClientSettings $client): LogsApi
     {
         $this->client = $client;
         return $this;

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Api\Client;
 use App\Api\Request\Unit;
 use App\Exceptions\BadResponseException;
+use App\Exceptions\InactiveCliendException;
 use App\Exceptions\InvalidRequestAgrs;
 use App\Exceptions\MalformedRequestException;
 use App\Exceptions\OrdersListEmptyResponseException;
@@ -80,23 +81,28 @@ class ApiController extends BaseController implements Api
         try {
             $typeModel = \LogTypesModel::find(\LogTypesModel::API_STATUS_V2_ID);
 
-            (new RequestValidator())->validateStatusV3Request(self::getRequest());
-            $clienSettings = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
+
+            (new RequestValidator())->validateRequiredFields(self::getRequest(), [Api::KEY]);
+            $client = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
                 ->findOneBy([\ClientSettings::API_KEY => self::getRequest()->get(Api::KEY)]);
             (new RequestValidator())->validateApiKey(
-                $clienSettings,
+                $client,
                 'Incorrect Api Key'
             );
+            (new RequestValidator())->validateClientActive($client);
+            (new RequestValidator())->validateRequiredFields(self::getRequest(), [Api::FIELD_FROM]);
             $dateFrom = \DateTime::createFromFormat(
                 \Options::FORMAT,
                 self::getRequest()->get(Api::FIELD_FROM)
             );
             (new RequestValidator())->validateNotBlank($dateFrom, 'Incorrect field: ' . Api::FIELD_FROM);
 
-            $dateTo = \DateTime::createFromFormat(
+            $dateTo = self::getRequest()->get(Api::FIELD_TO) != null ?
+                \DateTime::createFromFormat(
                 \Options::FORMAT,
                 self::getRequest()->get(Api::FIELD_TO)
-            );
+            ) : new \DateTime();
+
             (new RequestValidator())->validateNotBlank($dateTo, 'Incorrect field: ' . Api::FIELD_TO);
 
             $interval = date_diff($dateTo, $dateFrom);
@@ -105,7 +111,7 @@ class ApiController extends BaseController implements Api
             (new RequestValidator())->validateDateDiff($dateDiff, Api::LIMIT_DAYS_API_V3);
 
             $orders = (new Loader())->loadApiV3Orders(
-                $clienSettings,
+                $client,
                 $dateFrom,
                 $dateTo
             );
@@ -114,9 +120,6 @@ class ApiController extends BaseController implements Api
             $marks = (new Loader())->loadMarks();
 
             $ordersData = (new ResponseBuidser())->buildStatusV3($orders, $porders, $marks);
-
-
-            $code = HttpResponse::HTTP_OK;
 
         } catch (MalformedRequestException $e) {
             $this->logApi(
@@ -135,11 +138,19 @@ class ApiController extends BaseController implements Api
                 $this->loadErrorResultModel($e->getCode()),
                 $e->getMessage()
             );
-            return $this->error($e, HttpResponse::HTTP_UNAUTHORIZED);
+            return $this->error($e);
+        } catch (InactiveCliendException $e) {
+            $this->logApi(
+                $client ?? null,
+                $typeModel ?? null,
+                $this->loadErrorResultModel($e->getCode()),
+                $e->getMessage()
+            );
+            return $this->error($e);
         }
 
         $this->logApi(
-            $clienSettings,
+            $client,
             \LogTypesModel::find(\LogTypesModel::API_STATUS_V2_ID),
             \LogResultModel::find(HttpResponse::HTTP_OK),
             \GuzzleHttp\json_encode($ordersData)
