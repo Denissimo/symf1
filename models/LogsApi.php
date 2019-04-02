@@ -253,28 +253,28 @@ class LogsApi extends Model
     }
 
     /**
-     * @param ClientSettings $client
+     * @param ClientSettings | null $client
      * @return LogsApi
      */
-    public function setClient(ClientSettings $client): LogsApi
+    public function setClient(?ClientSettings $client): LogsApi
     {
         $this->client = $client;
         return $this;
     }
 
     /**
-     * @return LogTypesModel
+     * @return LogTypesModel | null
      */
-    public function getRequestType(): LogTypesModel
+    public function getRequestType()
     {
         return $this->requestType;
     }
 
     /**
-     * @param LogTypesModel $requestType
+     * @param LogTypesModel | null $requestType
      * @return LogsApi
      */
-    public function setRequestType(LogTypesModel $requestType): LogsApi
+    public function setRequestType($requestType): LogsApi
     {
         $this->requestType = $requestType;
         return $this;

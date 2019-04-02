@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Api\Client;
 use App\Api\Request\Unit;
 use App\Exceptions\BadResponseException;
+use App\Exceptions\InactiveCliendException;
 use App\Exceptions\InvalidRequestAgrs;
 use App\Exceptions\MalformedRequestException;
 use App\Exceptions\OrdersListEmptyResponseException;
@@ -78,23 +79,30 @@ class ApiController extends BaseController implements Api
     {
         $content = 'OK';
         try {
-            (new RequestValidator())->validateStatusV3Request(self::getRequest());
-            $clienSettings = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
+            $typeModel = \LogTypesModel::find(\LogTypesModel::API_STATUS_V2_ID);
+
+
+            (new RequestValidator())->validateRequiredFields(self::getRequest(), [Api::KEY]);
+            $client = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
                 ->findOneBy([\ClientSettings::API_KEY => self::getRequest()->get(Api::KEY)]);
             (new RequestValidator())->validateApiKey(
-                $clienSettings,
+                $client,
                 'Incorrect Api Key'
             );
+            (new RequestValidator())->validateClientActive($client);
+            (new RequestValidator())->validateRequiredFields(self::getRequest(), [Api::FIELD_FROM]);
             $dateFrom = \DateTime::createFromFormat(
                 \Options::FORMAT,
                 self::getRequest()->get(Api::FIELD_FROM)
             );
             (new RequestValidator())->validateNotBlank($dateFrom, 'Incorrect field: ' . Api::FIELD_FROM);
 
-            $dateTo = \DateTime::createFromFormat(
+            $dateTo = self::getRequest()->get(Api::FIELD_TO) != null ?
+                \DateTime::createFromFormat(
                 \Options::FORMAT,
                 self::getRequest()->get(Api::FIELD_TO)
-            );
+            ) : new \DateTime();
+
             (new RequestValidator())->validateNotBlank($dateTo, 'Incorrect field: ' . Api::FIELD_TO);
 
             $interval = date_diff($dateTo, $dateFrom);
@@ -103,7 +111,7 @@ class ApiController extends BaseController implements Api
             (new RequestValidator())->validateDateDiff($dateDiff, Api::LIMIT_DAYS_API_V3);
 
             $orders = (new Loader())->loadApiV3Orders(
-                $clienSettings,
+                $client,
                 $dateFrom,
                 $dateTo
             );
@@ -113,20 +121,36 @@ class ApiController extends BaseController implements Api
 
             $ordersData = (new ResponseBuidser())->buildStatusV3($orders, $porders, $marks);
 
-
-            $code = HttpResponse::HTTP_OK;
-
         } catch (MalformedRequestException $e) {
+            $this->logApi(
+                $client ?? null,
+                $typeModel ?? null,
+                $this->loadErrorResultModel($e->getCode()),
+                $e->getMessage()
+            );
 
             return $this->error($e);
 
         } catch (MalformedApiKeyException $e) {
-
-            return $this->error($e, HttpResponse::HTTP_UNAUTHORIZED);
+            $this->logApi(
+                $client ?? null,
+                $typeModel ?? null,
+                $this->loadErrorResultModel($e->getCode()),
+                $e->getMessage()
+            );
+            return $this->error($e);
+        } catch (InactiveCliendException $e) {
+            $this->logApi(
+                $client ?? null,
+                $typeModel ?? null,
+                $this->loadErrorResultModel($e->getCode()),
+                $e->getMessage()
+            );
+            return $this->error($e);
         }
 
         $this->logApi(
-            $clienSettings,
+            $client,
             \LogTypesModel::find(\LogTypesModel::API_STATUS_V2_ID),
             \LogResultModel::find(HttpResponse::HTTP_OK),
             \GuzzleHttp\json_encode($ordersData)
@@ -140,6 +164,8 @@ class ApiController extends BaseController implements Api
      * @Route("/api/v1/getStatus", methods={"GET"})
      *
      * @return HttpResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
@@ -149,6 +175,7 @@ class ApiController extends BaseController implements Api
         try {
             $innerId = self::getRequest()->get(Api::INNER_N, 0);
             $orderId = self::getRequest()->get(Api::ORDER_ID, 0);
+            $typeModel = \LogTypesModel::find(\LogTypesModel::API_STATUS_V1_ID);
 
             // если нет ни одно или переданны оба значения
             // мы принимаем только одно значение
@@ -183,32 +210,49 @@ class ApiController extends BaseController implements Api
                 ];
             }
 
+
+            $successModel = \LogResultModel::find(HttpResponse::HTTP_OK);
             $this->logApi(
                 $client,
-                \LogTypesModel::find(\LogTypesModel::API_STATUS_V1_ID),
-                \LogResultModel::find(HttpResponse::HTTP_OK),
+                $typeModel,
+                $successModel,
                 \GuzzleHttp\json_encode($wrapperOrder)
             );
             return $this->success($wrapperOrder, $options);
         } catch (\Exception $e) {
+            $this->logApi(
+                $client ?? null,
+                $typeModel ?? null,
+                $this->loadErrorResultModel($e->getCode()),
+                $e->getMessage()
+            );
             return $this->error($e);
         }
     }
 
     /**
-     * @param \ClientSettings $client
-     * @param \LogTypesModel $type
-     * @param \LogResultModel $result
-     * @param string $response
+     * @param int $code
+     * @return Collection|\LogResultModel|object|null
+     */
+    private function loadErrorResultModel(int $code)
+    {
+        try {
+            return \LogResultModel::find($code);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param \ClientSettings  | null $client
+     * @param \LogTypesModel | null $type
+     * @param \LogResultModel | null $result
+     * @param string | null $response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
      */
-    private function logApi(
-        \ClientSettings $client,
-        \LogTypesModel $type,
-        \LogResultModel $result,
-        string $response
-    )
+    private function logApi($client, $type, $result, $response)
     {
         $logsApi = (new \LogsApi())
             ->setClient($client)

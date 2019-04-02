@@ -19,6 +19,9 @@ class ClientSettings extends Model
         IS_OFF = 'is_off',
         ACTIVE = 'active';
 
+    const
+        VALUE_ACTIVE = 1;
+
 
     /**
      * @var int
