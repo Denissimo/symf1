@@ -128,7 +128,7 @@ class ApiController extends BaseController implements Api
         $this->logApi(
             $clienSettings,
             \LogTypesModel::find(\LogTypesModel::API_STATUS_V2_ID),
-            \LogResultModel::find(\LogResultModel::HTTP_OK_ID),
+            \LogResultModel::find(HttpResponse::HTTP_OK),
             \GuzzleHttp\json_encode($ordersData)
         );
 
@@ -186,7 +186,7 @@ class ApiController extends BaseController implements Api
             $this->logApi(
                 $client,
                 \LogTypesModel::find(\LogTypesModel::API_STATUS_V1_ID),
-                \LogResultModel::find(\LogResultModel::HTTP_OK_ID),
+                \LogResultModel::find(HttpResponse::HTTP_OK),
                 \GuzzleHttp\json_encode($wrapperOrder)
             );
             return $this->success($wrapperOrder, $options);
