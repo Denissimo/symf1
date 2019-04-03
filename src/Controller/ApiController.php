@@ -147,6 +147,14 @@ class ApiController extends BaseController implements Api
                 $e->getMessage()
             );
             return $this->error($e);
+        } catch (\Exception $e) {
+            $this->logApi(
+                $client ?? null,
+                $typeModel ?? null,
+                $this->loadErrorResultModel($e->getCode()),
+                $e->getMessage()
+            );
+            return $this->error($e);
         }
 
         $this->logApi(

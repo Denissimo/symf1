@@ -45,5 +45,6 @@ Interface Fields
         LIMIT_DAYS_API_V3 = 3;
 
     const
-        MAX_LOAD_UPDATE_INTERVAL = 'PT12H';
+        MAX_LOAD_UPDATE_INTERVAL = 'PT12H',
+        MAX_LOAD_ORDERS = 200;
 }

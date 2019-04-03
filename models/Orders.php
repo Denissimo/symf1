@@ -16,7 +16,7 @@ class Orders extends Model
 
     const
         CLIENT = 'client',
-        GHANGEDATE = 'changeDate',
+        GHANGEDATE = 'updated',
         OLDID = 'oldId',
         ID = 'id',
         INNER_N = 'innerN',
