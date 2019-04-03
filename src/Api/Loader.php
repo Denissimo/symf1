@@ -67,7 +67,7 @@ class Loader
                     )->andWhere(
                         Criteria::expr()->lte(\Orders::GHANGEDATE, $to)
                     )
-                    ->setMaxResults(200)
+                    ->setMaxResults(Api::MAX_LOAD_ORDERS)
             )->toArray();
 
         return $orders;
