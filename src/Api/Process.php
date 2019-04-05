@@ -51,14 +51,14 @@ class Process
         foreach ($clientsAll as $client) {
             $clientId = $client->getClientId();
 
-            if(isset($sortedClients[$clientId])) {
-              $clientNewData = $sortedClients[$clientId];
-                            $client
-                                ->setIsOff($clientNewData->is_off)
-                                ->setApikey($clientNewData->apikey)
-                                ->setActive($clientNewData->active);
-                            Proxy::init()->getEntityManager()->persist($client);
-            unset($sortedClients[$clientId]);
+            if (isset($sortedClients[$clientId])) {
+                $clientNewData = $sortedClients[$clientId];
+                $client
+                    ->setIsOff($clientNewData->is_off)
+                    ->setApikey($clientNewData->apikey)
+                    ->setActive($clientNewData->active);
+                Proxy::init()->getEntityManager()->persist($client);
+                unset($sortedClients[$clientId]);
             }
         }
 
@@ -88,7 +88,7 @@ class Process
         foreach ($pvzAll as $p) {
             $id = $p->getId();
 
-            if(isset($sortedPvz[$id])) {
+            if (isset($sortedPvz[$id])) {
                 $pvzNewData = $sortedPvz[$id];
                 $currentPvz = (new Builder())->buildPvz($p, $pvzNewData);
                 Proxy::init()->getEntityManager()->persist($currentPvz);
@@ -118,7 +118,7 @@ class Process
         foreach ($stocksAll as $stock) {
             $id = $stock->getId();
 
-            if(isset($sortedStocks[$id])) {
+            if (isset($sortedStocks[$id])) {
                 $stockNewData = $sortedStocks[$id];
                 $currentStock = (new Builder())->buildStock($stock, $stockNewData);
                 Proxy::init()->getEntityManager()->persist($currentStock);
@@ -138,7 +138,7 @@ class Process
      * @param string $column
      * @return array
      */
-    private  function sortedArray(array $array, string $column) : array
+    private function sortedArray(array $array, string $column): array
     {
         $columnArray = array_column($array, $column);
         return array_combine($columnArray, $array);
@@ -176,7 +176,7 @@ class Process
                 $orderSettings = (new Builder())->buildOrderSettings($order->getOrderSettings(), $ord);
                 $currentOrder = (new Builder())->buildOrder($order, $ord);
                 $ordersPvz = (new Builder())->buildOrdersPvz($currentOrder, $ord);
-                if(is_object($ordersPvz)) {
+                if (is_object($ordersPvz)) {
                     Proxy::init()->getEntityManager()->persist($ordersPvz);
                 }
 
@@ -215,13 +215,41 @@ class Process
             \Options::ORDERS_USE_ID => $useLastId
         ];
     }
+    /**
+     * @param array $porders
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
+     */
+    public function saveUpdatePorders(array $porders)
+    {
+        $firstDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($porders)->datetime);
+        foreach ($porders as $pord) {
+            $porder = (new Loader())->loadPorderByOid($pord->id);
+                $currentOrder = (new Builder())->buildPorder(
+                    is_object($porder) ? $porder : new \Porders(),
+                    $pord
+                );
+                Proxy::init()->getEntityManager()->persist($currentOrder);
+        }
+        $endDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($porders)->datetime);
+        $useLastId = (int)($firstDateTime == $endDateTime && count($porders) > 1);
+        $finalPorderId = (int)end($porders)->id;
+        Proxy::init()->getEntityManager()->flush();
+        return [
+            \Options::PORDERS_UPDATE => $endDateTime,
+            \Options::PORDERS_LAST_ID => $finalPorderId,
+            \Options::PORDERS_USE_ID => $useLastId
+        ];
+    }
 
     /**
      * @param \Orders $order
      * @param int $type
-     * @throws \Exception
      * @param string | null $param
      * @param string | null $value
+     * @throws \Exception
      * @throws \Doctrine\ORM\ORMException
      */
     public function saveHistory(\Orders $order, int $type, $param = null, $value = null)

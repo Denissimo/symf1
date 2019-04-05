@@ -92,7 +92,7 @@ class CmsController extends BaseController implements Api
         try {
 //            Proxy::init()->getLogger()->addWarning('UnitList: ' .\GuzzleHttp\json_encode($unitList));
             $response = (new Client())->process($unitList);
-            (new Validator())->validateOrdersList($response);
+            (new Validator())->validateResponseList($response);
 
             if (isset($response[0]->status) && $response[0]->status == 400) {
                 $content = 'Error';
@@ -128,7 +128,7 @@ class CmsController extends BaseController implements Api
             new \DateInterval(Api::MAX_LOAD_UPDATE_INTERVAL)
         );
         if ($current > $checkTime) {
-            $lastTime->setOrdersUpdateLastDatetime($current);
+            $lastTime->setUpdateLastDatetime($current);
             Proxy::init()->getEntityManager()->persist($lastTime);
             Proxy::init()->getEntityManager()->flush();
         }
@@ -156,7 +156,7 @@ class CmsController extends BaseController implements Api
 
         try {
             $response = (new Client())->sendOrdersQtyRequest($clentIdList);
-            (new Validator())->validateOrdersList($response);
+            (new Validator())->validateResponseList($response);
             (new ResponseBuidser())->saveOrdersCount($response);
         } catch (MalformedResponseException $e) {
             $message = $e->getMessage();
@@ -187,18 +187,18 @@ class CmsController extends BaseController implements Api
         Proxy::init()->getLogger()->addWarning('BiggestOrderId: ' . (new Loader())->loadBiggestOldId());
         try {
             $response = (new Client())->sendOrdersUpdateRequest(
-                $lastTime->getOrdersUpdateLastDatetime(),
+                $lastTime->getUpdateLastDatetime(),
                 $useId->getValue() ? $lastId->getValue() : Api::ZERO,
                 (new Loader())->loadBiggestOldId(),
                 self::getRequest()
             );
-            (new Validator())->validateOrdersList($response);
+            (new Validator())->validateResponseList($response);
             if (isset($response->status) && $response->status == 400) {
                 $content = 'Error';
                 Proxy::init()->getLogger()->addWarning('Error: ' . $content);
             } else {
                 $options = (new Process())->processUpdate($response);
-                $lastTime->setOrdersUpdateLastDatetime($options[\Options::ORDERS_UPDATE]);
+                $lastTime->setUpdateLastDatetime($options[\Options::ORDERS_UPDATE]);
                 $lastId->setValue($options[\Options::ORDERS_LAST_ID]);
                 $useId->setValue($options[\Options::ORDERS_USE_ID]);
                 Proxy::init()->getEntityManager()->persist($lastTime);
@@ -216,10 +216,50 @@ class CmsController extends BaseController implements Api
         Proxy::init()->getConnection()->close();
 
         return (new Render())->render([
-            Render::CONTENT => $lastTime->getOrdersUpdateLastDatetime()->format('c')
+            Render::CONTENT => $lastTime->getUpdateLastDatetime()->format('c')
         ]);
     }
 
+    /**
+     * @Route("/cmsapi/pordersupdate")
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     * @throws \Exception
+     */
+    public function loadPordersUpdate(){
+        $lastTime = (new Loader())->loadOption(\Options::PORDERS_UPDATE);
+        $lastId = (new Loader())->loadOption(\Options::PORDERS_LAST_ID);
+        $useId = (new Loader())->loadOption(\Options::PORDERS_USE_ID);
+        try {
+            $response = (new Client())->sendPordersUpdateRequest(
+                $lastTime->getUpdateLastDatetime(),
+                self::getRequest(),
+                $useId->getValue() ? $lastId->getValue() : Api::ZERO
+            );
+            (new Validator())->validateResponseList($response);
+            if (isset($response->status) && $response->status == 400) {
+                $content = 'Error';
+                Proxy::init()->getLogger()->addWarning('Error: ' . $content);
+            } else {
+                $options = (new Process())->saveUpdatePorders($response);
+                $lastTime->setUpdateLastDatetime($options[\Options::PORDERS_UPDATE]);
+                $lastId->setValue($options[\Options::PORDERS_LAST_ID]);
+                $useId->setValue($options[\Options::PORDERS_USE_ID]);
+                Proxy::init()->getEntityManager()->persist($lastTime);
+                Proxy::init()->getEntityManager()->persist($lastId);
+                Proxy::init()->getEntityManager()->persist($useId);
+                Proxy::init()->getEntityManager()->flush();
+            }
+        } catch (MalformedResponseException $e) {
+            $message = $e->getMessage();
+            Proxy::init()->getLogger()->addWarning('MalformedResponseException: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            Proxy::init()->getLogger()->addWarning('Exception: ' . $e->getMessage());
+        }
+    }
 
     /**
      * @Route("/cmsapi/listsupdate")

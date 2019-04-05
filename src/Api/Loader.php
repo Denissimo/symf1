@@ -183,6 +183,24 @@ class Loader
     }
 
     /**
+     * @param int $oid
+     * @return \Porders
+     */
+    public function loadPorderByOid(int $oid)
+    {
+        return $this->getRepository(\Porders::class)
+            ->matching(
+                Criteria::create()
+                    ->where(
+                        Criteria::expr()->eq(\Porders::OLDID,
+                            $oid
+                        )
+                    )
+                    ->orderBy([\Porders::ID => Criteria::ASC])
+                    ->setMaxResults(1)
+            )->current();
+    }
+    /**
      * @param \Orders $order
      * @return \Goods []
      */

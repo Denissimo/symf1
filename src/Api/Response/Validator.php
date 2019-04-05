@@ -15,7 +15,7 @@ class Validator
     /**
      * @param $ordersList
      */
-    public function validateOrdersList($ordersList)
+    public function validateResponseList($ordersList)
     {
         Proxy::init()->getValidator()->validateType(
             [self::RESPONSE => $ordersList],

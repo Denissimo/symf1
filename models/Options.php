@@ -21,6 +21,9 @@ class Options
         ORDERS_UPDATE = 'orders_update_last_datetime',
         ORDERS_LAST_ID = 'orders_update_last_order_id',
         ORDERS_USE_ID = 'orders_update_use_order_id',
+        PORDERS_UPDATE = 'porders_update_last_datetime',
+        PORDERS_LAST_ID = 'porders_update_last_porder_id',
+        PORDERS_USE_ID = 'porders_update_use_porder_id',
         FORMAT = 'Y-m-d H:i:s'
     ;
     /**
@@ -103,7 +106,7 @@ class Options
     /**
      * @return bool|DateTime
      */
-    public function getOrdersUpdateLastDatetime()
+    public function getUpdateLastDatetime()
     {
         return DateTime::createFromFormat(self::FORMAT, $this->value);
     }
@@ -112,7 +115,7 @@ class Options
      * @param DateTime $value
      * @return $this
      */
-    public function setOrdersUpdateLastDatetime(\DateTime $value)
+    public function setUpdateLastDatetime(\DateTime $value)
     {
         $this->value = $value->format(self::FORMAT);
         return $this;

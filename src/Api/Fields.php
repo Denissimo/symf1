@@ -32,6 +32,7 @@ Interface Fields
 
     const
         FORM_PARAMS = 'form_params',
+        DATE_FORMAT = 'Y-m-d',
         DATETIME_FORMAT = 'Y-m-d H:i:s';
 
     const
