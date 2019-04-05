@@ -4,6 +4,7 @@ namespace App\Api\Response;
 
 use App\Api\Process;
 use App\Api\Structure as Fields;
+use App\Helpers\Convert;
 use App\Proxy;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Expression;
@@ -89,7 +90,7 @@ class Builder
                 $orderSettings = $this->buildOrderSettings(new \OrdersSettings(), $ord);
                 $order = $this->buildOrder(new \Orders(), $ord);
                 $ordersPvz = $this->buildOrdersPvz($order, $ord);
-                if(is_object($ordersPvz)) Proxy::init()->getEntityManager()->persist($ordersPvz);
+                if (is_object($ordersPvz)) Proxy::init()->getEntityManager()->persist($ordersPvz);
                 $orderChangeDate = \DateTime::createFromFormat('Y-m-d H:i:s', $ord->updated);
                 $currentChangeDate = ($orderChangeDate < $currentChangeDate) ? $orderChangeDate : $currentChangeDate;
 
@@ -120,15 +121,15 @@ class Builder
     public function buildOrdersPvz(\Orders $order, \stdClass $ord)
     {
         $pregPvzId = preg_match('/^\(?([0-9]+)\)?.*$/', $ord->pvz_id, $pvzIdMatch);
-        if($pregPvzId) {
+        if ($pregPvzId) {
             $pvz = \Pvz::find((int)$pvzIdMatch[1]);
             $ordersPvzExists = \OrdersPvz::exists($order, $pvz);
-            if(is_object($ordersPvzExists)){
+            if (is_object($ordersPvzExists)) {
                 $ordersPvz = $ordersPvzExists;
             } else {
                 $ordersPvz = (new \OrdersPvz())
-                        ->setOrder($order)
-                        ->setPvz($pvz);
+                    ->setOrder($order)
+                    ->setPvz($pvz);
             }
             return $ordersPvz;
         } else {
@@ -333,13 +334,78 @@ class Builder
         return $porder;
     }
 
+    /**
+     * @param \Zorders $zorder
+     * @param \stdClass $zord
+     * @return \Zorders
+     * @throws \Exception
+     */
+    public function buildZorder(\Zorders $zorder, \stdClass $zord)
+    {
+        /** @var \ZordersTypesModel $type */
+        $type =  \ZordersTypesModel::find($zord->type_id);
+
+        /** @var \ZordersStatusModel $status */
+        $status = \ZordersStatusModel::find($zord->sts);
+
+        /** @var \ZordersStocksModels $stock */
+        $stock = \ZordersStocksModels::find($zord->sklad_id);
+
+        /** @var \ZordersStocksOurModel $stockOur */
+        $stockOur = \ZordersStocksOurModel::find($zord->sklad_num);
+
+        /** @var \ZordersVaktPartStatusModel $vaktId */
+        $vaktId = \ZordersVaktPartStatusModel::find($zord->vakt_id);
+
+        /** @var \ClientSettings $client */
+        $client = \ClientSettings::find(
+            Criteria::create()
+                ->where(Criteria::expr()->eq(\ClientSettings::CLIENTID, $zord->client_id))
+        )->first();
+
+
+        $zorder
+            ->setOldId($zord->id)
+            ->setType($type)
+            ->setDate(Convert::date($zord->date))
+            ->setClient($client)
+            ->setCourierId($zord->courier_id)
+            ->setStockOur($stockOur)
+            ->setInnerCli($zord->inner_cli)
+            ->setMoKladrId($zord->mo_kladr_id)
+            ->setStock($stock)
+            ->setZoneId($zord->zone_id)
+            ->setInner($zord->inner)
+            ->setTime1($zord->time1)
+            ->setTime2($zord->time2)
+            ->setZcomments($zord->zcomments)
+            ->setStatus($status)
+            ->setIsPay($zord->is_pay)
+            ->setZpvzId($zord->zpvz_id)
+            ->setZprice($zord->zprice)
+            ->setBillId($zord->bill_id)
+            ->setWeight($zord->weight)
+            ->setCap($zord->cap)
+            ->setCrCost($zord->cr_cost)
+            ->setCarType($zord->car_type)
+            ->setPerenos($zord->perenos)
+            ->setPerenosMark($zord->perenos_mark)
+            ->setChangeDate(Convert::date($zord->change_date, true))
+            ->setVozvratmark($zord->vozvratmark)
+            ->setPlacesCount($zord->places_count)
+            ->setVaktPart($zord->vakt_part)
+            ->setVaktPartStatus($vaktId);
+
+        return $zorder;
+    }
 
     /**
      * @param \Pvz $pvz
      * @param \stdClass $stdPvz
      * @return \Pvz
      */
-    public function buildPvz(\Pvz $pvz, \stdClass $stdPvz) {
+    public function buildPvz(\Pvz $pvz, \stdClass $stdPvz)
+    {
         $pvz
             ->setOldId($stdPvz->id)
             ->setMxmId($stdPvz->mxm_id)
@@ -390,7 +456,8 @@ class Builder
      * @param \stdClass $stdStock
      * @return \ZordersStocksModels
      */
-    public function buildStock(\ZordersStocksModels $stock, \stdClass $stdStock) {
+    public function buildStock(\ZordersStocksModels $stock, \stdClass $stdStock)
+    {
         /** @var \ClientSettings $client */
         $client = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
             ->matching(
@@ -419,8 +486,7 @@ class Builder
             ->setContTel($stdStock->cont_tel)
             ->setTime($stdStock->time)
             ->setMoPunktId($stdStock->mo_punkt_id)
-            ->setInnerN($stdStock->inner_n)
-        ;
+            ->setInnerN($stdStock->inner_n);
         return $stock;
     }
 

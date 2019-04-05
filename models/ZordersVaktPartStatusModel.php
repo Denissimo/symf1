@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="zorders_vakt_part_status_model")
  * @ORM\Entity
  */
-class ZordersVaktPartStatusModel
+class ZordersVaktPartStatusModel extends Model
 {
     /**
      * @var int

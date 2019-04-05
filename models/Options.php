@@ -24,6 +24,9 @@ class Options
         PORDERS_UPDATE = 'porders_update_last_datetime',
         PORDERS_LAST_ID = 'porders_update_last_porder_id',
         PORDERS_USE_ID = 'porders_update_use_porder_id',
+        ZORDERS_UPDATE = 'zorders_update_last_datetime',
+        ZORDERS_LAST_ID = 'zorders_update_last_zorder_id',
+        ZORDERS_USE_ID = 'zorders_update_use_zorder_id',
         FORMAT = 'Y-m-d H:i:s'
     ;
     /**

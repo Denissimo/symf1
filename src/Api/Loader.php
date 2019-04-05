@@ -183,20 +183,23 @@ class Loader
     }
 
     /**
+     * @param string $model
      * @param int $oid
-     * @return \Porders
+     * @param string $field
+     * @return mixed
      */
-    public function loadPorderByOid(int $oid)
+    public function loadByOid(string $model, int $oid, string $field = 'oldId')
     {
-        return $this->getRepository(\Porders::class)
+        return $this->getRepository($model)
             ->matching(
                 Criteria::create()
                     ->where(
-                        Criteria::expr()->eq(\Porders::OLDID,
+                        Criteria::expr()->eq(
+                            $field,
                             $oid
                         )
                     )
-                    ->orderBy([\Porders::ID => Criteria::ASC])
+                    ->orderBy([\Model::ID => Criteria::ASC])
                     ->setMaxResults(1)
             )->current();
     }
