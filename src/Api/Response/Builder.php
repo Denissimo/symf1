@@ -307,6 +307,34 @@ class Builder
 
 
     /**
+     * @param \Porders $porder
+     * @param \stdClass $pord
+     * @return \Porders
+     */
+    public function buildPorder(\Porders $porder, \stdClass $pord)
+    {
+        /** @var \PordersPodstatusModel $podstatus */
+        $podstatus = isset($pord->podstatus) ? Proxy::init()->getEntityManager()
+            ->getRepository(\PordersPodstatusModel::class)
+            ->find($pord->podstatus) : null;
+        $enddate = \DateTime::createFromFormat('Y-m-d', $pord->enddate) ?
+            \DateTime::createFromFormat('Y-m-d', $pord->enddate) : null;
+
+        $porder
+            ->setOldId($pord->id)
+            ->setPodstatus($podstatus)
+            ->setOrderId($pord->order_id)
+            ->setAtar($pord->atar)
+            ->setAnp($pord->anp)
+            ->setAus($pord->aus)
+            ->setBillId($pord->bill_id)
+            ->setEnddate($enddate);
+
+        return $porder;
+    }
+
+
+    /**
      * @param \Pvz $pvz
      * @param \stdClass $stdPvz
      * @return \Pvz

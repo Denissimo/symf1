@@ -14,6 +14,7 @@ class Client
 {
     const
         API_PATH_ORDERS = 'change_with_db',
+        API_PATH_PORDERS = 'change_with_db_porders',
         API_PATH_LISTS = 'change_with_db_lists';
 
     /**
@@ -103,6 +104,35 @@ class Client
                 Proxy::init()->getHttpClient()->request(
                     Api::POST,
                     getenv('cms_api_url1') . self::API_PATH_ORDERS,
+                    [
+                        Api::FORM_PARAMS =>
+                            $request
+                    ]
+                )->getBody()->getContents()
+            );
+    }
+
+    /**
+     * @param \DateTime $lastPordersUpdateTime
+     * @param Request $get
+     * @param int $lastOrderId
+     * @return mixed
+     * @throws GuzzleHttp\Exception\GuzzleException
+     */
+    public function sendPordersUpdateRequest(\DateTime $lastPordersUpdateTime, Request $get,  int $lastOrderId = null)
+    {
+        $request = [
+            Api::KEY => getenv('cms_api_key'),
+            Api::LIMIT_END => $get->query->all()[Api::LIMIT_END] ?? Builder::LIMIT_UPDATE,
+            Api::UPDATE_TIME => $lastPordersUpdateTime->format(\Options::FORMAT),
+            Api::LAST_ID => $lastOrderId,
+        ];
+
+        return
+            \GuzzleHttp\json_decode(
+                Proxy::init()->getHttpClient()->request(
+                    Api::POST,
+                    getenv('cms_api_url1') . self::API_PATH_PORDERS,
                     [
                         Api::FORM_PARAMS =>
                             $request
