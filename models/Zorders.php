@@ -14,6 +14,7 @@ class Zorders extends Model
     const
         CLIENT = 'client',
         INNER = 'inner',
+        OLDID = 'oldId',
         ID = 'id';
 
     /**
@@ -24,6 +25,13 @@ class Zorders extends Model
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="old_id", type="integer", nullable=true, options={"comment"="Старый id из древней БД"})
+     */
+    private $oldId;
 
     /**
      * @var \DateTime|null
@@ -38,6 +46,7 @@ class Zorders extends Model
      * @ORM\Column(name="client_id", type="integer", nullable=true)
      */
     private $clientId;
+
 
     /**
      * @var \ClientSettings
@@ -268,6 +277,24 @@ class Zorders extends Model
     public function setId(int $id): Zorders
     {
         $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOldId(): ?int
+    {
+        return $this->oldId;
+    }
+
+    /**
+     * @param int|null $oldId
+     * @return Zorders
+     */
+    public function setOldId(?int $oldId): Zorders
+    {
+        $this->oldId = $oldId;
         return $this;
     }
 
@@ -751,7 +778,7 @@ class Zorders extends Model
      * @param ZordersStocksOurModel $stockOur
      * @return Zorders
      */
-    public function setStockOur(ZordersStocksOurModel $stockOur): Zorders
+    public function setStockOur(?ZordersStocksOurModel $stockOur): Zorders
     {
         $this->stockOur = $stockOur;
         return $this;
@@ -769,7 +796,7 @@ class Zorders extends Model
      * @param ZordersStocksModels $stock
      * @return Zorders
      */
-    public function setStock(ZordersStocksModels $stock): Zorders
+    public function setStock(?ZordersStocksModels $stock): Zorders
     {
         $this->stock = $stock;
         return $this;

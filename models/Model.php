@@ -46,12 +46,16 @@ abstract class Model
     /**
      * вернет результат по условию Criteria или id
      *
-     * @param Criteria|int $query
-     * @return \Doctrine\Common\Collections\Collection|object|static
-     * @throws Exception
+     * @param $query
+     * @return \Doctrine\Common\Collections\Collection|object|null
+     * @throws \App\Exceptions\BadResponseException
      */
     static public function find($query)
     {
+        if(!isset($query)) {
+            return null;
+        }
+
         if ($query instanceof Criteria) {
             return static::getRepository()->matching($query);
         }

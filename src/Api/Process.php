@@ -226,7 +226,7 @@ class Process
     {
         $firstDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($porders)->datetime);
         foreach ($porders as $pord) {
-            $porder = (new Loader())->loadPorderByOid($pord->id);
+            $porder = (new Loader())->loadByOid(\Porders::class, $pord->id);
                 $currentOrder = (new Builder())->buildPorder(
                     is_object($porder) ? $porder : new \Porders(),
                     $pord
@@ -243,6 +243,36 @@ class Process
             \Options::PORDERS_USE_ID => $useLastId
         ];
     }
+
+    /**
+     * @param array $zorders
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
+     */
+    public function saveUpdateZorders(array $zorders)
+    {
+        $firstDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($zorders)->updated);
+        foreach ($zorders as $zord) {
+            $zorder = (new Loader())->loadByOid(\Zorders::class, $zord->id);
+            $currentOrder = (new Builder())->buildZorder(
+                is_object($zorder) ? $zorder : new \Zorders(),
+                $zord
+            );
+            Proxy::init()->getEntityManager()->persist($currentOrder);
+        }
+        $endDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($zorders)->updated);
+        $useLastId = (int)($firstDateTime == $endDateTime && count($zorders) > 1);
+        $finalPorderId = (int)end($zorders)->id;
+        Proxy::init()->getEntityManager()->flush();
+        return [
+            \Options::ZORDERS_UPDATE => $endDateTime,
+            \Options::ZORDERS_LAST_ID => $finalPorderId,
+            \Options::ZORDERS_USE_ID => $useLastId
+        ];
+    }
+
 
     /**
      * @param \Orders $order

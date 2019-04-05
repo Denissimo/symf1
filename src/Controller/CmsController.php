@@ -233,7 +233,8 @@ class CmsController extends BaseController implements Api
         $lastId = (new Loader())->loadOption(\Options::PORDERS_LAST_ID);
         $useId = (new Loader())->loadOption(\Options::PORDERS_USE_ID);
         try {
-            $response = (new Client())->sendPordersUpdateRequest(
+            $response = (new Client())->sendUpdateRequest(
+                Client::API_PATH_PORDERS,
                 $lastTime->getUpdateLastDatetime(),
                 self::getRequest(),
                 $useId->getValue() ? $lastId->getValue() : Api::ZERO
@@ -258,6 +259,53 @@ class CmsController extends BaseController implements Api
         } catch (\Exception $e) {
             Proxy::init()->getLogger()->addWarning('Exception: ' . $e->getMessage());
         }
+        return (new Render())->render([
+            Render::CONTENT => $lastTime->getUpdateLastDatetime()->format('c')
+        ]);
+    }
+
+    /**
+     * @Route("/cmsapi/zordersupdate")
+     * @return HttpResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function loadZordersUpdate(){
+        $lastTime = (new Loader())->loadOption(\Options::ZORDERS_UPDATE);
+        $lastId = (new Loader())->loadOption(\Options::ZORDERS_LAST_ID);
+        $useId = (new Loader())->loadOption(\Options::ZORDERS_USE_ID);
+        try {
+            $response = (new Client())->sendUpdateRequest(
+                Client::API_PATH_ZORDERS,
+                $lastTime->getUpdateLastDatetime(),
+                self::getRequest(),
+                $useId->getValue() ? $lastId->getValue() : Api::ZERO
+            );
+            (new Validator())->validateResponseList($response);
+            if (isset($response->status) && $response->status == 400) {
+                $content = 'Error';
+                Proxy::init()->getLogger()->addWarning('Error: ' . $content);
+            } else {
+                $options = (new Process())->saveUpdateZorders($response);
+                $lastTime->setUpdateLastDatetime($options[\Options::ZORDERS_UPDATE]);
+                $lastId->setValue($options[\Options::ZORDERS_LAST_ID]);
+                $useId->setValue($options[\Options::ZORDERS_USE_ID]);
+                Proxy::init()->getEntityManager()->persist($lastTime);
+                Proxy::init()->getEntityManager()->persist($lastId);
+                Proxy::init()->getEntityManager()->persist($useId);
+                Proxy::init()->getEntityManager()->flush();
+            }
+        } catch (MalformedResponseException $e) {
+            $message = $e->getMessage();
+            Proxy::init()->getLogger()->addWarning('MalformedResponseException: ' . $e->getMessage());
+        }
+        /*
+        catch (\Exception $e) {
+            Proxy::init()->getLogger()->addWarning('Exception: ' . $e->getMessage());
+        }
+        */
         return (new Render())->render([
             Render::CONTENT => $lastTime->getUpdateLastDatetime()->format('c')
         ]);

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="zorders_types_model")
  * @ORM\Entity
  */
-class ZordersTypesModel
+class ZordersTypesModel extends Model
 {
     /**
      * @var int
