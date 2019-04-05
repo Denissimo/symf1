@@ -222,12 +222,11 @@ class CmsController extends BaseController implements Api
 
     /**
      * @Route("/cmsapi/pordersupdate")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return HttpResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
-     * @throws \Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function loadPordersUpdate(){
         $lastTime = (new Loader())->loadOption(\Options::PORDERS_UPDATE);
