@@ -89,7 +89,7 @@ class Zorders extends Model
     /**
      * @var string|null
      *
-     * @ORM\Column(name="inner", type="string", length=256, nullable=true)
+     * @ORM\Column(name="iner", type="string", length=256, nullable=true)
      */
     private $inner;
 
