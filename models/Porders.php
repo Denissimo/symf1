@@ -242,7 +242,7 @@ class Porders extends Model
      * @param PordersPodstatusModel $podstatus
      * @return Porders
      */
-    public function setPodstatus(PordersPodstatusModel $podstatus): Porders
+    public function setPodstatus(?PordersPodstatusModel $podstatus): Porders
     {
         $this->podstatus = $podstatus;
         return $this;

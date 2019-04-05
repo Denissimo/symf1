@@ -259,6 +259,9 @@ class CmsController extends BaseController implements Api
         } catch (\Exception $e) {
             Proxy::init()->getLogger()->addWarning('Exception: ' . $e->getMessage());
         }
+        return (new Render())->render([
+            Render::CONTENT => $lastTime->getUpdateLastDatetime()->format('c')
+        ]);
     }
 
     /**

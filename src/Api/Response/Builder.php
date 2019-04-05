@@ -314,8 +314,12 @@ class Builder
     public function buildPorder(\Porders $porder, \stdClass $pord)
     {
         /** @var \PordersPodstatusModel $podstatus */
-        $podstatus = isset($ord->status) ? Proxy::init()->getEntityManager()->getRepository(\PordersPodstatusModel::class)
+        $podstatus = isset($pord->podstatus) ? Proxy::init()->getEntityManager()
+            ->getRepository(\PordersPodstatusModel::class)
             ->find($pord->podstatus) : null;
+        $enddate = \DateTime::createFromFormat('Y-m-d', $pord->enddate) ?
+            \DateTime::createFromFormat('Y-m-d', $pord->enddate) : null;
+
         $porder
             ->setOldId($pord->id)
             ->setPodstatus($podstatus)
@@ -324,7 +328,7 @@ class Builder
             ->setAnp($pord->anp)
             ->setAus($pord->aus)
             ->setBillId($pord->bill_id)
-            ->setEnddate(\DateTime::createFromFormat('Y-m-d', $pord->enddate));
+            ->setEnddate($enddate);
 
         return $porder;
     }
