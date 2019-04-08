@@ -301,11 +301,10 @@ class CmsController extends BaseController implements Api
             $message = $e->getMessage();
             Proxy::init()->getLogger()->addWarning('MalformedResponseException: ' . $e->getMessage());
         }
-        /*
         catch (\Exception $e) {
             Proxy::init()->getLogger()->addWarning('Exception: ' . $e->getMessage());
         }
-        */
+        
         return (new Render())->render([
             Render::CONTENT => $lastTime->getUpdateLastDatetime()->format('c')
         ]);
