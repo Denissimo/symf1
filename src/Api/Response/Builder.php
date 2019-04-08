@@ -311,6 +311,7 @@ class Builder
      * @param \Porders $porder
      * @param \stdClass $pord
      * @return \Porders
+     * @throws \Exception
      */
     public function buildPorder(\Porders $porder, \stdClass $pord)
     {
@@ -321,10 +322,13 @@ class Builder
         $enddate = Convert::date($pord->enddate);
         $datetime = Convert::date($pord->datetime, true);
 
+        $order = \Orders::findOrFail($pord->order_id);
+
 
         $porder
             ->setOldId($pord->id)
             ->setPodstatus($podstatus)
+            ->setOrder($order)
             ->setOrderId($pord->order_id)
             ->setAtar($pord->atar)
             ->setAnp($pord->anp)

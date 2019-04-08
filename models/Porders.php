@@ -35,6 +35,17 @@ class Porders extends Model
     private $oldId;
 
     /**
+     * @var \Orders
+     *
+     * @ORM\ManyToOne(targetEntity="Orders")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+     * })
+     */
+    private $order;
+
+
+    /**
      * @var string|null
      *
      * @ORM\Column(name="order_id", type="string", length=256, nullable=true)
@@ -128,6 +139,25 @@ class Porders extends Model
         $this->oldId = $oldId;
         return $this;
     }
+
+    /**
+     * @return Orders
+     */
+    public function getOrder(): Orders
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param Orders $order
+     * @return Porders
+     */
+    public function setOrder(Orders $order): Porders
+    {
+        $this->order = $order;
+        return $this;
+    }
+
 
     /**
      * @return string|null
@@ -272,5 +302,7 @@ class Porders extends Model
         $this->datetime = $datetime;
         return $this;
     }
+
+
 
 }
