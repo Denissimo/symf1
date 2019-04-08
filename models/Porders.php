@@ -87,6 +87,13 @@ class Porders extends Model
     private $podstatus;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datetime", type="datetime", nullable=false, options={"comment"="Дата изменения"})
+     */
+    private $datetime;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -245,6 +252,24 @@ class Porders extends Model
     public function setPodstatus(?PordersPodstatusModel $podstatus): Porders
     {
         $this->podstatus = $podstatus;
+        return $this;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getDatetime(): DateTime
+    {
+        return $this->datetime;
+    }
+
+    /**
+     * @param DateTime $datetime
+     * @return Porders
+     */
+    public function setDatetime(DateTime $datetime): Porders
+    {
+        $this->datetime = $datetime;
         return $this;
     }
 

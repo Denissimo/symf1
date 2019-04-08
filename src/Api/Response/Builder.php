@@ -318,8 +318,9 @@ class Builder
         $podstatus = isset($pord->podstatus) ? Proxy::init()->getEntityManager()
             ->getRepository(\PordersPodstatusModel::class)
             ->find($pord->podstatus) : null;
-        $enddate = \DateTime::createFromFormat('Y-m-d', $pord->enddate) ?
-            \DateTime::createFromFormat('Y-m-d', $pord->enddate) : null;
+        $enddate = Convert::date($pord->enddate);
+        $datetime = Convert::date($pord->datetime, true);
+
 
         $porder
             ->setOldId($pord->id)
@@ -329,7 +330,9 @@ class Builder
             ->setAnp($pord->anp)
             ->setAus($pord->aus)
             ->setBillId($pord->bill_id)
-            ->setEnddate($enddate);
+            ->setEnddate($enddate)
+            ->setDatetime($datetime)
+        ;
 
         return $porder;
     }
