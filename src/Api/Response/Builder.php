@@ -322,7 +322,10 @@ class Builder
         $enddate = Convert::date($pord->enddate);
         $datetime = Convert::date($pord->datetime, true);
 
-        $order = \Orders::findOrFail($pord->order_id);
+        $order = \Orders::find(
+            Criteria::create()
+                ->where(Criteria::expr()->eq(\Orders::ORDER_ID, $pord->order_id))
+        )->first();
 
 
         $porder
