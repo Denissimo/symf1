@@ -39,7 +39,7 @@ class Porders extends Model
      *
      * @ORM\ManyToOne(targetEntity="Orders")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="order", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="`order`", referencedColumnName="id")
      * })
      */
     private $order;
