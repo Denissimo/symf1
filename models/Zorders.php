@@ -814,7 +814,7 @@ class Zorders extends Model
      * @param ZordersTypesModel $type
      * @return Zorders
      */
-    public function setType(ZordersTypesModel $type): Zorders
+    public function setType(?ZordersTypesModel $type): Zorders
     {
         $this->type = $type;
         return $this;
