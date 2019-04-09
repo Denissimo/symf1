@@ -215,14 +215,16 @@ class Process
             \Options::ORDERS_USE_ID => $useLastId
         ];
     }
+
     /**
      * @param array $porders
+     * @param int|null $useId
      * @return array
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Exception
      */
-    public function saveUpdatePorders(array $porders)
+    public function saveUpdatePorders(array $porders, $useId = null)
     {
         $firstDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($porders)->datetime);
         foreach ($porders as $pord) {
@@ -234,15 +236,28 @@ class Process
                 Proxy::init()->getEntityManager()->persist($currentOrder);
         }
         $endDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($porders)->datetime);
-        $useLastId = (int)($firstDateTime == $endDateTime && count($porders) > 1);
+        if($firstDateTime == $endDateTime && count($porders) > 1) {
+            $useLastId = 1;
+            $resultUpdateTime = $endDateTime;
+        } elseif($useId) {
+            $useLastId = 0;
+            $interval = new \DateInterval('PT1S');
+            $resultUpdateTime = $endDateTime->add($interval);
+        } else {
+            $useLastId = 0;
+            $resultUpdateTime = $endDateTime;
+        }
+//        $useLastId = (int)($firstDateTime == $endDateTime && count($porders) > 1);
         $finalPorderId = (int)end($porders)->id;
         Proxy::init()->getEntityManager()->flush();
         return [
-            \Options::PORDERS_UPDATE => $endDateTime,
+            \Options::PORDERS_UPDATE => $resultUpdateTime,
             \Options::PORDERS_LAST_ID => $finalPorderId,
             \Options::PORDERS_USE_ID => $useLastId
         ];
     }
+
+
 
     /**
      * @param array $zorders

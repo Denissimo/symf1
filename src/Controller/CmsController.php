@@ -244,7 +244,7 @@ class CmsController extends BaseController implements Api
                 $content = 'Error';
                 Proxy::init()->getLogger()->addWarning('Error: ' . $content);
             } else {
-                $options = (new Process())->saveUpdatePorders($response);
+                $options = (new Process())->saveUpdatePorders($response, $useId->getValue());
                 $lastTime->setUpdateLastDatetime($options[\Options::PORDERS_UPDATE]);
                 $lastId->setValue($options[\Options::PORDERS_LAST_ID]);
                 $useId->setValue($options[\Options::PORDERS_USE_ID]);
