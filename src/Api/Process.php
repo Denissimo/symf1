@@ -247,7 +247,6 @@ class Process
             $useLastId = 0;
             $resultUpdateTime = $endDateTime;
         }
-//        $useLastId = (int)($firstDateTime == $endDateTime && count($porders) > 1);
         $finalPorderId = (int)end($porders)->id;
         Proxy::init()->getEntityManager()->flush();
         return [
