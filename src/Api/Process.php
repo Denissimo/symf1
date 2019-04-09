@@ -257,15 +257,15 @@ class Process
     }
 
 
-
     /**
      * @param array $zorders
+     * @param null $useId
      * @return array
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Exception
      */
-    public function saveUpdateZorders(array $zorders)
+    public function saveUpdateZorders(array $zorders, $useId = null)
     {
         $firstDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($zorders)->updated);
         foreach ($zorders as $zord) {
@@ -277,12 +277,23 @@ class Process
             Proxy::init()->getEntityManager()->persist($currentOrder);
         }
         $endDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($zorders)->updated);
-        $useLastId = (int)($firstDateTime == $endDateTime && count($zorders) > 1);
-        $finalPorderId = (int)end($zorders)->id;
+        if($firstDateTime == $endDateTime && count($zorders) > 1) {
+            $useLastId = 1;
+            $resultUpdateTime = $endDateTime;
+        } elseif($useId) {
+            $useLastId = 0;
+            $interval = new \DateInterval('PT1S');
+            $resultUpdateTime = $endDateTime->add($interval);
+        } else {
+            $useLastId = 0;
+            $resultUpdateTime = $endDateTime;
+        }
+
+        $finalZorderId = (int)end($zorders)->id;
         Proxy::init()->getEntityManager()->flush();
         return [
-            \Options::ZORDERS_UPDATE => $endDateTime,
-            \Options::ZORDERS_LAST_ID => $finalPorderId,
+            \Options::ZORDERS_UPDATE => $resultUpdateTime,
+            \Options::ZORDERS_LAST_ID => $finalZorderId,
             \Options::ZORDERS_USE_ID => $useLastId
         ];
     }
