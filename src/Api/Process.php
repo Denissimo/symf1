@@ -12,13 +12,15 @@ class Process
 
     /**
      * @param array $orders
+     * @param string $class
      * @return array
+     * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function processUpdate(array $orders)
+    public function processUpdate(array $orders, string $class)
     {
-        return $this->saveUpdateOrders($orders);
+        return $this->saveUpdateOrders($orders, $class);
     }
 
 
@@ -146,15 +148,17 @@ class Process
 
     /**
      * @param array $orders
+     * @param string $class
+     * @param null $useId
      * @return array
+     * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Exception
      */
-    private function saveUpdateOrders(array $orders)
+    private function saveUpdateOrders(array $orders, string $class, $useId = null)
     {
         $lostUpdateTime = new \DateTime();
-        $lostId = end($orders)->id;
         $firstUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($orders)->updated);
         Proxy::init()->getLogger()->addWarning('firstUpdateTime: ' . \GuzzleHttp\json_encode($firstUpdateTime));
         if (isset($orders[0]->data_last_id)) {
@@ -208,11 +212,22 @@ class Process
         $finalUpdateTime = $endUpdateTime < $lostUpdateTime ? $endUpdateTime : $lostUpdateTime;
         Proxy::init()->getLogger()->addWarning('finalUpdateTime: ' . \GuzzleHttp\json_encode($endUpdateTime));
         $finalOrderId = $endOrderId;
-        $useLastId = (int)($firstUpdateTime == $endUpdateTime && count($orders) > 1);
+//        $useLastId = (int)($firstUpdateTime == $endUpdateTime && count($orders) > 1);
+        if($firstUpdateTime == $endUpdateTime && count($orders) > 1) {
+            $useLastId = 1;
+            $resultUpdateTime = $endUpdateTime;
+        } elseif($useId) {
+            $useLastId = 0;
+            $interval = new \DateInterval('PT1S');
+            $resultUpdateTime = $endUpdateTime->add($interval);
+        } else {
+            $useLastId = 0;
+            $resultUpdateTime = $endUpdateTime;
+        }
         return [
-            \Options::ORDERS_UPDATE => $finalUpdateTime,
-            \Options::ORDERS_LAST_ID => $finalOrderId,
-            \Options::ORDERS_USE_ID => $useLastId
+            \Options::fields()[$class][\Options::UPDATE] =>  $resultUpdateTime,
+            \Options::fields()[$class][\Options::LAST_ID] => $finalOrderId,
+            \Options::fields()[$class][\Options::USE_ID] => $useLastId
         ];
     }
 

@@ -169,21 +169,52 @@ class CmsController extends BaseController implements Api
         ]);
     }
 
-
     /**
      * @Route("/cmsapi/ordersupdate")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return HttpResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \Exception
      */
-    public function loadOrdersUpdate()
+    public function ordersUpdate()
     {
-        $lastTime = (new Loader())->loadOption(\Options::ORDERS_UPDATE);
-        $lastId = (new Loader())->loadOption(\Options::ORDERS_LAST_ID);
-        $useId = (new Loader())->loadOption(\Options::ORDERS_USE_ID);
+        $lastTime = $this->loadOrdersUpdate(\Orders::class);
+
+        return (new Render())->render([
+            Render::CONTENT => $lastTime->getUpdateLastDatetime()->format('c')
+        ]);
+    }
+
+    /**
+     * @Route("/cmsapi/orderscontrol")
+     * @return HttpResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \Exception
+     */
+    public function ordersControl()
+    {
+        $lastTime = $this->loadOrdersUpdate('Control');
+
+        return (new Render())->render([
+            Render::CONTENT => $lastTime->getUpdateLastDatetime()->format('c')
+        ]);
+    }
+
+    /**
+     * @param string $class
+     * @return \Options
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function loadOrdersUpdate(string $class)
+    {
+        $lastTime = (new Loader())->loadOption(\Options::fields()[$class][\Options::UPDATE]);
+        $lastId = (new Loader())->loadOption(\Options::fields()[$class][\Options::LAST_ID]);
+        $useId = (new Loader())->loadOption(\Options::fields()[$class][\Options::USE_ID]);
         Proxy::init()->getLogger()->addWarning('BiggestOrderId: ' . (new Loader())->loadBiggestOldId());
         try {
             $response = (new Client())->sendOrdersUpdateRequest(
@@ -197,27 +228,26 @@ class CmsController extends BaseController implements Api
                 $content = 'Error';
                 Proxy::init()->getLogger()->addWarning('Error: ' . $content);
             } else {
-                $options = (new Process())->processUpdate($response);
-                $lastTime->setUpdateLastDatetime($options[\Options::ORDERS_UPDATE]);
-                $lastId->setValue($options[\Options::ORDERS_LAST_ID]);
-                $useId->setValue($options[\Options::ORDERS_USE_ID]);
+                $options = (new Process())->processUpdate($response, $class);
+//                Proxy::init()->getLogger()->addWarning('processUpdate Result: ' . \GuzzleHttp\json_encode($options));
+                $lastTime->setUpdateLastDatetime($options[\Options::fields()[$class][\Options::UPDATE]]);
+                $lastId->setValue($options[\Options::fields()[$class][\Options::LAST_ID]]);
+                $useId->setValue($options[\Options::fields()[$class][\Options::USE_ID]]);
                 Proxy::init()->getEntityManager()->persist($lastTime);
                 Proxy::init()->getEntityManager()->persist($lastId);
                 Proxy::init()->getEntityManager()->persist($useId);
                 Proxy::init()->getEntityManager()->flush();
             }
         } catch (MalformedResponseException $e) {
-            $message = $e->getMessage();
             Proxy::init()->getLogger()->addWarning('MalformedResponseException: ' . $e->getMessage());
-        } catch (\Exception $e) {
+        }catch (\Exception $e) {
             Proxy::init()->getLogger()->addWarning('Exception: ' . $e->getMessage());
         }
 
+
         Proxy::init()->getConnection()->close();
 
-        return (new Render())->render([
-            Render::CONTENT => $lastTime->getUpdateLastDatetime()->format('c')
-        ]);
+        return $lastTime;
     }
 
     /**
@@ -333,7 +363,6 @@ class CmsController extends BaseController implements Api
                 Proxy::init()->getLogger()->addWarning('UpdateListError: ' . $content);
             } else {
                 $result = (new Process())->processLists($response);
-
                 $content = 'OK';
             }
         } catch (MalformedResponseException $e) {
