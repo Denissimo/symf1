@@ -115,11 +115,11 @@ class OrdersPvz extends Model
 
     /**
      * @param Orders $order
-     * @param Pvz | null $pvz
+     * @param Pvz $pvz
      * @return OrdersPvz|null
      * @throws Exception
      */
-    public static function exists(\Orders $order, $pvz)
+    public static function exists(\Orders $order, \Pvz $pvz)
     {
         return self::find(
             Criteria::create()
