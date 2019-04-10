@@ -215,7 +215,6 @@ class CmsController extends BaseController implements Api
         $lastTime = (new Loader())->loadOption(\Options::fields()[$class][\Options::UPDATE]);
         $lastId = (new Loader())->loadOption(\Options::fields()[$class][\Options::LAST_ID]);
         $useId = (new Loader())->loadOption(\Options::fields()[$class][\Options::USE_ID]);
-        Proxy::init()->getLogger()->addWarning('BiggestOrderId: ' . (new Loader())->loadBiggestOldId());
         try {
             $response = (new Client())->sendOrdersUpdateRequest(
                 $lastTime->getUpdateLastDatetime(),
@@ -228,8 +227,7 @@ class CmsController extends BaseController implements Api
                 $content = 'Error';
                 Proxy::init()->getLogger()->addWarning('Error: ' . $content);
             } else {
-                $options = (new Process())->processUpdate($response, $class, $useId);
-//                Proxy::init()->getLogger()->addWarning('processUpdate Result: ' . \GuzzleHttp\json_encode($options));
+                $options = (new Process())->processUpdate($response, $class, $useId->getValue());
                 $lastTime->setUpdateLastDatetime($options[\Options::fields()[$class][\Options::UPDATE]]);
                 $lastId->setValue($options[\Options::fields()[$class][\Options::LAST_ID]]);
                 $useId->setValue($options[\Options::fields()[$class][\Options::USE_ID]]);
@@ -318,7 +316,7 @@ class CmsController extends BaseController implements Api
                 $content = 'Error';
                 Proxy::init()->getLogger()->addWarning('Error: ' . $content);
             } else {
-                $options = (new Process())->saveUpdateZorders($response);
+                $options = (new Process())->saveUpdateZorders($response, $useId->getValue());
                 $lastTime->setUpdateLastDatetime($options[\Options::ZORDERS_UPDATE]);
                 $lastId->setValue($options[\Options::ZORDERS_LAST_ID]);
                 $useId->setValue($options[\Options::ZORDERS_USE_ID]);
