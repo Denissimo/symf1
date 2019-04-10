@@ -17,6 +17,7 @@ class OrdersPvz extends Model
 {
 
     const
+        TEST_ID = 2,
         ORDER = 'order',
         PVZ = 'pvz';
 
@@ -114,11 +115,11 @@ class OrdersPvz extends Model
 
     /**
      * @param Orders $order
-     * @param Pvz $pvz
+     * @param Pvz | null $pvz
      * @return OrdersPvz|null
      * @throws Exception
      */
-    public static function exists(\Orders $order, \Pvz $pvz)
+    public static function exists(\Orders $order, $pvz)
     {
         return self::find(
             Criteria::create()
