@@ -122,7 +122,9 @@ class Builder
     {
         $pregPvzId = preg_match('/^\(?([0-9]+)\)?.*$/', $ord->pvz_id, $pvzIdMatch);
         if ($pregPvzId) {
+            /** @var \Pvz $pvz */
             $pvz = \Pvz::find((int)$pvzIdMatch[1]);
+            if ($pvz == null ) $pvz = \Pvz::find(\OrdersPvz::TEST_ID);
             $ordersPvzExists = \OrdersPvz::exists($order, $pvz);
             if (is_object($ordersPvzExists)) {
                 $ordersPvz = $ordersPvzExists;

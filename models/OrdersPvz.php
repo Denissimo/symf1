@@ -17,6 +17,7 @@ class OrdersPvz extends Model
 {
 
     const
+        TEST_ID = 2,
         ORDER = 'order',
         PVZ = 'pvz';
 
