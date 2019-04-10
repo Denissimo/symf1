@@ -228,7 +228,7 @@ class CmsController extends BaseController implements Api
                 $content = 'Error';
                 Proxy::init()->getLogger()->addWarning('Error: ' . $content);
             } else {
-                $options = (new Process())->processUpdate($response, $class);
+                $options = (new Process())->processUpdate($response, $class, $useId);
 //                Proxy::init()->getLogger()->addWarning('processUpdate Result: ' . \GuzzleHttp\json_encode($options));
                 $lastTime->setUpdateLastDatetime($options[\Options::fields()[$class][\Options::UPDATE]]);
                 $lastId->setValue($options[\Options::fields()[$class][\Options::LAST_ID]]);

@@ -13,14 +13,15 @@ class Process
     /**
      * @param array $orders
      * @param string $class
+     * @param int|null $useId
      * @return array
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function processUpdate(array $orders, string $class)
+    public function processUpdate(array $orders, string $class, $useId = null)
     {
-        return $this->saveUpdateOrders($orders, $class);
+        return $this->saveUpdateOrders($orders, $class, $useId);
     }
 
 
@@ -149,7 +150,7 @@ class Process
     /**
      * @param array $orders
      * @param string $class
-     * @param null $useId
+     * @param int|null $useId
      * @return array
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\ORM\ORMException
