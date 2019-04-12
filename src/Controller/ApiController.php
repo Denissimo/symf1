@@ -291,7 +291,7 @@ class ApiController extends BaseController implements Api
             // если нет ни одно или переданны оба значения
             // мы принимаем только одно значение
             if ((!$innerId && !$orderId) || ($innerId && $orderId)) {
-                throw new InvalidRequestAgrs(sprintf("Error request: One field required %s or %s", Api::INNER_N, Api::ZORDER_ID));
+                throw new InvalidRequestAgrs(sprintf("Не заполнено одно из полей %s или %s", Api::INNER_N, Api::ZORDER_ID));
             }
 
             $client = $this->getClientSettings();
@@ -315,6 +315,10 @@ class ApiController extends BaseController implements Api
     /**
      * @Route("/api/v1/confirmOrder", methods={"POST"})
      *
+     * @return HttpResponse
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function confirmOrder()
     {
@@ -325,7 +329,7 @@ class ApiController extends BaseController implements Api
             // если нет ни одно или переданны оба значения
             // мы принимаем только одно значение
             if ((!$innerId && !$orderId) || ($innerId && $orderId)) {
-                throw new \Exception(sprintf("Не заполнено одно из полей %s или %s", Api::INNER_N, Api::ORDER_ID), 402);
+                throw new InvalidRequestAgrs(sprintf("Не заполнено одно из полей %s или %s", Api::INNER_N, Api::ORDER_ID));
             }
 
             $client = $this->getClientSettings();
@@ -344,7 +348,7 @@ class ApiController extends BaseController implements Api
 
             // если ордер уже активирован
             if ($order->getStatus() !== 1) {
-                //throw new \Exception('Ордер ' . $order->getInnerN() . ' уже подтвержден!');
+                throw new InvalidRequestAgrs('Ордер ' . $order->getInnerN() . ' уже подтвержден!');
             }
 
             if ($order->getType()->getId() === 2) {
@@ -363,7 +367,6 @@ class ApiController extends BaseController implements Api
             \Orders::getEntity()->persist($order);
             \Orders::getEntity()->flush();
 
-
             return $this->success([
                 'order_id' => $order->getOrderId(),
                 'inner_id' => $order->getInnerN(),
@@ -373,4 +376,46 @@ class ApiController extends BaseController implements Api
             return $this->error($e);
         }
     }
+
+
+    /**
+     *
+     * @Route("/api/v1/createOrder")
+     */
+    public function createOrder()
+    {
+        try {
+            $client = $this->getClientSettings();
+            $post = self::getRequest()->request->all();
+
+            $post = (new RequestValidator())->validateCreateOrder($post, true);
+
+
+            $criteria = Criteria::create()
+                ->where(Criteria::expr()->eq(\Orders::INNER_N, $post[Fields::INNER_N]))
+                ->andWhere(Criteria::expr()->eq(\Orders::CLIENT, $client));
+
+            $order = \Orders::find($criteria)->first();
+            if ($order && !$client->getId() !== 1489) {
+                throw new InvalidRequestAgrs('Duplicate order: ' . $post[Fields::INNER_N]);
+            }
+
+            $rz = (new Loader())->findAddress($post[Fields::CITY], $post[Fields::ADDR]);
+
+            dd($rz, $post, $criteria);
+
+
+            return $this->success([]);
+        } catch (\Exception $e) {
+            throw $e;
+            dd($e);
+            return $this->error($e);
+        }
+    }
+
+    protected function createNewOrder()
+    {
+
+    }
+
 }

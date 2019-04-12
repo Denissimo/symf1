@@ -354,7 +354,7 @@ class CmsController extends BaseController implements Api
         try {
             $response = (new Client())->sendListsUpdateRequest($updatedStock);
 
-            
+
 //            (new Validator())->validateOrdersList($response->clients);
 
             if (isset($response->status) && $response->status == 400) {

@@ -29,14 +29,8 @@ class Headers extends Request
     public function getApiKey()
     {
         $param = array_merge($this->query->all(), $this->request->all());
-<<<<<<< HEAD
-
-        if (!isset($param[Fields::KEY])) {
-            throw new ErrorApiKey('Поле "' . Fields::KEY . '" обязательно!');
-=======
         if (!$param[Fields::KEY]) {
             throw new ErrorApiKey('Fields "' . Fields::KEY . '" are REQUIRED !!!');
->>>>>>> step 3
         }
 
         return $param[Fields::KEY];
