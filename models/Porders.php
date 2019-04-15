@@ -35,7 +35,7 @@ class Porders extends Model
     private $oldId;
 
     /**
-     * @var \Orders
+     * @var \Orders|null
      *
      * @ORM\ManyToOne(targetEntity="Orders")
      * @ORM\JoinColumns({
@@ -149,10 +149,10 @@ class Porders extends Model
     }
 
     /**
-     * @param Orders $order
+     * @param Orders|null $order
      * @return Porders
      */
-    public function setOrder(Orders $order): Porders
+    public function setOrder(?Orders $order): Porders
     {
         $this->order = $order;
         return $this;
