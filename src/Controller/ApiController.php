@@ -79,10 +79,11 @@ class ApiController extends BaseController implements Api
     {
         $content = 'OK';
         try {
+            /** @var \LogTypesModel $typeModel */
             $typeModel = \LogTypesModel::find(\LogTypesModel::API_STATUS_V2_ID);
 
-
             (new RequestValidator())->validateRequiredFields(self::getRequest(), [Api::KEY]);
+            /** @var \ClientSettings $client */
             $client = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
                 ->findOneBy([\ClientSettings::API_KEY => self::getRequest()->get(Api::KEY)]);
             (new RequestValidator())->validateApiKey(
@@ -157,10 +158,16 @@ class ApiController extends BaseController implements Api
             return $this->error($e);
         }
 
+        /** @var \LogTypesModel $logType */
+        $logType = \LogTypesModel::find(\LogTypesModel::API_STATUS_V2_ID);
+
+        /** @var \LogResultModel $logResult */
+        $logResult = \LogResultModel::find(HttpResponse::HTTP_OK);
+
         $this->logApi(
             $client,
-            \LogTypesModel::find(\LogTypesModel::API_STATUS_V2_ID),
-            \LogResultModel::find(HttpResponse::HTTP_OK),
+            $logType,
+            $logResult,
             \GuzzleHttp\json_encode($ordersData)
         );
 
@@ -183,6 +190,7 @@ class ApiController extends BaseController implements Api
         try {
             $innerId = self::getRequest()->get(Api::INNER_N, 0);
             $orderId = self::getRequest()->get(Api::ORDER_ID, 0);
+            /** @var \LogTypesModel $typeModel */
             $typeModel = \LogTypesModel::find(\LogTypesModel::API_STATUS_V1_ID);
 
             // если нет ни одно или переданны оба значения
@@ -218,7 +226,7 @@ class ApiController extends BaseController implements Api
                 ];
             }
 
-
+            /** @var \LogResultModel $successModel */
             $successModel = \LogResultModel::find(HttpResponse::HTTP_OK);
             $this->logApi(
                 $client,
@@ -392,12 +400,12 @@ class ApiController extends BaseController implements Api
 
 
             $criteria = Criteria::create()
-                ->where(Criteria::expr()->eq(\Orders::INNER_N, $post[Fields::INNER_N]))
+                ->where(Criteria::expr()->eq(\Orders::INNER_N, $post[Api::INNER_N]))
                 ->andWhere(Criteria::expr()->eq(\Orders::CLIENT, $client));
 
             $order = \Orders::find($criteria)->first();
             if ($order && !$client->getId() !== 1489) {
-                throw new InvalidRequestAgrs('Duplicate order: ' . $post[Fields::INNER_N]);
+                throw new InvalidRequestAgrs('Duplicate order: ' . $post[Api::INNER_N]);
             }
 
             $rz = (new Loader())->findAddress($post[Fields::CITY], $post[Fields::ADDR]);
