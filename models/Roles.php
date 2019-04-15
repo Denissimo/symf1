@@ -3,6 +3,9 @@
 
 
 use Doctrine\ORM\Mapping as ORM;
+use \Doctrine\Common\Collections\Collection;
+use \Doctrine\Common\Collections\ArrayCollection;
+
 
 /**
  * Roles
@@ -36,7 +39,7 @@ class Roles
     private $description;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Users", mappedBy="role")
      */
@@ -47,7 +50,7 @@ class Roles
      */
     public function __construct()
     {
-        $this->user = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->user = new ArrayCollection();
     }
 
     /**
@@ -105,18 +108,18 @@ class Roles
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getUser(): \Doctrine\Common\Collections\Collection
+    public function getUser(): Collection
     {
         return $this->user;
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection $user
+     * @param Collection $user
      * @return Roles
      */
-    public function setUser(\Doctrine\Common\Collections\Collection $user): Roles
+    public function setUser(Collection $user): Roles
     {
         $this->user = $user;
         return $this;
