@@ -41,6 +41,27 @@ class Validator
     }
 
     /**
+     * @param array $data
+     * @param array $required
+     * @param \Exception $e
+     * @throws \Exception
+     */
+    public function validateRequired2(array $data, array $required, \Exception $e){
+        $fields = [];
+
+        foreach ($required as $field) {
+            $fields[$field] = new Assert\NotBlank();
+        }
+
+        $validator = new Assert\Collection([
+            'fields' => $fields,
+            'allowExtraFields' => true,
+        ]);
+
+        $this->validate2($data, $validator, $e);
+    }
+
+    /**
      * Проверка, что переданные параметры соответствуют определенному типу
      *
      * @param array $data
@@ -124,5 +145,21 @@ class Validator
             );
         }
 
+    }
+
+    /**
+     * @param array $data
+     * @param Assert\Collection $validator
+     * @param \Exception $e
+     * @throws \Exception
+     */
+    public function validate2(array $data, Assert\Collection $validator, \Exception $e){
+        /** @var ValidatorInterface $baseValidator */
+        $baseValidator = Validation::createValidator();
+        $errors = $baseValidator->validate($data, $validator);
+
+        if (count($errors) !== 0) {
+            throw $e;
+        }
     }
 }

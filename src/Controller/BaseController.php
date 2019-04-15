@@ -94,10 +94,10 @@ abstract class BaseController extends AbstractController
             ->findOneBy([\ClientSettings::API_KEY => self::getRequest()->getApiKey()]);
 
         if (!$clientSettings) {
-            throw new ErrorApiKey('Ошибка: неверный ApiKey');
+            throw new ErrorApiKey('Ошибка: неверный apikey', 401);
         }
         if (!$clientSettings->getActive()) {
-            throw new DeactivateApiKey('ApiKey не активен');
+            throw new ErrorApiKey('ApiKey не активен', 405);
         }
         return $clientSettings;
     }
@@ -143,6 +143,7 @@ abstract class BaseController extends AbstractController
      */
     protected function prepareResult($content, $customOptions = [], $code = Response::HTTP_OK)
     {
+        Proxy::init()->getConnection()->close();
         if ($content instanceof \Exception) {
             $response = [
                 'Error' => $content->getMessage()

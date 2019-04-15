@@ -28,7 +28,24 @@ Interface Fields
         INNER_N = 'inner_n',
         ORDER_ID = 'order_id',
         ZERO = 0,
-        ZORDER_ID = 'zorder_id';
+        ZORDER_ID = 'zorder_id',
+        MO_PUNKT_ID = 'mo_punkt_id',
+        CITY = 'city',
+        ADDR = 'addr',
+        GOODS = 'goods',
+        NP = 'np',
+        PRICE_CLIENT = 'price_client',
+        OS = 'os',
+        COUNT = 'count',
+        PRICE = 'price',
+        PRICE_CLIENT_DELIVERY = 'price_client_delivery',
+        DELIVERY_DATE = 'delivery_date',
+        DELIVERY_TIME = 'delivery_time',
+        PRICE_CLIENT_DELIVERY_NDS = 'price_client_delivery_nds',
+        DIMENSION_SIDE_1 = 'dimension_side1',
+        DIMENSION_SIDE_2 = 'dimension_side2',
+        DIMENSION_SIDE_3 = 'dimension_side3',
+        ORDER_WEIGHT = 'order_weight';
 
     const
         FORM_PARAMS = 'form_params',

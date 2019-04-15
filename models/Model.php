@@ -2,6 +2,12 @@
 
 use \App\Proxy;
 use Doctrine\Common\Collections\Criteria;
+use \Doctrine\Common\Persistence\ObjectRepository;
+use \Doctrine\ORM\EntityRepository;
+use \Doctrine\ORM\EntityManager;
+use \Doctrine\Common\Collections\Collection;
+use \App\Exceptions\BadResponseException;
+use \App\Exceptions\NotFoundRecord;
 
 abstract class Model
 {
@@ -18,7 +24,7 @@ abstract class Model
     }
 
     /**
-     * @return \Doctrine\Common\Persistence\ObjectRepository|\Doctrine\ORM\EntityRepository
+     * @return ObjectRepository|EntityRepository
      */
     static public function getRepository()
     {
@@ -26,7 +32,7 @@ abstract class Model
     }
 
     /**
-     * @return \Doctrine\ORM\EntityManager
+     * @return EntityManager
      */
     static public function getEntity()
     {
@@ -47,8 +53,8 @@ abstract class Model
      * вернет результат по условию Criteria или id
      *
      * @param $query
-     * @return \Doctrine\Common\Collections\Collection|object|null
-     * @throws \App\Exceptions\BadResponseException
+     * @return Collection|object|null
+     * @throws BadResponseException
      */
     static public function find($query)
     {
@@ -61,7 +67,7 @@ abstract class Model
         }
         $query = (int)$query;
         if (!$query) {
-            throw new \App\Exceptions\BadResponseException('Invalid query model: ' . static::class);
+            throw new BadResponseException('Invalid query model: ' . static::class);
         }
         return static::getRepository()->find($query);
     }
@@ -70,14 +76,14 @@ abstract class Model
      * если результат пустой, выкинет исключение
      *
      * @param Criteria|int $query
-     * @return \Doctrine\Common\Collections\Collection|object|static
+     * @return Collection|object|static
      * @throws Exception
      */
     static public function findOrFail($query)
     {
         $result = static::find($query);
-        if (!$result || ($result instanceof \Doctrine\Common\Collections\Collection && !$result->count())) {
-            throw new \App\Exceptions\NotFoundRecord('Not found', 404);
+        if (!$result || ($result instanceof Collection && !$result->count())) {
+            throw new NotFoundRecord('Not found', 404);
         }
         return $result;
     }
