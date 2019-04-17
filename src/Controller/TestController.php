@@ -6,7 +6,6 @@ use App\Helpers\Output;
 use App\Kernel;
 use App\Security\AuthListener;
 use Doctrine\ORM\Mapping\EntityResult;
-use http\Header;
 use Monolog\Logger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +36,12 @@ class TestController extends BaseController
     public function admin()
     {
         try {
+
+            /** @var \Orders $order */
+            $order = \Orders::find(1508822);
+
+
+
             return (new Render())->render([
                 Render::CONTENT => ' try'
             ]);
@@ -46,9 +51,6 @@ class TestController extends BaseController
             ]);
         }
 
-//        return (new Render())->render([
-//            Render::CONTENT => ' admin'
-//        ]);
     }
 
     /**

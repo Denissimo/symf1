@@ -86,6 +86,7 @@ class Client
     /**
      * @param \DateTime $lastOrdersUpdateTime
      * @param int $lastOrderId
+     * @param int $biggestId
      * @param Request $get
      * @return mixed
      * @throws GuzzleHttp\Exception\GuzzleException

@@ -325,6 +325,7 @@ class Process
      */
     public function saveHistory(\Orders $order, int $type, $param = null, $value = null)
     {
+        /** @var \OrdersHistoryTypesModel $ordersHirtoryType */
         $ordersHirtoryType = Proxy::init()->getEntityManager()
             ->getRepository(\OrdersHistoryTypesModel::class)->find($type);
         $ordersHirtory = (new \OrdersHistory())

@@ -9,7 +9,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Proxy;
 use Symfony\Component\HttpFoundation\Request;
 use App\Api\Actions\Autorize;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Twig\Render;
 use App\Cfg\Config;

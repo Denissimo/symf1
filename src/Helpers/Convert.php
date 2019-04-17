@@ -25,6 +25,6 @@ class Convert
     {
         $format = $full ? 'Y-m-d H:i:s' : 'Y-m-d';
         $date = \DateTime::createFromFormat($format, $sdate);
-        return $date ? $date : null;
+        return $date && $date->format('Y') > 0 ? $date : null;
     }
 }

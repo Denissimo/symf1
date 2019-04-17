@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Api\Client;
-use App\Api\Request\Unit;
 use App\Exceptions\BadResponseException;
 use App\Exceptions\InactiveCliendException;
 use App\Exceptions\InvalidRequestAgrs;
@@ -13,7 +11,6 @@ use App\Wrappers\Order;
 use App\Wrappers\ZOrder;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Proxy;
 use App\Twig\Render;
 use App\Api\Fields as Api;
@@ -24,11 +21,10 @@ use App\Api\Response\Builder as ResponseBuidser;
 use App\Api\Response\Validator;
 use App\Exceptions\MalformedResponseException;
 use App\Exceptions\MalformedApiKeyException;
-use App\Api\Process;
 use App\Helpers\Output;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
-use Symfony\Component\Serializer\Encoder\JsonEncode;
+
 
 
 class ApiController extends BaseController implements Api

@@ -120,6 +120,9 @@ class AuthorizationUserProvider extends AbstractGuardAuthenticator
 
     /**
      * Called when authentication is needed, but it's not sent
+     * @param Request $request
+     * @param AuthenticationException|null $authException
+     * @return JsonResponse|Response
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {

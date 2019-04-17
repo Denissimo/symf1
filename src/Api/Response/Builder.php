@@ -85,6 +85,7 @@ class Builder
         $currentChangeDate = new \DateTime();
         foreach ($orders as $ord) {
             if (isset($ord->id) && !in_array($ord->id, $duplicates)) {
+
                 $address = $this->buildAddress(new \Address(), $ord);
                 $orderBill = $this->buildOrderBill(new \OrdersBills(), $ord);
                 $orderSettings = $this->buildOrderSettings(new \OrdersSettings(), $ord);
@@ -252,12 +253,12 @@ class Builder
             ->setAktId($ord->akt_id ?? null)
             ->setBillId($ord->bill_id ?? null)
             ->setBrand($ord->brand ?? null)
-            ->setChangeDate(isset($ord->change_date) ? \DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date) : null)
-            ->setUpdated(isset($ord->updated) ? \DateTime::createFromFormat('Y-m-d H:i:s', $ord->updated) : null)
+            ->setChangeDate(Convert::date($ord->change_date, true))
+            ->setUpdated(Convert::date($ord->updated, true))
             ->setCourCid($ord->cour_cid ?? null)
             ->setCourierId($ord->courier_id ?? null)
-            ->setDateAdd(isset($ord->date_add) ? \DateTime::createFromFormat('Y-m-d', $ord->date_add) : null)
-            ->setDeliveryDate(isset($ord->delivery_date) ? \DateTime::createFromFormat('Y-m-d', $ord->delivery_date) : null)
+            ->setDateAdd(Convert::date($ord->date_add))
+            ->setDeliveryDate(Convert::date($ord->delivery_date))
             ->setDeliveryTime($ord->delivery_time)
             ->setDeliveryTime1($delivTime1)
             ->setDeliveryTime2($delivTime2)

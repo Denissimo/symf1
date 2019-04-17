@@ -103,7 +103,7 @@ class Loader
                     ->orderBy([\Orders::ID => Criteria::DESC])
                     ->setMaxResults(1)
             )->current();
-        return $lastOrder->getOldId();
+        return $lastOrder == null? Api::ZERO : $lastOrder->getOldId();
     }
 
     /**
