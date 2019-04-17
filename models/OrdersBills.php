@@ -50,27 +50,6 @@ class OrdersBills
     private $os;
 
     /**
-     * @var float|null
-     *
-     * @ORM\Column(name="dimension_side1", type="float", precision=10, scale=0, nullable=true, options={"default"="10","comment"="Габарит 1"})
-     */
-    private $dimensionSide1 = '10';
-
-    /**
-     * @var float|null
-     *
-     * @ORM\Column(name="dimension_side2", type="float", precision=10, scale=0, nullable=true, options={"default"="10","comment"="Габарит 2"})
-     */
-    private $dimensionSide2 = '10';
-
-    /**
-     * @var float|null
-     *
-     * @ORM\Column(name="dimension_side3", type="float", precision=10, scale=0, nullable=true, options={"default"="10","comment"="Габарит 3"})
-     */
-    private $dimensionSide3 = '10';
-
-    /**
      * @var string|null
      *
      * @ORM\Column(name="pd_tar", type="decimal", precision=9, scale=2, nullable=true, options={"default"="0.00","comment"="Тариф доставки"})
@@ -101,72 +80,9 @@ class OrdersBills
     /**
      * @var string|null
      *
-     * @ORM\Column(name="pd_dop_compl", type="decimal", precision=9, scale=2, nullable=true, options={"default"="0.00","comment"="Комплектация, руб"})
-     */
-    private $pdDopCompl = '0.00';
-
-    /**
-     * @var string|null
-     *
      * @ORM\Column(name="pd_eq", type="decimal", precision=9, scale=2, nullable=true, options={"default"="0.00","comment"="Эквайринг, руб"})
      */
     private $pdEq = '0.00';
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="pd_call", type="decimal", precision=9, scale=2, nullable=true, options={"default"="0.00","comment"="Прозвон, руб"})
-     */
-    private $pdCall = '0.00';
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="pd_sms", type="decimal", precision=9, scale=2, nullable=true, options={"default"="0.00","comment"="смс, руб"})
-     */
-    private $pdSms = '0.00';
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="pd_label", type="decimal", precision=9, scale=2, nullable=true, options={"default"="0.00","comment"="этикирование, руб"})
-     */
-    private $pdLabel = '0.00';
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="pd_docs", type="decimal", precision=9, scale=2, nullable=true, options={"default"="0.00","comment"="вложение накл., руб"})
-     */
-    private $pdDocs = '0.00';
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="pd_docs_return", type="decimal", precision=9, scale=2, nullable=true, options={"default"="0.00","comment"="возврат док., руб"})
-     */
-    private $pdDocsReturn = '0.00';
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="pd_change", type="decimal", precision=9, scale=2, nullable=true, options={"default"="0.00","comment"="обмен, руб"})
-     */
-    private $pdChange = '0.00';
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="pd_dop_pack", type="decimal", precision=9, scale=2, nullable=true, options={"default"="0.00","comment"="Упаковка, руб"})
-     */
-    private $pdDopPack = '0.00';
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="pd_dop_vozvrat", type="decimal", precision=9, scale=2, nullable=true, options={"default"="0.00","comment"="Обработка возврата, руб"})
-     */
-    private $pdDopVozvrat = '0.00';
 
     /**
      * @var string|null
@@ -204,11 +120,43 @@ class OrdersBills
     private $changeOs = '1.00';
 
     /**
-     * @var string|null
+     * @var int|null
      *
-     * @ORM\Column(name="change_weight", type="decimal", precision=9, scale=3, nullable=true, options={"default"="1.000","comment"="вес обмена"})
+     * @ORM\Column(name="nds_price_client", type="integer", nullable=true)
      */
-    private $changeWeight = '1.000';
+    private $ndsPriceClient;
+
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="card", type="integer", nullable=true, options={"comment"="оплата картой"})
+     */
+    private $card;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="card_type", type="integer", nullable=true, options={"comment"="1-mastercard, 2-visa, 3-мир"})
+     */
+    private $cardType;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="pimp_send", type="integer", nullable=true, options={"comment"="1-done, 0-not transfer"})
+     */
+    private $pimpSend;
+
+    /**
+     * @var \OrdersPimpayModel
+     *
+     * @ORM\ManyToOne(targetEntity="OrdersPimpayModel")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="pimpay_status", referencedColumnName="id")
+     * })
+     */
+    private $pimpayStatus;
 
     /**
      * @return int
@@ -301,60 +249,6 @@ class OrdersBills
     }
 
     /**
-     * @return float|null
-     */
-    public function getDimensionSide1(): ?float
-    {
-        return $this->dimensionSide1;
-    }
-
-    /**
-     * @param float|null $dimensionSide1
-     * @return OrdersBills
-     */
-    public function setDimensionSide1(?float $dimensionSide1): OrdersBills
-    {
-        $this->dimensionSide1 = $dimensionSide1;
-        return $this;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getDimensionSide2(): ?float
-    {
-        return $this->dimensionSide2;
-    }
-
-    /**
-     * @param float|null $dimensionSide2
-     * @return OrdersBills
-     */
-    public function setDimensionSide2(?float $dimensionSide2): OrdersBills
-    {
-        $this->dimensionSide2 = $dimensionSide2;
-        return $this;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getDimensionSide3(): ?float
-    {
-        return $this->dimensionSide3;
-    }
-
-    /**
-     * @param float|null $dimensionSide3
-     * @return OrdersBills
-     */
-    public function setDimensionSide3(?float $dimensionSide3): OrdersBills
-    {
-        $this->dimensionSide3 = $dimensionSide3;
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getPdTar(): ?string
@@ -429,24 +323,6 @@ class OrdersBills
     /**
      * @return string|null
      */
-    public function getPdDopCompl(): ?string
-    {
-        return $this->pdDopCompl;
-    }
-
-    /**
-     * @param string|null $pdDopCompl
-     * @return OrdersBills
-     */
-    public function setPdDopCompl(?string $pdDopCompl): OrdersBills
-    {
-        $this->pdDopCompl = $pdDopCompl;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getPdEq(): ?string
     {
         return $this->pdEq;
@@ -459,150 +335,6 @@ class OrdersBills
     public function setPdEq(?string $pdEq): OrdersBills
     {
         $this->pdEq = $pdEq;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPdCall(): ?string
-    {
-        return $this->pdCall;
-    }
-
-    /**
-     * @param string|null $pdCall
-     * @return OrdersBills
-     */
-    public function setPdCall(?string $pdCall): OrdersBills
-    {
-        $this->pdCall = $pdCall;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPdSms(): ?string
-    {
-        return $this->pdSms;
-    }
-
-    /**
-     * @param string|null $pdSms
-     * @return OrdersBills
-     */
-    public function setPdSms(?string $pdSms): OrdersBills
-    {
-        $this->pdSms = $pdSms;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPdLabel(): ?string
-    {
-        return $this->pdLabel;
-    }
-
-    /**
-     * @param string|null $pdLabel
-     * @return OrdersBills
-     */
-    public function setPdLabel(?string $pdLabel): OrdersBills
-    {
-        $this->pdLabel = $pdLabel;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPdDocs(): ?string
-    {
-        return $this->pdDocs;
-    }
-
-    /**
-     * @param string|null $pdDocs
-     * @return OrdersBills
-     */
-    public function setPdDocs(?string $pdDocs): OrdersBills
-    {
-        $this->pdDocs = $pdDocs;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPdDocsReturn(): ?string
-    {
-        return $this->pdDocsReturn;
-    }
-
-    /**
-     * @param string|null $pdDocsReturn
-     * @return OrdersBills
-     */
-    public function setPdDocsReturn(?string $pdDocsReturn): OrdersBills
-    {
-        $this->pdDocsReturn = $pdDocsReturn;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPdChange(): ?string
-    {
-        return $this->pdChange;
-    }
-
-    /**
-     * @param string|null $pdChange
-     * @return OrdersBills
-     */
-    public function setPdChange(?string $pdChange): OrdersBills
-    {
-        $this->pdChange = $pdChange;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPdDopPack(): ?string
-    {
-        return $this->pdDopPack;
-    }
-
-    /**
-     * @param string|null $pdDopPack
-     * @return OrdersBills
-     */
-    public function setPdDopPack(?string $pdDopPack): OrdersBills
-    {
-        $this->pdDopPack = $pdDopPack;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPdDopVozvrat(): ?string
-    {
-        return $this->pdDopVozvrat;
-    }
-
-    /**
-     * @param string|null $pdDopVozvrat
-     * @return OrdersBills
-     */
-    public function setPdDopVozvrat(?string $pdDopVozvrat): OrdersBills
-    {
-        $this->pdDopVozvrat = $pdDopVozvrat;
         return $this;
     }
 
@@ -697,20 +429,95 @@ class OrdersBills
     }
 
     /**
-     * @return string|null
+     * @return int|null
      */
-    public function getChangeWeight(): ?string
+    public function getNdsPriceClient(): ?int
     {
-        return $this->changeWeight;
+        return $this->ndsPriceClient;
     }
 
     /**
-     * @param string|null $changeWeight
+     * @param int|null $ndsPriceClient
      * @return OrdersBills
      */
-    public function setChangeWeight(?string $changeWeight): OrdersBills
+    public function setNdsPriceClient(?int $ndsPriceClient): OrdersBills
     {
-        $this->changeWeight = $changeWeight;
+        $this->ndsPriceClient = $ndsPriceClient;
         return $this;
     }
+
+    /**
+     * @return int|null
+     */
+    public function getCard(): ?int
+    {
+        return $this->card;
+    }
+
+    /**
+     * @param int|null $card
+     * @return OrdersBills
+     */
+    public function setCard(?int $card): OrdersBills
+    {
+        $this->card = $card;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCardType(): ?int
+    {
+        return $this->cardType;
+    }
+
+    /**
+     * @param int|null $cardType
+     * @return OrdersBills
+     */
+    public function setCardType(?int $cardType): OrdersBills
+    {
+        $this->cardType = $cardType;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPimpSend(): ?int
+    {
+        return $this->pimpSend;
+    }
+
+    /**
+     * @param int|null $pimpSend
+     * @return OrdersBills
+     */
+    public function setPimpSend(?int $pimpSend): OrdersBills
+    {
+        $this->pimpSend = $pimpSend;
+        return $this;
+    }
+
+
+    /**
+     * @return OrdersPimpayModel
+     */
+    public function getPimpayStatus(): OrdersPimpayModel
+    {
+        return $this->pimpayStatus;
+    }
+
+    /**
+     * @param OrdersPimpayModel $pimpayStatus
+     * @return OrdersBills
+     */
+    public function setPimpayStatus(OrdersPimpayModel $pimpayStatus): OrdersBills
+    {
+        $this->pimpayStatus = $pimpayStatus;
+        return $this;
+    }
+
+
 }

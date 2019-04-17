@@ -14,43 +14,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\Common\Collections\Criteria;
 use App\Twig\Render;
 use App\Validator;
-use App\Api\Criteria\Builder;
-use App\Api\Query\Builder as Qb;
 use Monolog\Logger;
 use Symfony\Component\Security\Core\Authentication;
 
 class PostController extends BaseController
 {
-    /**
-     * @return RedirectResponse
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function addUser()
-    {
-        $newUser = (new \Users())
-            ->setName(self::getRequest()->get(\Users::NAME))
-            ->setEmail(self::getRequest()->get(\Users::EMAIL))
-            ->setPassword(
-                sha1(
-                    strtolower(
-                        self::getRequest()->get(\Users::EMAIL) . self::getRequest()->get(\Users::PASSWORD)
-                    )
-                )
-            )
-            ->setEnabled(
-                self::getRequest()->get(\Users::ENABLED) ? true : false
-            )
-            ->setPriority(
-                self::getRequest()->get(\Users::PRIORITY)
-            );
-
-        Proxy::init()->getEntityManager()->persist($newUser);
-        Proxy::init()->getEntityManager()->flush();
-        return $this->redirect(
-            self::getRequest()->headers->get('referer') ?? $this->generateUrl('main')
-        );
-    }
 
     /**
      * @Route("addupic", name="addupic")

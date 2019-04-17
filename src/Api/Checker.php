@@ -4,7 +4,6 @@ namespace App\Api;
 
 
 use App\Proxy;
-use function Sodium\compare;
 use Symfony\Component\Console\Output\Output;
 use App\Api\Response\Builder;
 
