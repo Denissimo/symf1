@@ -174,20 +174,6 @@ class Orders extends Model
     private $cReason;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="reason_7", type="integer", nullable=true, options={"comment"="id статус отказ на месте"})
-     */
-    private $reason7;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="reason_8", type="integer", nullable=true, options={"comment"="id причины отмены"})
-     */
-    private $reason8;
-
-    /**
      * @var string|null
      *
      * @ORM\Column(name="inner_n", type="string", length=256, nullable=true, options={"comment"="Внутренний номер заказа"})
@@ -730,42 +716,6 @@ class Orders extends Model
     public function setCReason($cReason) : Orders
     {
         $this->cReason = $cReason;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getReason7(): ?int
-    {
-        return $this->reason7;
-    }
-
-    /**
-     * @param int|null $reason7
-     * @return Orders
-     */
-    public function setReason7(?int $reason7): Orders
-    {
-        $this->reason7 = $reason7;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getReason8(): ?int
-    {
-        return $this->reason8;
-    }
-
-    /**
-     * @param int|null $reason8
-     * @return Orders
-     */
-    public function setReason8(?int $reason8): Orders
-    {
-        $this->reason8 = $reason8;
         return $this;
     }
 
