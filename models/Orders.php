@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Orders
  *
- * @ORM\Table(name="orders", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="order_id", columns={"order_id"}), @ORM\Index(name="order_type", columns={"type"}), @ORM\Index(name="pimpay_status", columns={"pimpay_status"}), @ORM\Index(name="order_bill_id", columns={"order_bill_id"}), @ORM\Index(name="order_settings_id", columns={"order_settings_id"}), @ORM\Index(name="oid", columns={"old_id"}), @ORM\Index(name="order_status", columns={"status"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="orders_address_id", columns={"address_id"})})
+ * @ORM\Table(name="orders", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})}, indexes={@ORM\Index(name="order_id", columns={"order_id"}), @ORM\Index(name="order_type", columns={"type"}), @ORM\Index(name="order_bill_id", columns={"order_bill_id"}), @ORM\Index(name="order_settings_id", columns={"order_settings_id"}), @ORM\Index(name="oid", columns={"old_id"}), @ORM\Index(name="order_status", columns={"status"}), @ORM\Index(name="client_id", columns={"client_id"}), @ORM\Index(name="orders_address_id", columns={"address_id"})})
  * @ORM\Entity
  */
 class Orders extends Model
@@ -141,72 +141,9 @@ class Orders extends Model
     /**
      * @var int|null
      *
-     * @ORM\Column(name="nds_price_client", type="integer", nullable=true)
-     */
-    private $ndsPriceClient;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="is_packed", type="string", length=256, nullable=true, options={"comment"="Флажок упаковки"})
-     */
-    private $isPacked;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="np", type="string", length=256, nullable=true, options={"comment"="Флажок НП"})
-     */
-    private $np;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="sms", type="string", length=256, nullable=true, options={"comment"="SMS"})
-     */
-    private $sms;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="is_complect", type="string", length=256, nullable=true, options={"comment"="Флажок комплектации"})
-     */
-    private $isComplect;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="card", type="integer", nullable=true, options={"comment"="оплата картой"})
-     */
-    private $card;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="card_type", type="integer", nullable=true, options={"comment"="1-mastercard, 2-visa, 3-мир"})
-     */
-    private $cardType;
-
-    /**
-     * @var int|null
-     *
      * @ORM\Column(name="agent_id", type="integer", nullable=true, options={"comment"="id Партнера"})
      */
     private $agentId;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="agent_act", type="string", length=256, nullable=true)
-     */
-    private $agentAct;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="agent_vact", type="string", length=256, nullable=true)
-     */
-    private $agentVact;
 
     /**
      * @var int|null
@@ -214,13 +151,6 @@ class Orders extends Model
      * @ORM\Column(name="manager_id", type="integer", nullable=true, options={"comment"="id Менеджера"})
      */
     private $managerId;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="isoh", type="integer", nullable=true)
-     */
-    private $isoh;
 
     /**
      * @var int|null
@@ -258,13 +188,6 @@ class Orders extends Model
     private $reason8;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="ordercall", type="integer", nullable=true, options={"comment"="опция хз"})
-     */
-    private $ordercall;
-
-    /**
      * @var string|null
      *
      * @ORM\Column(name="inner_n", type="string", length=256, nullable=true, options={"comment"="Внутренний номер заказа"})
@@ -295,13 +218,6 @@ class Orders extends Model
     /**
      * @var int|null
      *
-     * @ORM\Column(name="chweightflag", type="integer", nullable=true, options={"comment"="опция Максипост"})
-     */
-    private $chweightflag;
-
-    /**
-     * @var int|null
-     *
      * @ORM\Column(name="update_date_flag", type="integer", nullable=true, options={"comment"="опция b2cpl - но уберем"})
      */
     private $updateDateFlag;
@@ -328,34 +244,6 @@ class Orders extends Model
     private $regBillId;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="partner_act", type="string", length=256, nullable=true, options={"comment"="reserved"})
-     */
-    private $partnerAct;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="open_option", type="integer", nullable=true, options={"default"="1","comment"="Вскрытие"})
-     */
-    private $openOption = '1';
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="call_option", type="integer", nullable=true, options={"comment"="Предварительный прозвон"})
-     */
-    private $callOption;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="label_option", type="integer", nullable=true, options={"comment"="этикирование"})
-     */
-    private $labelOption;
-
-    /**
      * @var int|null
      *
      * @ORM\Column(name="places_count", type="integer", nullable=true, options={"default"="1","comment"="Количество мест в заказе"})
@@ -365,72 +253,9 @@ class Orders extends Model
     /**
      * @var int|null
      *
-     * @ORM\Column(name="docs_option", type="integer", nullable=true, options={"comment"="Вложение накладной"})
-     */
-    private $docsOption;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="docs_return_option", type="integer", nullable=true, options={"comment"="Возврат накладной"})
-     */
-    private $docsReturnOption;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="partial_option", type="integer", nullable=true, options={"default"="1","comment"="Ч.о."})
-     */
-    private $partialOption = '1';
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="dress_fitting_option", type="integer", nullable=true, options={"comment"="примерка"})
-     */
-    private $dressFittingOption;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="lifting_option", type="integer", nullable=true, options={"comment"="подъем"})
-     */
-    private $liftingOption;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="cargo_lift", type="integer", nullable=true, options={"comment"="наличие лифта"})
-     */
-    private $cargoLift;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="change_option", type="integer", nullable=true, options={"comment"="обмен"})
-     */
-    private $changeOption;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="change_text", type="text", length=0, nullable=true, options={"comment"="текст обмена"})
-     */
-    private $changeText;
-
-    /**
-     * @var int|null
-     *
      * @ORM\Column(name="orderPlace", type="integer", nullable=true, options={"comment"="Сортировка для мобильных телефонов"})
      */
     private $orderplace;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="pimp_send", type="integer", nullable=true, options={"comment"="1-done, 0-not transfer"})
-     */
-    private $pimpSend;
 
     /**
      * @var \ClientSettings
@@ -493,16 +318,6 @@ class Orders extends Model
     private $address;
 
     /**
-     * @var \OrdersPimpayModel
-     *
-     * @ORM\ManyToOne(targetEntity="OrdersPimpayModel")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="pimpay_status", referencedColumnName="id")
-     * })
-     */
-    private $pimpayStatus;
-
-    /**
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Goods", mappedBy="order")
@@ -511,6 +326,13 @@ class Orders extends Model
      * })
      */
     private $goods;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="change_weight", type="decimal", precision=9, scale=3, nullable=true, options={"default"="1.000","comment"="вес обмена"})
+     */
+    private $changeWeight = '1.000';
 
     /**
      * @return Collection
@@ -824,132 +646,6 @@ class Orders extends Model
     /**
      * @return int|null
      */
-    public function getNdsPriceClient(): ?int
-    {
-        return $this->ndsPriceClient;
-    }
-
-    /**
-     * @param int|null $ndsPriceClient
-     * @return Orders
-     */
-    public function setNdsPriceClient(?int $ndsPriceClient): Orders
-    {
-        $this->ndsPriceClient = $ndsPriceClient;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getisPacked(): ?string
-    {
-        return $this->isPacked;
-    }
-
-    /**
-     * @param string|null $isPacked
-     * @return Orders
-     */
-    public function setIsPacked(?string $isPacked): Orders
-    {
-        $this->isPacked = $isPacked;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getNp(): ?string
-    {
-        return $this->np;
-    }
-
-    /**
-     * @param string|null $np
-     * @return Orders
-     */
-    public function setNp(?string $np): Orders
-    {
-        $this->np = $np;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getSms(): ?string
-    {
-        return $this->sms;
-    }
-
-    /**
-     * @param string|null $sms
-     * @return Orders
-     */
-    public function setSms(?string $sms): Orders
-    {
-        $this->sms = $sms;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getisComplect(): ?string
-    {
-        return $this->isComplect;
-    }
-
-    /**
-     * @param string|null $isComplect
-     * @return Orders
-     */
-    public function setIsComplect(?string $isComplect): Orders
-    {
-        $this->isComplect = $isComplect;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getCard(): ?int
-    {
-        return $this->card;
-    }
-
-    /**
-     * @param int|null $card
-     * @return Orders
-     */
-    public function setCard(?int $card): Orders
-    {
-        $this->card = $card;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getCardType(): ?int
-    {
-        return $this->cardType;
-    }
-
-    /**
-     * @param int|null $cardType
-     * @return Orders
-     */
-    public function setCardType(?int $cardType): Orders
-    {
-        $this->cardType = $cardType;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
     public function getAgentId(): ?int
     {
         return $this->agentId;
@@ -962,42 +658,6 @@ class Orders extends Model
     public function setAgentId(?int $agentId): Orders
     {
         $this->agentId = $agentId;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getAgentAct(): ?string
-    {
-        return $this->agentAct;
-    }
-
-    /**
-     * @param string|null $agentAct
-     * @return Orders
-     */
-    public function setAgentAct(?string $agentAct): Orders
-    {
-        $this->agentAct = $agentAct;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getAgentVact(): ?string
-    {
-        return $this->agentVact;
-    }
-
-    /**
-     * @param string|null $agentVact
-     * @return Orders
-     */
-    public function setAgentVact(?string $agentVact): Orders
-    {
-        $this->agentVact = $agentVact;
         return $this;
     }
 
@@ -1016,24 +676,6 @@ class Orders extends Model
     public function setManagerId(?int $managerId): Orders
     {
         $this->managerId = $managerId;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getIsoh(): ?int
-    {
-        return $this->isoh;
-    }
-
-    /**
-     * @param int|null $isoh
-     * @return Orders
-     */
-    public function setIsoh(?int $isoh): Orders
-    {
-        $this->isoh = $isoh;
         return $this;
     }
 
@@ -1128,24 +770,6 @@ class Orders extends Model
     }
 
     /**
-     * @return int|null
-     */
-    public function getOrdercall(): ?int
-    {
-        return $this->ordercall;
-    }
-
-    /**
-     * @param int|null $ordercall
-     * @return Orders
-     */
-    public function setOrdercall(?int $ordercall): Orders
-    {
-        $this->ordercall = $ordercall;
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getInnerN(): ?string
@@ -1214,24 +838,6 @@ class Orders extends Model
     public function setOrderWeight(?string $orderWeight): Orders
     {
         $this->orderWeight = $orderWeight;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getChweightflag(): ?int
-    {
-        return $this->chweightflag;
-    }
-
-    /**
-     * @param int|null $chweightflag
-     * @return Orders
-     */
-    public function setChweightflag(?int $chweightflag): Orders
-    {
-        $this->chweightflag = $chweightflag;
         return $this;
     }
 
@@ -1308,78 +914,6 @@ class Orders extends Model
     }
 
     /**
-     * @return string|null
-     */
-    public function getPartnerAct(): ?string
-    {
-        return $this->partnerAct;
-    }
-
-    /**
-     * @param string|null $partnerAct
-     * @return Orders
-     */
-    public function setPartnerAct(?string $partnerAct): Orders
-    {
-        $this->partnerAct = $partnerAct;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getOpenOption(): ?int
-    {
-        return $this->openOption;
-    }
-
-    /**
-     * @param int|null $openOption
-     * @return Orders
-     */
-    public function setOpenOption(?int $openOption): Orders
-    {
-        $this->openOption = $openOption;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getCallOption(): ?int
-    {
-        return $this->callOption;
-    }
-
-    /**
-     * @param int|null $callOption
-     * @return Orders
-     */
-    public function setCallOption(?int $callOption): Orders
-    {
-        $this->callOption = $callOption;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getLabelOption(): ?int
-    {
-        return $this->labelOption;
-    }
-
-    /**
-     * @param int|null $labelOption
-     * @return Orders
-     */
-    public function setLabelOption(?int $labelOption): Orders
-    {
-        $this->labelOption = $labelOption;
-        return $this;
-    }
-
-    /**
      * @return int|null
      */
     public function getPlacesCount(): ?int
@@ -1400,150 +934,6 @@ class Orders extends Model
     /**
      * @return int|null
      */
-    public function getDocsOption(): ?int
-    {
-        return $this->docsOption;
-    }
-
-    /**
-     * @param int|null $docsOption
-     * @return Orders
-     */
-    public function setDocsOption(?int $docsOption): Orders
-    {
-        $this->docsOption = $docsOption;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getDocsReturnOption(): ?int
-    {
-        return $this->docsReturnOption;
-    }
-
-    /**
-     * @param int|null $docsReturnOption
-     * @return Orders
-     */
-    public function setDocsReturnOption(?int $docsReturnOption): Orders
-    {
-        $this->docsReturnOption = $docsReturnOption;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getPartialOption(): ?int
-    {
-        return $this->partialOption;
-    }
-
-    /**
-     * @param int|null $partialOption
-     * @return Orders
-     */
-    public function setPartialOption(?int $partialOption): Orders
-    {
-        $this->partialOption = $partialOption;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getDressFittingOption(): ?int
-    {
-        return $this->dressFittingOption;
-    }
-
-    /**
-     * @param int|null $dressFittingOption
-     * @return Orders
-     */
-    public function setDressFittingOption(?int $dressFittingOption): Orders
-    {
-        $this->dressFittingOption = $dressFittingOption;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getLiftingOption(): ?int
-    {
-        return $this->liftingOption;
-    }
-
-    /**
-     * @param int|null $liftingOption
-     * @return Orders
-     */
-    public function setLiftingOption(?int $liftingOption): Orders
-    {
-        $this->liftingOption = $liftingOption;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getCargoLift(): ?int
-    {
-        return $this->cargoLift;
-    }
-
-    /**
-     * @param int|null $cargoLift
-     * @return Orders
-     */
-    public function setCargoLift(?int $cargoLift): Orders
-    {
-        $this->cargoLift = $cargoLift;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getChangeOption(): ?int
-    {
-        return $this->changeOption;
-    }
-
-    /**
-     * @param int|null $changeOption
-     * @return Orders
-     */
-    public function setChangeOption(?int $changeOption): Orders
-    {
-        $this->changeOption = $changeOption;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getChangeText(): ?string
-    {
-        return $this->changeText;
-    }
-
-    /**
-     * @param string|null $changeText
-     * @return Orders
-     */
-    public function setChangeText(?string $changeText): Orders
-    {
-        $this->changeText = $changeText;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
     public function getOrderplace(): ?int
     {
         return $this->orderplace;
@@ -1556,24 +946,6 @@ class Orders extends Model
     public function setOrderplace(?int $orderplace): Orders
     {
         $this->orderplace = $orderplace;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getPimpSend(): ?int
-    {
-        return $this->pimpSend;
-    }
-
-    /**
-     * @param int|null $pimpSend
-     * @return Orders
-     */
-    public function setPimpSend(?int $pimpSend): Orders
-    {
-        $this->pimpSend = $pimpSend;
         return $this;
     }
 
@@ -1686,20 +1058,20 @@ class Orders extends Model
     }
 
     /**
-     * @return OrdersPimpayModel
+     * @return string|null
      */
-    public function getPimpayStatus(): OrdersPimpayModel
+    public function getChangeWeight(): ?string
     {
-        return $this->pimpayStatus;
+        return $this->changeWeight;
     }
 
     /**
-     * @param OrdersPimpayModel $pimpayStatus
+     * @param string|null $changeWeight
      * @return Orders
      */
-    public function setPimpayStatus(OrdersPimpayModel $pimpayStatus): Orders
+    public function setChangeWeight(?string $changeWeight): Orders
     {
-        $this->pimpayStatus = $pimpayStatus;
+        $this->changeWeight = $changeWeight;
         return $this;
     }
 

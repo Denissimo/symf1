@@ -182,11 +182,11 @@ class Builder
      */
     public function buildGoods(\Goods $goods, \stdClass $good)
     {
-        /** @var \GoodsStatusModel $client */
+        /** @var \GoodsStatusModel $goodStatus */
         $goodStatus = Proxy::init()->getEntityManager()->getRepository(\GoodsStatusModel::class)
             ->find($good->gstatus);
 
-        /** @var \NdsType | null $client */
+        /** @var \NdsType | null $ndsType */
         $ndsType = $good->nds ? Proxy::init()->getEntityManager()->getRepository(\NdsType::class)
             ->find($good->nds) : null;
 
