@@ -227,13 +227,9 @@ class Builder
         $status = isset($ord->status) ? Proxy::init()->getEntityManager()->getRepository(\OrdersStatusModel::class)
             ->find($ord->status) : null;
 
-        /** @var \OrdersTypesModel $status */
+        /** @var \OrdersTypesModel $type */
         $type = isset($ord->type) ? Proxy::init()->getEntityManager()->getRepository(\OrdersTypesModel::class)
             ->find($ord->type) : null;
-
-        /** @var \OrdersPimpayModel | null $pimpayStatus */
-        $pimpayStatus = Proxy::init()->getEntityManager()->getRepository(\OrdersPimpayModel::class)
-            ->find($ord->pimpay_status ?? \OrdersPimpayModel::DEFAULT_ID);
 
         $delivTime1 = $delivTime2 = null;
 
@@ -247,26 +243,17 @@ class Builder
 
         $order
             ->setClient($client)
-            ->setPimpayStatus($pimpayStatus)
+            ->setChangeWeight($ord->change_weight)
             ->setStatus($status)
             ->setType($type)
             ->setOldId($ord->id)
             ->setAdmNotes($ord->adm_notes ?? null)
-            ->setAgentAct($ord->agent_act ?? null)
             ->setAgentId($ord->agent_id ?? null)
-            ->setAgentVact($ord->agent_vact ?? null)
             ->setAktId($ord->akt_id ?? null)
             ->setBillId($ord->bill_id ?? null)
             ->setBrand($ord->brand ?? null)
-            ->setCallOption($ord->call_option ?? null)
-            ->setCard($ord->card ?? null)
-            ->setCardType($ord->card_type ?? null)
-            ->setCargoLift($ord->cargo_lift ?? null)
             ->setChangeDate(isset($ord->change_date) ? \DateTime::createFromFormat('Y-m-d H:i:s', $ord->change_date) : null)
             ->setUpdated(isset($ord->updated) ? \DateTime::createFromFormat('Y-m-d H:i:s', $ord->updated) : null)
-            ->setChangeOption($ord->change_option ?? null)
-            ->setChangeText($ord->change_text ?? null)
-            ->setChweightflag($ord->chweightflag ?? null)
             ->setCourCid($ord->cour_cid ?? null)
             ->setCourierId($ord->courier_id ?? null)
             ->setDateAdd(isset($ord->date_add) ? \DateTime::createFromFormat('Y-m-d', $ord->date_add) : null)
@@ -274,37 +261,22 @@ class Builder
             ->setDeliveryTime($ord->delivery_time)
             ->setDeliveryTime1($delivTime1)
             ->setDeliveryTime2($delivTime2)
-            ->setDocsOption($ord->docs_option ?? null)
-            ->setDocsReturnOption($ord->docs_return_option ?? null)
-            ->setDressFittingOption($ord->dress_fitting_option ?? null)
             ->setInnerN($ord->inner_n ?? null)
-            ->setIsComplect($ord->is_complect ?? null)
-            ->setIsPacked($ord->is_packed ?? null)
-            ->setIsoh($ord->isoh ?? null)
-            ->setLabelOption($ord->label_option ?? null)
-            ->setLiftingOption($ord->lifting_option ?? null)
             ->setManagerId($ord->manager_id ?? null)
-            ->setNdsPriceClient($ord->nds_price_client ?? null)
-            ->setNp($ord->np ?? null)
-            ->setOpenOption($ord->open_option ?? null)
             ->setOrderId($ord->order_id ?? null)
             ->setOrderWeight($ord->order_weight ?? null)
-            ->setOrdercall($ord->ordercall ?? null)
             ->setOrderplace($ord->orderPlace ?? null)
             ->setOtkazmark($ord->otkazmark ?? null)
             ->setPReason($ord->p_reason ?? null)
             ->setCReason($ord->c_reason ?? null)
-            ->setPartialOption($ord->partial_option ?? null)
-            ->setPartnerAct($ord->partner_act ?? null)
-            ->setPimpSend($ord->pimp_send ?? null)
             ->setPlacesCount($ord->places_count ?? null)
             ->setRegBillId($ord->reg_bill_id ?? null)
             ->setShk($ord->shk ?? null)
-            ->setSms($ord->sms ?? null)
             ->setTargetContacts($ord->target_contacts ?? null)
             ->setTargetName($ord->target_name ?? null)
             ->setTargetNotes($ord->target_notes ?? null)
-            ->setUpdateDateFlag($ord->update_date_flag ?? null);
+            ->setUpdateDateFlag($ord->update_date_flag ?? null)
+        ;
         return $order;
     }
 
@@ -481,10 +453,6 @@ class Builder
 
             )->current();
 
-//        if(!isset($client)) {
-//            Output::echo($stdStock, 1);
-//        }
-
         $stock
             ->setOldId($stdStock->id)
             ->setName($stdStock->name)
@@ -549,28 +517,24 @@ class Builder
      */
     public function buildOrderBill(\OrdersBills $orderBills, \stdClass $ord)
     {
+        /** @var \OrdersPimpayModel | null $pimpayStatus */
+        $pimpayStatus = Proxy::init()->getEntityManager()->getRepository(\OrdersPimpayModel::class)
+            ->find($ord->pimpay_status ?? \OrdersPimpayModel::DEFAULT_ID);
+
         $orderBills
+            ->setCard($ord->card ?? null)
+            ->setCardType($ord->card_type ?? null)
+            ->setPimpayStatus($pimpayStatus)
             ->setAgentCost($ord->agent_cost)
             ->setChangeOs($ord->change_os)
-            ->setChangeWeight($ord->change_weight)
-            ->setDimensionSide1($ord->dimension_side1)
-            ->setDimensionSide2($ord->dimension_side2)
-            ->setDimensionSide3($ord->dimension_side3)
+            ->setNdsPriceClient($ord->nds_price_client ?? null)
             ->setOs($ord->os)
-            ->setPdCall($ord->pd_call)
-            ->setPdChange($ord->pd_change)
-            ->setPdDocs($ord->pd_docs)
-            ->setPdDocsReturn($ord->pd_docs_return)
             ->setPdDop($ord->pd_dop)
-            ->setPdDopCompl($ord->pd_dop_compl)
-            ->setPdDopPack($ord->pd_dop_pack)
             ->setPdDopStrah($ord->pd_dop_strah)
-            ->setPdDopVozvrat($ord->pd_dop_vozvrat)
             ->setPdEq($ord->pd_eq)
             ->setPdKo($ord->pd_ko)
-            ->setPdLabel($ord->pd_label)
-            ->setPdSms($ord->pd_sms)
             ->setPdTar($ord->pd_tar)
+            ->setPimpSend($ord->pimp_send ?? null)
             ->setPriceClient($ord->price_client)
             ->setPriceClientDelivery($ord->price_client_delivery)
             ->setPriceCourier($ord->price_courier)
@@ -593,6 +557,39 @@ class Builder
     {
 
         $orderSettings
+            ->setAgentAct($ord->agent_act ?? null)
+            ->setAgentVact($ord->agent_vact ?? null)
+            ->setCallOption($ord->call_option ?? null)
+            ->setCargoLift($ord->cargo_lift ?? null)
+            ->setChangeOption($ord->change_option ?? null)
+            ->setChangeText($ord->change_text ?? null)
+            ->setChweightflag($ord->chweightflag ?? null)
+            ->setDocsOption($ord->docs_option ?? null)
+            ->setDocsReturnOption($ord->docs_return_option ?? null)
+            ->setDressFittingOption($ord->dress_fitting_option ?? null)
+            ->setIsComplect($ord->is_complect ?? null)
+            ->setIsPacked($ord->is_packed ?? null)
+            ->setIsoh($ord->isoh ?? null)
+            ->setLabelOption($ord->label_option ?? null)
+            ->setLiftingOption($ord->lifting_option ?? null)
+            ->setNp($ord->np ?? null)
+            ->setOpenOption($ord->open_option ?? null)
+            ->setOrdercall($ord->ordercall ?? null)
+            ->setPartialOption($ord->partial_option ?? null)
+            ->setPartnerAct($ord->partner_act ?? null)
+            ->setSms($ord->sms ?? null)
+            ->setDimensionSide1($ord->dimension_side1)
+            ->setDimensionSide2($ord->dimension_side2)
+            ->setDimensionSide3($ord->dimension_side3)
+            ->setPdCall($ord->pd_call)
+            ->setPdChange($ord->pd_change)
+            ->setPdDocs($ord->pd_docs)
+            ->setPdDocsReturn($ord->pd_docs_return)
+            ->setPdDopCompl($ord->pd_dop_compl)
+            ->setPdDopPack($ord->pd_dop_pack)
+            ->setPdDopVozvrat($ord->pd_dop_vozvrat)
+            ->setPdLabel($ord->pd_label)
+            ->setPdSms($ord->pd_sms)
             ->setReciepientName($ord->reciepient_name)
             ->setDocDescription($ord->doc_description);
         Proxy::init()->getEntityManager()->persist($orderSettings);
@@ -663,6 +660,7 @@ class Builder
         }
 
         $ordersArray = [];
+        /** @var \Orders $ord */
         foreach ($orders as $ord) {
             $podstatus = isset($porsdersSorted[$ord->getOrderId()]) ?
                 $porsdersSorted[$ord->getOrderId()]->getPodstatus()->getPodstatus() : null;
@@ -689,7 +687,7 @@ class Builder
                 self::ORDER_STATUS => $ord->getStatus()->getId(),
                 self::ORDER_ORDER_WEIGHT => round((float)$ord->getOrderWeight(), 2),
                 self::ORDER_PRICE_DELIVERY => (float)$ord->getOrderBill()->getPriceDelivery(),
-                self::ORDER_PRICE_DELIVERY => (float)$ord->getOrderBill()->getPriceClient(),
+                self::ORDER_PRICE_CLIENT => (float)$ord->getOrderBill()->getPriceClient(),
                 self::ORDER_CHANGE => $ord->getChangeDate()->format('Y-m-d H:i:s'),
                 self::ORDER_RECEPIENT => $ord->getOrderSettings()->getReciepientName(),
                 self::ORDER_ORDER_GOODS => $goodsArray ?? null,
@@ -711,6 +709,7 @@ class Builder
     private function buildGoodsV3($goodsCollection): array
     {
         $goodsArray = [];
+        /** @var \Goods $goods */
         foreach ($goodsCollection as $goods) {
             $goodsArray[] = [
                 self::GOODS_ID => $goods->getId(),

@@ -716,4 +716,202 @@ class OrdersSettings
         return $this;
     }
 
+    /**
+     * @return float|null
+     */
+    public function getDimensionSide2(): ?float
+    {
+        return $this->dimensionSide2;
+    }
+
+    /**
+     * @param float|null $dimensionSide2
+     * @return OrdersSettings
+     */
+    public function setDimensionSide2(?float $dimensionSide2): OrdersSettings
+    {
+        $this->dimensionSide2 = $dimensionSide2;
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getDimensionSide3(): ?float
+    {
+        return $this->dimensionSide3;
+    }
+
+    /**
+     * @param float|null $dimensionSide3
+     * @return OrdersSettings
+     */
+    public function setDimensionSide3(?float $dimensionSide3): OrdersSettings
+    {
+        $this->dimensionSide3 = $dimensionSide3;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPdDopCompl(): ?string
+    {
+        return $this->pdDopCompl;
+    }
+
+    /**
+     * @param string|null $pdDopCompl
+     * @return OrdersSettings
+     */
+    public function setPdDopCompl(?string $pdDopCompl): OrdersSettings
+    {
+        $this->pdDopCompl = $pdDopCompl;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPdCall(): ?string
+    {
+        return $this->pdCall;
+    }
+
+    /**
+     * @param string|null $pdCall
+     * @return OrdersSettings
+     */
+    public function setPdCall(?string $pdCall): OrdersSettings
+    {
+        $this->pdCall = $pdCall;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPdSms(): ?string
+    {
+        return $this->pdSms;
+    }
+
+    /**
+     * @param string|null $pdSms
+     * @return OrdersSettings
+     */
+    public function setPdSms(?string $pdSms): OrdersSettings
+    {
+        $this->pdSms = $pdSms;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPdLabel(): ?string
+    {
+        return $this->pdLabel;
+    }
+
+    /**
+     * @param string|null $pdLabel
+     * @return OrdersSettings
+     */
+    public function setPdLabel(?string $pdLabel): OrdersSettings
+    {
+        $this->pdLabel = $pdLabel;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPdDocs(): ?string
+    {
+        return $this->pdDocs;
+    }
+
+    /**
+     * @param string|null $pdDocs
+     * @return OrdersSettings
+     */
+    public function setPdDocs(?string $pdDocs): OrdersSettings
+    {
+        $this->pdDocs = $pdDocs;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPdDocsReturn(): ?string
+    {
+        return $this->pdDocsReturn;
+    }
+
+    /**
+     * @param string|null $pdDocsReturn
+     * @return OrdersSettings
+     */
+    public function setPdDocsReturn(?string $pdDocsReturn): OrdersSettings
+    {
+        $this->pdDocsReturn = $pdDocsReturn;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPdChange(): ?string
+    {
+        return $this->pdChange;
+    }
+
+    /**
+     * @param string|null $pdChange
+     * @return OrdersSettings
+     */
+    public function setPdChange(?string $pdChange): OrdersSettings
+    {
+        $this->pdChange = $pdChange;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPdDopPack(): ?string
+    {
+        return $this->pdDopPack;
+    }
+
+    /**
+     * @param string|null $pdDopPack
+     * @return OrdersSettings
+     */
+    public function setPdDopPack(?string $pdDopPack): OrdersSettings
+    {
+        $this->pdDopPack = $pdDopPack;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPdDopVozvrat(): ?string
+    {
+        return $this->pdDopVozvrat;
+    }
+
+    /**
+     * @param string|null $pdDopVozvrat
+     * @return OrdersSettings
+     */
+    public function setPdDopVozvrat(?string $pdDopVozvrat): OrdersSettings
+    {
+        $this->pdDopVozvrat = $pdDopVozvrat;
+        return $this;
+    }
+
 }
