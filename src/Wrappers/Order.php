@@ -83,7 +83,7 @@ class Order
         $this->order_weight = $order->getOrderWeight();
         $this->bill_id = $order->getBillId();
 
-        $this->paymentType = !$order->getCard() ? 2 : 1;
+        $this->paymentType = !$order->getOrderBill()->getCard() ? 2 : 1;
 
         $this->status = $order->getStatus()->getId();
 

@@ -696,7 +696,7 @@ class Builder
                 self::ORDER_UPDATE_DATE_FLAG => $ord->getUpdateDateFlag(),
                 self::ORDER_UPDATE_DATE_REASON => null,
                 self::ORDER_BILL_ID => $ord->getBillId(),
-                self::ORDER_PAYMENT_TYPE => $ord->getCard() == 1 ? 1 : 2
+                self::ORDER_PAYMENT_TYPE => $ord->getOrderBill()->getCard() == 1 ? 1 : 2
             ];
         }
         return $ordersArray;
