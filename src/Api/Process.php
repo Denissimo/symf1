@@ -161,7 +161,6 @@ class Process
     {
         $lostUpdateTime = new \DateTime();
         $firstUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', reset($orders)->updated);
-        Proxy::init()->getLogger()->addWarning('firstUpdateTime: ' . \GuzzleHttp\json_encode($firstUpdateTime));
         if (isset($orders[0]->data_last_id)) {
             $optionsLog = (new \OptionsLog())
                 ->setOrderId($orders[0]->data_last_id)
@@ -203,17 +202,12 @@ class Process
                 (new Builder())->saveOrders([$ord]);
                 $oid = '-';
             }
-            Proxy::init()->getLogger()->addWarning($oid . ' >> ' . $ord->id . ' >> ' . $ord->updated);
-
         }
         Proxy::init()->getEntityManager()->flush();
         $endUpdateTime = \DateTime::createFromFormat('Y-m-d H:i:s', end($orders)->updated);
-        Proxy::init()->getLogger()->addWarning('endUpdateTime: ' . \GuzzleHttp\json_encode($endUpdateTime));
         $endOrderId = (int)end($orders)->id;
         $finalUpdateTime = $endUpdateTime < $lostUpdateTime ? $endUpdateTime : $lostUpdateTime;
-        Proxy::init()->getLogger()->addWarning('finalUpdateTime: ' . \GuzzleHttp\json_encode($endUpdateTime));
         $finalOrderId = $endOrderId;
-//        $useLastId = (int)($firstUpdateTime == $endUpdateTime && count($orders) > 1);
         if($firstUpdateTime == $endUpdateTime && count($orders) > 1) {
             $useLastId = 1;
             $resultUpdateTime = $endUpdateTime;

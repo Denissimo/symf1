@@ -90,7 +90,7 @@ class CmsController extends BaseController implements Api
 
         $content = 'Orders loaded';
         try {
-//            Proxy::init()->getLogger()->addWarning('UnitList: ' .\GuzzleHttp\json_encode($unitList));
+
             $response = (new Client())->process($unitList);
             (new Validator())->validateResponseList($response);
 
