@@ -115,12 +115,18 @@ class Validator
             Api::PRICE_CLIENT_DELIVERY_NDS
         ];
 
-        Proxy::init()->getValidator()->validateRequired2(
+        Proxy::init()->getValidator()->validateRequired(
             $post,
             $requiredFields,
-            new InvalidRequestAgrs('Поля ' . implode(', ', $requiredFields) . ' обязаиельны для заполнения!')
+            'Поля ' . implode(', ', $requiredFields) . ' обязаиельны для заполнения!',
+            MalformedRequestException::class
         );
-
+/*
+        Proxy::init()->getValidator()->validate(
+            $post,
+            new Assert\
+        );
+*/
         if (empty($post[Api::MO_PUNKT_ID]) && empty($post[Api::CITY])) {
             throw new InvalidRequestAgrs(sprintf("Не заполнено одно из полей %s или %s", Api::MO_PUNKT_ID, Api::CITY));
         }
