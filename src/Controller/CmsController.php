@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Api\Client;
+use App\Api\LaraProvider;
 use App\Api\Request\Unit;
 use App\Exceptions\BadResponseException;
 use App\Exceptions\InvalidRequestAgrs;
@@ -374,4 +375,19 @@ class CmsController extends BaseController implements Api
             Render::CONTENT => $content
         ]);
     }
+
+    /**
+     * @Route("/address_test")
+     *
+     */
+    public function addressTest()
+    {
+        $lara = new LaraProvider();
+        $addr = [];
+        $addr['find'] = $lara->findAddress('Московская обл, г Домодедово, мкр Центральный, Привокзальная пл, д 7');
+        $addr['byId'] = $lara->getAddressId(5);
+        $addr['byKladrId'] = $lara->getAddressKladrId(7700400000200);
+        dd('RESULT', $addr);
+    }
+
 }

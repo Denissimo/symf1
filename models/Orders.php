@@ -4,6 +4,7 @@
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use \App\Api\LaraProvider;
 
 /**
  * Orders
@@ -721,7 +722,7 @@ class Orders extends Model
      * @param int|null $cReason
      * @return Orders
      */
-    public function setCReason($cReason) : Orders
+    public function setCReason($cReason): Orders
     {
         $this->cReason = $cReason;
         return $this;
@@ -1051,4 +1052,14 @@ class Orders extends Model
         return $this;
     }
 
+    /**
+     * @return |null
+     */
+    public function getGeoAddress()
+    {
+        if (!$this->getGeoId()) {
+            return null;
+        }
+        return (new LaraProvider())->getAddressId($this->getGeoId());
+    }
 }
