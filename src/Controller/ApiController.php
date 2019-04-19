@@ -22,6 +22,7 @@ use App\Api\Response\Validator;
 use App\Exceptions\MalformedResponseException;
 use App\Exceptions\MalformedApiKeyException;
 use App\Helpers\Output;
+use App\Api\CreateOrder;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 
@@ -383,14 +384,20 @@ class ApiController extends BaseController implements Api
 
 
     /**
-     *
      * @Route("/api/v1/createOrder")
+     * @return HttpResponse
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function createOrder()
     {
         try {
+            $create = new CreateOrder(self::getRequest());
+            Output::echo(1, true);
             $client = $this->getClientSettings();
             $post = self::getRequest()->request->all();
+
 
             $post = (new RequestValidator())->validateCreateOrder($post, true);
 
@@ -410,9 +417,12 @@ class ApiController extends BaseController implements Api
 
 
             return $this->success([]);
+
+        } catch (MalformedRequestException $e){
+            return $this->error($e);
         } catch (\Exception $e) {
-            throw $e;
-            dd($e);
+//            throw $e;
+//            dd($e);
             return $this->error($e);
         }
     }

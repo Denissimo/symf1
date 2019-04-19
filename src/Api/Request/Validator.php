@@ -5,6 +5,7 @@ namespace App\Api\Request;
 use App\Exceptions\InactiveCliendException;
 use App\Exceptions\InvalidRequestAgrs;
 use App\Exceptions\MalformedApiKeyException;
+use App\Helpers\Output;
 use App\Proxy;
 use Carbon\Carbon;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -22,12 +23,12 @@ class Validator
     /**
      * @param Request $Request
      * @param array $requiredFields
+     * @param bool $post
      */
-    public function validateRequiredFields(Request $Request, array $requiredFields)
+    public function validateRequiredFields(Request $Request, array $requiredFields, $post = false)
     {
-
         Proxy::init()->getValidator()->validateRequired(
-            $Request->query->all(),
+            $post ? $Request->request->all() : $Request->query->all(),
             $requiredFields,
             'Required fields missing: ' . implode(', ', $requiredFields),
             MalformedRequestException::class
