@@ -303,6 +303,14 @@ class Orders extends Model
      */
     private $address;
 
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="geo_id", type="integer", nullable=true)
+     */
+    private $geoId;
+
     /**
      * @var Collection
      *
@@ -1004,6 +1012,24 @@ class Orders extends Model
     public function setAddress(Address $address): Orders
     {
         $this->address = $address;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getGeoId(): ?int
+    {
+        return $this->geoId;
+    }
+
+    /**
+     * @param int|null $geoId
+     * @return Orders
+     */
+    public function setGeoId(?int $geoId): Orders
+    {
+        $this->geoId = $geoId;
         return $this;
     }
 
