@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PlacesBarcodes
  *
- * @ORM\Table(name="places_barcodes", indexes={@ORM\Index(name="order_id", columns={"oid"}), @ORM\Index(name="barcode", columns={"barcode"})})
+ * @ORM\Table(name="places_barcodes", indexes={@ORM\Index(name="shk", columns={"shk"}), @ORM\Index(name="pb_status", columns={"status"}), @ORM\Index(name="order_id", columns={"order_id"})})
  * @ORM\Entity
  */
 class PlacesBarcodes
@@ -31,9 +31,9 @@ class PlacesBarcodes
     /**
      * @var string|null
      *
-     * @ORM\Column(name="barcode", type="string", length=255, nullable=true)
+     * @ORM\Column(name="shk", type="string", length=255, nullable=true)
      */
-    private $barcode;
+    private $shk;
 
     /**
      * @var float|null
@@ -41,6 +41,13 @@ class PlacesBarcodes
      * @ORM\Column(name="weight", type="float", precision=9, scale=2, nullable=true)
      */
     private $weight;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="goods", type="text", length=0, nullable=true)
+     */
+    private $goods;
 
     /**
      * @var int|null
@@ -59,19 +66,29 @@ class PlacesBarcodes
     /**
      * @var int|null
      *
-     * @ORM\Column(name="status", type="integer", nullable=true)
+     * @ORM\Column(name="is_cancle", type="integer", nullable=true, options={"comment"="Если 1 то отменен"})
      */
-    private $status;
+    private $isCancle = '0';
 
     /**
      * @var \Orders
      *
      * @ORM\ManyToOne(targetEntity="Orders")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="oid", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="order_id", referencedColumnName="id")
      * })
      */
-    private $oid;
+    private $order;
+
+    /**
+     * @var \PlacesBarcodesStatusModel
+     *
+     * @ORM\ManyToOne(targetEntity="PlacesBarcodesStatusModel")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="status", referencedColumnName="id")
+     * })
+     */
+    private $status;
 
     /**
      * @return int
@@ -112,18 +129,18 @@ class PlacesBarcodes
     /**
      * @return string|null
      */
-    public function getBarcode(): ?string
+    public function getShk(): ?string
     {
-        return $this->barcode;
+        return $this->shk;
     }
 
     /**
-     * @param string|null $barcode
+     * @param string|null $shk
      * @return PlacesBarcodes
      */
-    public function setBarcode(?string $barcode): PlacesBarcodes
+    public function setShk(?string $shk): PlacesBarcodes
     {
-        $this->barcode = $barcode;
+        $this->shk = $shk;
         return $this;
     }
 
@@ -142,6 +159,24 @@ class PlacesBarcodes
     public function setWeight(?float $weight): PlacesBarcodes
     {
         $this->weight = $weight;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getGoods(): ?string
+    {
+        return $this->goods;
+    }
+
+    /**
+     * @param string|null $goods
+     * @return PlacesBarcodes
+     */
+    public function setGoods(?string $goods): PlacesBarcodes
+    {
+        $this->goods = $goods;
         return $this;
     }
 
@@ -184,36 +219,54 @@ class PlacesBarcodes
     /**
      * @return int|null
      */
-    public function getStatus(): ?int
+    public function getIsCancle(): ?int
     {
-        return $this->status;
+        return $this->isCancle;
     }
 
     /**
-     * @param int|null $status
+     * @param int|null $isCancle
      * @return PlacesBarcodes
      */
-    public function setStatus(?int $status): PlacesBarcodes
+    public function setIsCancle(?int $isCancle): PlacesBarcodes
     {
-        $this->status = $status;
+        $this->isCancle = $isCancle;
         return $this;
     }
 
     /**
      * @return Orders
      */
-    public function getOid(): Orders
+    public function getOrder(): Orders
     {
-        return $this->oid;
+        return $this->order;
     }
 
     /**
-     * @param Orders $oid
+     * @param Orders $order
      * @return PlacesBarcodes
      */
-    public function setOid(Orders $oid): PlacesBarcodes
+    public function setOrder(Orders $order): PlacesBarcodes
     {
-        $this->oid = $oid;
+        $this->order = $order;
+        return $this;
+    }
+
+    /**
+     * @return PlacesBarcodesStatusModel
+     */
+    public function getStatus(): PlacesBarcodesStatusModel
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param PlacesBarcodesStatusModel $status
+     * @return PlacesBarcodes
+     */
+    public function setStatus(PlacesBarcodesStatusModel $status): PlacesBarcodes
+    {
+        $this->status = $status;
         return $this;
     }
 
