@@ -5,6 +5,7 @@ namespace App\Api\Request;
 use App\Exceptions\InactiveCliendException;
 use App\Exceptions\InvalidRequestAgrs;
 use App\Exceptions\MalformedApiKeyException;
+use App\Helpers\Output;
 use App\Proxy;
 use Carbon\Carbon;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -22,12 +23,12 @@ class Validator
     /**
      * @param Request $Request
      * @param array $requiredFields
+     * @param bool $post
      */
-    public function validateRequiredFields(Request $Request, array $requiredFields)
+    public function validateRequiredFields(Request $Request, array $requiredFields, $post = false)
     {
-
         Proxy::init()->getValidator()->validateRequired(
-            $Request->query->all(),
+            $post ? $Request->request->all() : $Request->query->all(),
             $requiredFields,
             'Required fields missing: ' . implode(', ', $requiredFields),
             MalformedRequestException::class
@@ -111,16 +112,22 @@ class Validator
             Api::PRICE_CLIENT,
             Api::OS,
             Api::DELIVERY_DATE,
-            Api::DELIVERY_TIME,
-            Api::PRICE_CLIENT_DELIVERY_NDS
+            Api::DELIVERY_TIME
+//            Api::PRICE_CLIENT_DELIVERY_NDS
         ];
 
-        Proxy::init()->getValidator()->validateRequired2(
+        Proxy::init()->getValidator()->validateRequired(
             $post,
             $requiredFields,
-            new InvalidRequestAgrs('Поля ' . implode(', ', $requiredFields) . ' обязаиельны для заполнения!')
+            'Поля ' . implode(', ', $requiredFields) . ' обязаиельны для заполнения!',
+            MalformedRequestException::class
         );
-
+/*
+        Proxy::init()->getValidator()->validate(
+            $post,
+            new Assert\
+        );
+*/
         if (empty($post[Api::MO_PUNKT_ID]) && empty($post[Api::CITY])) {
             throw new InvalidRequestAgrs(sprintf("Не заполнено одно из полей %s или %s", Api::MO_PUNKT_ID, Api::CITY));
         }

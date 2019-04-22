@@ -13,8 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 class OrdersTypesModel
 {
     const
+        COURIER_DELIVERY = 1, //Доставка курьером
         PICKUP = 2; // Самовывоз
-
 
     /**
      * @var int

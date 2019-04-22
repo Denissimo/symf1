@@ -2,7 +2,10 @@
 
 namespace App\Api\Response;
 
+use App\Api\CreateGoods;
+use App\Api\CreateOrder;
 use App\Api\Process;
+use App\Api\Fields as Api;
 use App\Api\Structure as Fields;
 use App\Helpers\Convert;
 use App\Proxy;
@@ -13,7 +16,8 @@ use App\Helpers\Output;
 class Builder
 {
     const
-        TYPE = 'object',
+        OBJECT = 'object',
+        ARRAY = 'array',
         DEFAULT_ID = 1;
 
     const
@@ -164,12 +168,17 @@ class Builder
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private
-    function saveGoods(array $goods, \Orders $order)
+    public function saveGoods(array $goods, \Orders $order)
     {
         foreach ($goods as $good) {
-            if (gettype($good) == self::TYPE) {
-                $goodsNew = $this->buildGoods(new \Goods(), $good)->setOrder($order);
+            if (is_array($good) == self::ARRAY) {
+                $goodObj = new CreateGoods($good);
+            } else {
+                $goodObj = $good;
+            }
+//            Output::echo($goodObj, 1);
+            if (gettype($goodObj) == self::OBJECT) {
+                $goodsNew = $this->buildGoods(new \Goods(), $goodObj)->setOrder($order);
                 Proxy::init()->getEntityManager()->persist($goodsNew);
             }
         }
@@ -178,40 +187,40 @@ class Builder
 
     /**
      * @param \Goods $goods
-     * @param \stdClass $good
+     * @param \stdClass | CreateGoods $good
      * @return \Goods
      */
-    public function buildGoods(\Goods $goods, \stdClass $good)
+    public function buildGoods(\Goods $goods, $good)
     {
         /** @var \GoodsStatusModel $goodStatus */
         $goodStatus = Proxy::init()->getEntityManager()->getRepository(\GoodsStatusModel::class)
-            ->find($good->gstatus);
+            ->find($good->gstatus ?? \GoodsStatusModel::EXPECTED);
 
         /** @var \NdsType | null $ndsType */
         $ndsType = $good->nds ? Proxy::init()->getEntityManager()->getRepository(\NdsType::class)
             ->find($good->nds) : null;
 
         return $goods
-            ->setOldId($good->id)
+            ->setOldId($good->id ?? Api::ZERO)
             ->setGoodsStatus($goodStatus)
             ->setGoodsNdsType($ndsType)
             ->setArticle($good->articul)
             ->setCount($good->count)
-            ->setCountWeight($good->count_weight)
+            ->setCountWeight($good->count_weight ?? null)
             ->setDescription($good->artname)
-            ->setIsCancel($good->is_cancel)
+            ->setIsCancel($good->is_cancel ?? null)
             ->setPrice($good->price)
-            ->setVAktId($good->v_akt_id)
+            ->setVAktId($good->v_akt_id ?? null)
             ->setWeight($good->weight);
 
     }
 
     /**
      * @param \Orders $order
-     * @param \stdClass $ord
+     * @param \stdClass | CreateOrder $ord
      * @return \Orders
      */
-    public function buildOrder(\Orders $order, \stdClass $ord)
+    public function buildOrder(\Orders $order, $ord)
     {
         /** @var \ClientSettings $client */
         $client = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)
@@ -248,6 +257,7 @@ class Builder
             ->setStatus($status)
             ->setType($type)
             ->setOldId($ord->id)
+            ->setGeoId($ord->geo_id ?? null)
             ->setAdmNotes($ord->adm_notes ?? null)
             ->setAgentId($ord->agent_id ?? null)
             ->setAktId($ord->akt_id ?? null)
@@ -473,12 +483,12 @@ class Builder
 
     /**
      * @param \Address $address
-     * @param \stdClass $ord
+     * @param \stdClass | CreateOrder $ord
      * @return \Address
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function buildAddress(\Address $address, \stdClass $ord)
+    public function buildAddress(\Address $address, $ord)
     {
         /** @var \AddressTypesModel $addrType */
         $addrType = Proxy::init()->getEntityManager()->getRepository(\AddressTypesModel::class)
@@ -511,12 +521,12 @@ class Builder
 
     /**
      * @param \OrdersBills $orderBills
-     * @param \stdClass $ord
+     * @param \stdClass | CreateOrder $ord
      * @return \OrdersBills
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function buildOrderBill(\OrdersBills $orderBills, \stdClass $ord)
+    public function buildOrderBill(\OrdersBills $orderBills, $ord)
     {
         /** @var \OrdersPimpayModel | null $pimpayStatus */
         $pimpayStatus = Proxy::init()->getEntityManager()->getRepository(\OrdersPimpayModel::class)
@@ -526,22 +536,22 @@ class Builder
             ->setCard($ord->card ?? null)
             ->setCardType($ord->card_type ?? null)
             ->setPimpayStatus($pimpayStatus)
-            ->setAgentCost($ord->agent_cost)
-            ->setChangeOs($ord->change_os)
+            ->setAgentCost($ord->agent_cost ?? null)
+            ->setChangeOs($ord->change_os ?? null)
             ->setNdsPriceClient($ord->nds_price_client ?? null)
-            ->setOs($ord->os)
-            ->setPdDop($ord->pd_dop)
-            ->setPdDopStrah($ord->pd_dop_strah)
-            ->setPdEq($ord->pd_eq)
-            ->setPdKo($ord->pd_ko)
-            ->setPdTar($ord->pd_tar)
+            ->setOs($ord->os ?? null)
+            ->setPdDop($ord->pd_dop ?? null)
+            ->setPdDopStrah($ord->pd_dop_strah ?? null)
+            ->setPdEq($ord->pd_eq ?? null)
+            ->setPdKo($ord->pd_ko ?? null)
+            ->setPdTar($ord->pd_tar ?? null)
             ->setPimpSend($ord->pimp_send ?? null)
             ->setPriceClient($ord->price_client)
-            ->setPriceClientDelivery($ord->price_client_delivery)
-            ->setPriceCourier($ord->price_courier)
-            ->setPriceDelivery($ord->price_delivery)
-            ->setPriceGoods($ord->price_goods)
-            ->setSum2p($ord->sum2p);
+            ->setPriceClientDelivery($ord->price_client_delivery ?? null)
+            ->setPriceCourier($ord->price_courier ?? null)
+            ->setPriceDelivery($ord->price_delivery ?? null)
+            ->setPriceGoods($ord->price_goods ?? null)
+            ->setSum2p($ord->sum2p ?? null);
         Proxy::init()->getEntityManager()->persist($orderBills);
         Proxy::init()->getEntityManager()->flush();
         return $orderBills;
@@ -549,12 +559,12 @@ class Builder
 
     /**
      * @param \OrdersSettings $orderSettings
-     * @param \stdClass $ord
+     * @param \stdClass | CreateOrder $ord
      * @return \OrdersSettings
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function buildOrderSettings(\OrdersSettings $orderSettings, \stdClass $ord)
+    public function buildOrderSettings(\OrdersSettings $orderSettings, $ord)
     {
 
         $orderSettings
@@ -579,20 +589,19 @@ class Builder
             ->setPartialOption($ord->partial_option ?? null)
             ->setPartnerAct($ord->partner_act ?? null)
             ->setSms($ord->sms ?? null)
-            ->setDimensionSide1($ord->dimension_side1)
-            ->setDimensionSide2($ord->dimension_side2)
-            ->setDimensionSide3($ord->dimension_side3)
-            ->setPdCall($ord->pd_call)
-            ->setPdChange($ord->pd_change)
-            ->setPdDocs($ord->pd_docs)
-            ->setPdDocsReturn($ord->pd_docs_return)
-            ->setPdDopCompl($ord->pd_dop_compl)
-            ->setPdDopPack($ord->pd_dop_pack)
-            ->setPdDopVozvrat($ord->pd_dop_vozvrat)
-            ->setPdLabel($ord->pd_label)
-            ->setPdSms($ord->pd_sms)
-            ->setReciepientName($ord->reciepient_name)
-            ->setDocDescription($ord->doc_description);
+            ->setDimensionSide1($ord->dimension_side1 ?? null)
+            ->setDimensionSide2($ord->dimension_side2 ?? null)
+            ->setDimensionSide3($ord->dimension_side3 ?? null)
+            ->setPdCall($ord->pd_call ?? null)
+            ->setPdChange($ord->pd_change ?? null)
+            ->setPdDocsReturn($ord->pd_docs_return ?? null)
+            ->setPdDopCompl($ord->pd_dop_compl ?? null)
+            ->setPdDopPack($ord->pd_dop_pack ?? null)
+            ->setPdDopVozvrat($ord->pd_dop_vozvrat ?? null)
+            ->setPdLabel($ord->pd_label ?? null)
+            ->setPdSms($ord->pd_sms ?? null)
+            ->setReciepientName($ord->reciepient_name ?? null)
+            ->setDocDescription($ord->doc_description ?? null);
         Proxy::init()->getEntityManager()->persist($orderSettings);
         Proxy::init()->getEntityManager()->flush();
         return $orderSettings;
