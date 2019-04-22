@@ -10,7 +10,7 @@ return ConsoleRunner::createHelperSet(
             'driver' => 'pdo_mysql',
             'host' => 'kabudasay.beget.tech',
             'user' => 'kabudasay_core',
-            'password' => 'arg0navt12$',
+            'password' => 'kSntf87jgnDa',
             'dbname' => 'kabudasay_core',
             'charset' => 'utf8',
         ],
