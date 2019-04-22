@@ -394,29 +394,64 @@ class ApiController extends BaseController implements Api
     {
         try {
             $create = new CreateOrder(self::getRequest());
-            Output::echo(1, true);
             $client = $this->getClientSettings();
+            $create->setClientId($client);
             $post = self::getRequest()->request->all();
 
+//            $post = (new RequestValidator())->validateCreateOrder($post, true);
 
-            $post = (new RequestValidator())->validateCreateOrder($post, true);
-
-
-            $criteria = Criteria::create()
+            $criteriaDuplicate = Criteria::create()
                 ->where(Criteria::expr()->eq(\Orders::INNER_N, $post[Api::INNER_N]))
                 ->andWhere(Criteria::expr()->eq(\Orders::CLIENT, $client));
 
-            $order = \Orders::find($criteria)->first();
+            $order = \Orders::find($criteriaDuplicate)->first();
+
+            if($order != null) Output::echo($order->getOrderId(), true);
+
             if ($order && !$client->getId() !== 1489) {
                 throw new InvalidRequestAgrs('Duplicate order: ' . $post[Api::INNER_N]);
             }
 
-            $rz = (new Loader())->findAddress($post[Fields::CITY], $post[Fields::ADDR]);
+            $criteriaLast = Criteria::create()
+                ->where(Criteria::expr()->eq(\Orders::CLIENT, $client))
+                ->andWhere(Criteria::expr()->eq(\Orders::CLIENT, $client)
+                )
+                ->orderBy([\Orders::ID => Criteria::DESC]);
 
-            dd($rz, $post, $criteria);
+            /** @var \Orders|null $orderLast */
+            $orderLast = \Orders::find($criteriaLast)->first();
+
+            $regexpHex = '/^'.\Orders::PREFIX.$client->getClientId().'\-([0-9A-Fa-f]+)\-.+$/';
+            $regexpDec = '/^'.\Orders::PREFIX.$client->getClientId().'\-([0-9]+)$/';
+
+            if(is_null($orderLast)) {
+                $newNumber = 1;
+            }elseif(preg_match($regexpHex, $orderLast->getOrderId(), $matches)) {
+                $newNumber = hexdec($matches[1]);
+                $newNumber++;
+            }elseif(preg_match($regexpDec, $orderLast->getOrderId(), $matches)) {
+                $newNumber = $matches[1];
+                $newNumber++;
+            } else {
+                $newNumber = 1;
+            }
+
+            $regionCode = '77';
+            $newHex = dechex($newNumber);
+            $orderId = \Orders::PREFIX . $client->getClientId(). '-' . $newHex . '-' . $regionCode;
+            $create->setOrderId($orderId);
+
+            $newOrder = (new ResponseBuidser())->buildOrder(new \Orders(), $create);
+            Proxy::init()->getEntityManager()->persist($newOrder);
+            Proxy::init()->getEntityManager()->flush();
 
 
-            return $this->success([]);
+//            $rz = (new Loader())->findAddress($post[Fields::CITY], $post[Fields::ADDR]);
+
+//            dd($rz, $post, $criteriaDuplicate);
+
+
+            return $this->success([1]);
 
         } catch (MalformedRequestException $e){
             return $this->error($e);

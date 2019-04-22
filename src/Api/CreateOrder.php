@@ -5,6 +5,7 @@ namespace App\Api;
 
 use App\Api\Request\Validator;
 use App\Providers\Headers;
+use App\Api\Fields as Api;
 use App\Helpers\Output;
 
 class CreateOrder
@@ -128,10 +129,18 @@ class CreateOrder
         self::GOODS
     ];
 
+    public $id;
+    public $client_id;
+    public $status;
+    public $type;
+    public $order_id;
     public $delivery_date;
     public $delivery_time;
     public $delivery_time1;
     public $delivery_time2;
+    public $change_date;
+    public $updated;
+    public $date_add;
     public $city;
     public $mo_punkt_id;
     public $floor;
@@ -145,6 +154,7 @@ class CreateOrder
     public $dimension_side3;
     public $price_client_delivery;
     public $np;
+    public $addr;
     public $sms;
     public $inner_n;
     public $brand;
@@ -162,6 +172,7 @@ class CreateOrder
     public $change_text;
     public $change_os;
     public $change_weight;
+    public $goods;
 
     private $deliveryTimes = [
         1 => [self::FROM => '10:00', self::TO => '14:00'],
@@ -173,6 +184,7 @@ class CreateOrder
     /**
      * CreateOrder constructor.
      * @param Headers $request
+     * @throws \Exception
      */
     public function __construct(Headers $request)
     {
@@ -187,13 +199,24 @@ class CreateOrder
 
     /**
      * @param Headers $request
+     * @throws \Exception
      */
     private function setParams(Headers $request)
     {
+        $now = new \DateTime();
+        $nowDStringDateTime = $now->format(Api::DATETIME_FORMAT);
+        $nowDStringDate = $now->format(Api::DATE_FORMAT);
+
+        $this->id = 0;
+        $this->status = \OrdersStatusModel::STATUS_NEW_ORDER;
+        $this->type = \OrdersTypesModel::COURIER_DELIVERY;
         $this->delivery_date = $request->request->get('delivery_date');
         $this->delivery_time = $request->request->get('delivery_time');
         $this->delivery_time1 = $this->deliveryTimes[$this->delivery_time][self::FROM];
-        $this->delivery_time2 = $this->deliveryTimes[$this->delivery_time][self::TO];;
+        $this->delivery_time2 = $this->deliveryTimes[$this->delivery_time][self::TO];
+        $this->change_date = $nowDStringDateTime;
+        $this->updated = $nowDStringDateTime;
+        $this->date_add = $nowDStringDate;
         $this->city = $request->request->get('city');
         $this->mo_punkt_id = $request->request->get('mo_punkt_id');
         $this->floor = $request->request->get('floor');
@@ -207,6 +230,7 @@ class CreateOrder
         $this->dimension_side3 = $request->request->get('dimension_side3');
         $this->price_client_delivery = $request->request->get('price_client_delivery');
         $this->np = $request->request->get('np');
+        $this->addr = $request->request->get('addr');
         $this->sms = $request->request->get('sms');
         $this->inner_n = $request->request->get('inner_n');
         $this->brand = $request->request->get('brand');
@@ -224,8 +248,26 @@ class CreateOrder
         $this->change_text = $request->request->get('change_text');
         $this->change_os = $request->request->get('change_os');
         $this->change_weight = $request->request->get('change_weight');
-
+        $this->goods = $request->request->get('goods');
     }
 
+    /**
+     * @param \ClientSettings $client
+     * @return $this
+     */
+    public function setClientId(\ClientSettings $client)
+    {
+        $this->client_id = $client->getClientId();
+        return $this;
+    }
 
+    /**
+     * @param string $order_id
+     * @return CreateOrder
+     */
+    public function setOrderId($order_id)
+    {
+        $this->order_id = $order_id;
+        return $this;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Api\Response;
 
+use App\Api\CreateOrder;
 use App\Api\Process;
 use App\Api\Structure as Fields;
 use App\Helpers\Convert;
@@ -208,10 +209,10 @@ class Builder
 
     /**
      * @param \Orders $order
-     * @param \stdClass $ord
+     * @param \stdClass | CreateOrder $ord
      * @return \Orders
      */
-    public function buildOrder(\Orders $order, \stdClass $ord)
+    public function buildOrder(\Orders $order, $ord)
     {
         /** @var \ClientSettings $client */
         $client = Proxy::init()->getEntityManager()->getRepository(\ClientSettings::class)

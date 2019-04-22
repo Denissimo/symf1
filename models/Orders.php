@@ -23,6 +23,9 @@ class Orders extends Model
         INNER_N = 'innerN',
         ORDER_ID = 'orderId';
 
+    const
+        PREFIX = 'LS';
+
     /** @var string - формат хранения даты доставки */
     const DELIVERY_DATE_FORMAT = 'Y-m-d';
 

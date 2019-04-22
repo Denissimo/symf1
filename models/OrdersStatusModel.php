@@ -13,6 +13,7 @@ class OrdersStatusModel extends Model
 {
 
     const
+        STATUS_NEW_ORDER = 1, // Новая заявка
         STATUS_PARTIAL_FAILURE = 6, // Частичный отказ
         STATUS_REJECTION = 7, // полный отказ
         STATUS_CANCEL = 8; // отмена

@@ -112,8 +112,8 @@ class Validator
             Api::PRICE_CLIENT,
             Api::OS,
             Api::DELIVERY_DATE,
-            Api::DELIVERY_TIME,
-            Api::PRICE_CLIENT_DELIVERY_NDS
+            Api::DELIVERY_TIME
+//            Api::PRICE_CLIENT_DELIVERY_NDS
         ];
 
         Proxy::init()->getValidator()->validateRequired(
