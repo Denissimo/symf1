@@ -457,7 +457,6 @@ class ApiController extends BaseController implements Api
             Proxy::init()->getEntityManager()->flush();
 
 //            Output::echo($order->getId(), true);
-            $create->setId($order->getId());
             $orderBill = (new ResponseBuidser())->buildOrderBill(new \OrdersBills(), $create);
             $orderSettings = (new ResponseBuidser())->buildOrderSettings(new \OrdersSettings(), $create);
 

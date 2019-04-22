@@ -5,6 +5,7 @@ namespace App\Api\Response;
 use App\Api\CreateGoods;
 use App\Api\CreateOrder;
 use App\Api\Process;
+use App\Api\Fields as Api;
 use App\Api\Structure as Fields;
 use App\Helpers\Convert;
 use App\Proxy;
@@ -175,7 +176,8 @@ class Builder
             } else {
                 $goodObj = $good;
             }
-            if (gettype($good) == self::OBJECT) {
+//            Output::echo($goodObj, 1);
+            if (gettype($goodObj) == self::OBJECT) {
                 $goodsNew = $this->buildGoods(new \Goods(), $goodObj)->setOrder($order);
                 Proxy::init()->getEntityManager()->persist($goodsNew);
             }
@@ -185,10 +187,10 @@ class Builder
 
     /**
      * @param \Goods $goods
-     * @param \stdClass $good
+     * @param \stdClass | CreateGoods $good
      * @return \Goods
      */
-    public function buildGoods(\Goods $goods, \stdClass $good)
+    public function buildGoods(\Goods $goods, $good)
     {
         /** @var \GoodsStatusModel $goodStatus */
         $goodStatus = Proxy::init()->getEntityManager()->getRepository(\GoodsStatusModel::class)
@@ -199,16 +201,16 @@ class Builder
             ->find($good->nds) : null;
 
         return $goods
-            ->setOldId($good->id)
+            ->setOldId($good->id ?? Api::ZERO)
             ->setGoodsStatus($goodStatus)
             ->setGoodsNdsType($ndsType)
             ->setArticle($good->articul)
             ->setCount($good->count)
-            ->setCountWeight($good->count_weight)
+            ->setCountWeight($good->count_weight ?? null)
             ->setDescription($good->artname)
-            ->setIsCancel($good->is_cancel)
+            ->setIsCancel($good->is_cancel ?? null)
             ->setPrice($good->price)
-            ->setVAktId($good->v_akt_id)
+            ->setVAktId($good->v_akt_id ?? null)
             ->setWeight($good->weight);
 
     }

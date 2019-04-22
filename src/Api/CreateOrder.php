@@ -208,6 +208,7 @@ class CreateOrder
         $nowDStringDateTime = $now->format(Api::DATETIME_FORMAT);
         $nowDStringDate = $now->format(Api::DATE_FORMAT);
 
+        $this->setId(Api::ZERO);
         $this->status = \OrdersStatusModel::STATUS_NEW_ORDER;
         $this->type = \OrdersTypesModel::COURIER_DELIVERY;
         $this->delivery_date = $request->request->get('delivery_date');
