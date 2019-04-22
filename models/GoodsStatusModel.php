@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GoodsStatusModel
 {
+
+    const
+        EXPECTED = 1;
     /**
      * @var int
      *

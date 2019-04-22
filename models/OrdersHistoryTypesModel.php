@@ -14,6 +14,7 @@ class OrdersHistoryTypesModel
 {
 
     const
+        CREATE_ID = 1,
         IMPORT_ID = 3,
         UPDATE_ID = 4;
     /**

@@ -134,6 +134,7 @@ class CreateOrder
     public $status;
     public $type;
     public $order_id;
+    public $geo_id;
     public $delivery_date;
     public $delivery_time;
     public $delivery_time1;
@@ -207,7 +208,6 @@ class CreateOrder
         $nowDStringDateTime = $now->format(Api::DATETIME_FORMAT);
         $nowDStringDate = $now->format(Api::DATE_FORMAT);
 
-        $this->id = 0;
         $this->status = \OrdersStatusModel::STATUS_NEW_ORDER;
         $this->type = \OrdersTypesModel::COURIER_DELIVERY;
         $this->delivery_date = $request->request->get('delivery_date');
@@ -270,4 +270,25 @@ class CreateOrder
         $this->order_id = $order_id;
         return $this;
     }
+
+    /**
+     * @param mixed $geo_id
+     * @return CreateOrder
+     */
+    public function setGeoId($geo_id)
+    {
+        $this->geo_id = $geo_id;
+        return $this;
+    }
+
+    /**
+     * @param mixed $id
+     * @return CreateOrder
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
 }

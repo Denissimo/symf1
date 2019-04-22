@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Api\LaraProvider;
+use App\Api\Process;
 use App\Exceptions\BadResponseException;
 use App\Exceptions\InactiveCliendException;
 use App\Exceptions\InvalidRequestAgrs;
@@ -406,8 +408,6 @@ class ApiController extends BaseController implements Api
 
             $order = \Orders::find($criteriaDuplicate)->first();
 
-            if($order != null) Output::echo($order->getOrderId(), true);
-
             if ($order && !$client->getId() !== 1489) {
                 throw new InvalidRequestAgrs('Duplicate order: ' . $post[Api::INNER_N]);
             }
@@ -436,22 +436,57 @@ class ApiController extends BaseController implements Api
                 $newNumber = 1;
             }
 
-            $regionCode = '77';
+            $lara = new LaraProvider();
+            $addr = $lara->findAddress($create->addr);
+            $geoId = $addr->toArray()[0]->id;
+            $create->setGeoId($geoId);
+            $regionCode = $addr->toArray()[0]->region_code;
+//            Output::echo($addr->toArray()[0]->region_code, true);
+
             $newHex = dechex($newNumber);
             $orderId = \Orders::PREFIX . $client->getClientId(). '-' . $newHex . '-' . $regionCode;
             $create->setOrderId($orderId);
 
-            $newOrder = (new ResponseBuidser())->buildOrder(new \Orders(), $create);
-            Proxy::init()->getEntityManager()->persist($newOrder);
+//            $newOrder = (new ResponseBuidser())->buildOrder(new \Orders(), $create);
+//            (new ResponseBuidser())->saveOrders([$create]);
+
+//            $address = (new ResponseBuidser())->buildAddress(new \Address(), $create);
+
+            $order = (new ResponseBuidser())->buildOrder(new \Orders(), $create);
+            Proxy::init()->getEntityManager()->persist($order);
             Proxy::init()->getEntityManager()->flush();
 
+//            Output::echo($order->getId(), true);
+            $create->setId($order->getId());
+            $orderBill = (new ResponseBuidser())->buildOrderBill(new \OrdersBills(), $create);
+            $orderSettings = (new ResponseBuidser())->buildOrderSettings(new \OrdersSettings(), $create);
 
-//            $rz = (new Loader())->findAddress($post[Fields::CITY], $post[Fields::ADDR]);
+            $order
+                ->setOrderBill($orderBill)
+                ->setOrderSettings($orderSettings);
 
-//            dd($rz, $post, $criteriaDuplicate);
+            Proxy::init()->getEntityManager()->persist($order);
+            Proxy::init()->getEntityManager()->flush();
+
+            (new Process())->saveHistory($order,
+                \OrdersHistoryTypesModel::CREATE_ID,
+                'order',
+                \GuzzleHttp\json_encode($create)
+            );
+
+            isset($create->goods) ? (new ResponseBuidser())->saveGoods((array)$create->goods, $order) : null;
+            Proxy::init()->getEntityManager()->flush();
+            $link = 'http://cab.logsis.ru/responders/label_p?im=1&id' . $order->getOrderId() . '=' .
+                $order->getOrderId();
+            $response = [
+                'order_id' => $order->getOrderId(),
+                'price_client' => $create->price_client,
+                'price_delivery' => 0, 'inner_track' =>$create->inner_n,
+                'label' => $link
+            ];
 
 
-            return $this->success([1]);
+            return $this->success([$response]);
 
         } catch (MalformedRequestException $e){
             return $this->error($e);
